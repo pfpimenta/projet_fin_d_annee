@@ -2,6 +2,6 @@
 Projet de majeur du semestre 9 à CPE Lyon.
 
 Les auteurs:
-* KUASSIVI, Cedric
+* KUASSIVI, Cédric
 * TOSTI, Dylan
 * FOLETTO PIMENTA, Pedro
