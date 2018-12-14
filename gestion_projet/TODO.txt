@@ -1,0 +1,36 @@
+
+TODO:
+
+MAP:
+* map 3D
+* map grid (fixe ou genere proceduralement)
+
+* deplacement dans la scene 3D
+
+COMBAT:
+* actions en combat dans le grid (controle du joueur)
+* gestion des HP etc (gestion du combat)
+* animations
+
+IA:
+* Q-table (apprentissage par renforcement)
+* Version "Deep"
+* actions:
+** deplacement 4 directions
+** attaquer (à distance, proche)
+** soigner
+** deplacement plusieurs cases
+
+
+
+------------------------------------
+objectifs:
+1 - maps (3d et grid) fixes
+ - deplacement dans la scene 3D et dans la grid
+ - gestion du combat
+2 - Q-table
+  - animations
+  - action en combat
+3 - IA deep
+  - combat plus complexe
+  - terrain procedurale
