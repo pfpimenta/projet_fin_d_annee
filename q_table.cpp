@@ -52,6 +52,7 @@ int Q_table::takeAction(int state){
 	if(rand_num > this->taux_exploration){
 		// choisir la meilleure action
 	  	for(int j = 0; j < NUM_ACTIONS; j++){
+		  // TODO ???
 			action_score[j] = this->q_table[state][j];
 		}
 		return 0;

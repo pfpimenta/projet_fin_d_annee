@@ -19,10 +19,13 @@ class GameManager
 	GameManager(int width, int height); // constructeur
 	int getWidth();
 	int getHeight();
-	char atPosition(int x, int y);
+	char charAtPosition(int x, int y);
+	//auto atPosition(int x, int y); //??
 	void printGrid();
 	void addPersonnage(Agent personnage);
 	void step();
+	void doDamageAroundPoint(int x, int y, float attack_damage);
+
 };
 
 #endif

@@ -2,7 +2,6 @@
 
 #include "Agent.hpp"
 
-
 // constructeur
 Agent::Agent(){
   // jamais utilise, je pense
@@ -14,12 +13,14 @@ Agent::Agent(int x, int y){
   this->pos_y = y;
   
   this->hp = HP_MAX;
+  this->attack_force = 15.7;
 }
 
 
 // take damage
 void Agent::takeDamage(float damage){
   this->hp = this->hp - damage;
+  std::cout << "debug hp : " << this->hp << std::endl;
 }
 
 
@@ -62,10 +63,10 @@ if(this->pos_y < this->height - 1)
  return;
 }
 // ATTACK
-void Agent::attack(){
+float Agent::attack(){
 // TODO
   
-  return;
+  return this->attack_force;
 }
 
 // width  height

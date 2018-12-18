@@ -6,7 +6,7 @@
 #define HP_MAX 100.0f
 
 #include <iostream>
-#include <cstdlib>
+#include <string>
 #include "q_table.hpp"
 
 enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
@@ -14,8 +14,10 @@ enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
 class Agent
 {
 	float hp; //health point
+	float attack_force; // force du attaque
 	Q_table qTable;
 	//vec3 position;
+	// width et height de la grid ou on est
 	int width;
 	int height;
 	public:
@@ -29,7 +31,7 @@ class Agent
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-	void attack();
+	float attack();
 	void setBoundaries(int w, int h);
 
 };

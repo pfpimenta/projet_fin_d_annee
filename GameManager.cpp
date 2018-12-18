@@ -22,7 +22,7 @@ int GameManager::getHeight(){
   return this->height;
 }
 
-char GameManager::atPosition(int x, int y){
+char GameManager::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
   int nombre_personnages = this->personnages.size();
   for(int i = 0; i < nombre_personnages; i++){
@@ -35,12 +35,12 @@ char GameManager::atPosition(int x, int y){
 
 // affichage
 void GameManager::printGrid(){
-	char gridPoint = ' ';
+	char gridPointChar = ' ';
 	std::cout << "...printing grid:" << std::endl;
 	for(int i = 0; i < this->width; i++){
 		for(int j = 0; j < this->height; j++){
-			gridPoint = this->atPosition(i, j);
-			std::cout << gridPoint;
+			gridPointChar = this->charAtPosition(i, j);
+			std::cout << gridPointChar << ' ';
 		}
 		std::cout << std::endl;
 	}
@@ -57,6 +57,9 @@ void GameManager::addPersonnage(Agent personnage){
 void GameManager::step(){
   int nombre_personnages = this->personnages.size();
   Action a;
+  int attack_x;
+  int attack_y;
+  float attack_damage;
   for(int i = 0; i < nombre_personnages; i++){
     a = this->personnages[i].chooseAction();
     switch(a){
@@ -73,10 +76,37 @@ void GameManager::step(){
 	this->personnages[i].moveRight();
 	break;
       case ATTACK:
+	attack_damage = this->personnages[i].attack();
+	attack_x = this->personnages[i].pos_x;
+	attack_y = this->personnages[i].pos_y;
+	this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
 	break;
       default:
 	break;
     }
   }
+}
 
+void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
+  int nombre_personnages = this->personnages.size();
+  for(int i = 0; i < nombre_personnages; i++){
+    // verifie pour les 8 carres autour du attaquant
+    if(this->personnages[i].pos_x == x + 1 && this->personnages[i].pos_y == y + 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x + 1 && this->personnages[i].pos_y == y){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x + 1 && this->personnages[i].pos_y == y - 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x  && this->personnages[i].pos_y == y + 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x  && this->personnages[i].pos_y == y - 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x - 1 && this->personnages[i].pos_y == y + 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x - 1 && this->personnages[i].pos_y == y){
+      this->personnages[i].takeDamage(attack_damage);
+    }else if(this->personnages[i].pos_x == x - 1 && this->personnages[i].pos_y == y - 1){
+      this->personnages[i].takeDamage(attack_damage);
+    }
+  }
 }

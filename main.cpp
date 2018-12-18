@@ -17,26 +17,23 @@ int main(){
   qtable.printTable();
   
   // pour tester le GameManager
-  GameManager gameManager = GameManager(20, 20);
+  GameManager gameManager = GameManager(7, 7);
   
   // ajouter des personnage
-  Agent personnage_test = Agent(12, 5);
+  Agent personnage_test = Agent(2, 5);
   gameManager.addPersonnage(personnage_test);
-  Agent personnage_test2 = Agent(2, 15);
+  Agent personnage_test2 = Agent(5, 2);
   gameManager.addPersonnage(personnage_test2);
   Agent personnage_test3 = Agent(2, 2);
   gameManager.addPersonnage(personnage_test3);
   
 
-  int random_variable;
-  
   // tester le jeu avec l'affichage au terminal
   while(true){
       gameManager.printGrid();
       std::cin.ignore();
       gameManager.step();
   }
-  
-  
   return 0;
 }
+
