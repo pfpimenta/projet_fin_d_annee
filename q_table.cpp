@@ -15,7 +15,6 @@ Q_table::Q_table(){
 	}
 	
 	// seed pour des nombres aleatoires
-	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
 // affichage

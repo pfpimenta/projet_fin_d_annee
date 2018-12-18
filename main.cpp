@@ -1,10 +1,15 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 #include "q_table.hpp"
 #include "Agent.hpp"
 #include "GameManager.hpp"
 
 int main(){
+  
+  std::srand(std::time(nullptr)); // use current time as seed for random generator
+
   std::cout << "test main Q_table" << std::endl;
   
   // pour tester la Q_table
@@ -22,14 +27,14 @@ int main(){
   Agent personnage_test3 = Agent(2, 2);
   gameManager.addPersonnage(personnage_test3);
   
-  
-  gameManager.printGrid();
+
+  int random_variable;
   
   // tester le jeu avec l'affichage au terminal
   while(true){
+      gameManager.printGrid();
       std::cin.ignore();
       gameManager.step();
-      gameManager.printGrid();
   }
   
   

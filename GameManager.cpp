@@ -49,6 +49,7 @@ void GameManager::printGrid(){
 
 
 void GameManager::addPersonnage(Agent personnage){
+  personnage.setBoundaries(this->width, this->height);
   this->personnages.push_back(personnage);
 }
 
@@ -63,10 +64,13 @@ void GameManager::step(){
 	this->personnages[i].moveUp();
 	break;
       case DOWN:
+	this->personnages[i].moveDown();
 	break;
       case LEFT:
+	this->personnages[i].moveLeft();
 	break;
       case RIGHT:
+	this->personnages[i].moveRight();
 	break;
       case ATTACK:
 	break;
