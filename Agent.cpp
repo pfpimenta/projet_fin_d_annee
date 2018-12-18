@@ -22,3 +22,16 @@ Agent::Agent(int x, int y){
 void Agent::takeDamage(float damage){
   this->hp = this->hp - damage;
 }
+
+
+// choose action
+Action Agent::chooseAction(){
+  Action action = UP;
+  return action;
+}
+
+// choose action
+void Agent::moveUp(){
+  this->pos_x -= 1;
+  return;
+}

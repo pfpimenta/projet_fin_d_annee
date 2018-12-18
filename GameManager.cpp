@@ -51,3 +51,28 @@ void GameManager::printGrid(){
 void GameManager::addPersonnage(Agent personnage){
   this->personnages.push_back(personnage);
 }
+
+
+void GameManager::step(){
+  int nombre_personnages = this->personnages.size();
+  Action a;
+  for(int i = 0; i < nombre_personnages; i++){
+    a = this->personnages[i].chooseAction();
+    switch(a){
+      case UP:
+	this->personnages[i].moveUp();
+	break;
+      case DOWN:
+	break;
+      case LEFT:
+	break;
+      case RIGHT:
+	break;
+      case ATTACK:
+	break;
+      default:
+	break;
+    }
+  }
+
+}

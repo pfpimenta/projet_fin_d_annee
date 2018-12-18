@@ -25,6 +25,13 @@ int main(){
   
   gameManager.printGrid();
   
+  // tester le jeu avec l'affichage au terminal
+  while(true){
+      std::cin.ignore();
+      gameManager.step();
+      gameManager.printGrid();
+  }
+  
   
   return 0;
 }

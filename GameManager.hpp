@@ -22,6 +22,7 @@ class GameManager
 	char atPosition(int x, int y);
 	void printGrid();
 	void addPersonnage(Agent personnage);
+	void step();
 };
 
 #endif
