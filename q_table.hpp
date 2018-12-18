@@ -19,9 +19,10 @@ class Q_table
 	float learning_rate;
 	float gamma; // hyperparametre : discount value
 	float q_table[NUM_STATES][NUM_ACTIONS]; // la q-table en soi
+	
 	public:
 	Q_table(); // constructeur
-	int takeAction(int state); // retourne le meilleur etat
+	int takeAction(int state); // retourne la meilleure action dans un etat donne
 	void printTable(); // affiche la Q table
 	void update_table(int action, int etat_courrant, int etat_suivant, float recompense); // actualise le tableau Q
 	//int getState("toutes informations qui l'agent utilise") // a definir
