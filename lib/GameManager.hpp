@@ -9,6 +9,7 @@
 #include <cassert>
 #include <vector>
 
+
 class GameManager
 {
 	std::vector<Agent*> personnages;

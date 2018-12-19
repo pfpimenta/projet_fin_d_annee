@@ -9,6 +9,8 @@
 #include <cassert>
 #include <string>
 #include "q_table.hpp"
+//#include "GameManager.hpp"
+
 
 class GameManager;
 

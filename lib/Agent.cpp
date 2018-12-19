@@ -43,6 +43,12 @@ Action Agent::chooseAction(){
   // TODO : action avec la Q table
   // ou input du joueur
   
+  // DEBUG pour tester la variable gm
+  //int w = gm->getWidth();
+  //gm->printHPs();
+  //std::cout << "debug wwwww : " << w << std::endl;
+
+  
   return action;
 }
 

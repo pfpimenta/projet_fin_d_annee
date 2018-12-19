@@ -75,7 +75,10 @@ void GameManager::step(){
   int attack_y;
   float attack_damage;
   for(int i = 0; i < nombre_personnages; i++){
+    // choisir l'action
     a = this->personnages[i]->chooseAction();
+    
+    // faire l'action
     switch(a){
       case UP:
 	this->personnages[i]->moveUp();
