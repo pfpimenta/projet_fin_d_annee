@@ -2,9 +2,6 @@
 TODO:
 
 
-** vector<Agents*>
-
-
 MAP:
 * map 3D
 * map grid (fixe ou genere proceduralement)

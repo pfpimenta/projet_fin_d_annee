@@ -21,11 +21,11 @@ int main(){
   
   // ajouter des personnage
   Agent personnage_test = Agent(2, 5);
-  gameManager.addPersonnage(personnage_test);
+  gameManager.addPersonnage(&personnage_test);
   Agent personnage_test2 = Agent(5, 2);
-  gameManager.addPersonnage(personnage_test2);
+  gameManager.addPersonnage(&personnage_test2);
   Agent personnage_test3 = Agent(2, 2);
-  gameManager.addPersonnage(personnage_test3);
+  gameManager.addPersonnage(&personnage_test3);
   
 
   // tester le jeu avec l'affichage au terminal

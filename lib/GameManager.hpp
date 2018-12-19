@@ -11,7 +11,7 @@
 
 class GameManager
 {
-	std::vector<Agent> personnages;
+	std::vector<Agent*> personnages;
 	// objets ? pierre etc
 	int width;
 	int height;
@@ -24,7 +24,7 @@ class GameManager
 	//auto atPosition(int x, int y); //??
 	void printGrid();
 	void printHPs();
-	void addPersonnage(Agent personnage);
+	void addPersonnage(Agent* personnage);
 	void step();
 	void doDamageAroundPoint(int x, int y, float attack_damage);
 
