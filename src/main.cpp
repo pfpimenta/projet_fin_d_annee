@@ -30,6 +30,7 @@ int main(){
 
   // tester le jeu avec l'affichage au terminal
   while(true){
+      std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
       gameManager.printGrid();
       gameManager.printHPs();
       std::cin.ignore();
