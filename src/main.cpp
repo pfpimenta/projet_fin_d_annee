@@ -31,6 +31,7 @@ int main(){
   // tester le jeu avec l'affichage au terminal
   while(true){
       gameManager.printGrid();
+      gameManager.printHPs();
       std::cin.ignore();
       gameManager.step();
   }
