@@ -60,6 +60,7 @@ void GameManager::printHPs(){
 }
 
 
+
 void GameManager::addPersonnage(Agent* personnage){
   personnage->setBoundaries(this->width, this->height);
   GameManager *gmPointer;
