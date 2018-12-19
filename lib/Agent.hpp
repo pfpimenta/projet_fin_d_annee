@@ -10,6 +10,8 @@
 #include <string>
 #include "q_table.hpp"
 
+class GameManager;
+
 enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
  
 class Agent
@@ -19,6 +21,7 @@ class Agent
 	Q_table qTable;
 	//vec3 position;
 	// width et height de la grid ou on est
+	GameManager *gm;
 	int width;
 	int height;
 	public:
@@ -34,6 +37,7 @@ class Agent
 	void moveRight();
 	float attack();
 	void setBoundaries(int w, int h);
+	void setGameManager(GameManager* gameManager);
 	float getHP();
 
 };

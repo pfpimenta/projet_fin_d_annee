@@ -2,6 +2,8 @@
 
 #include "Agent.hpp"
 
+
+
 // constructeur
 Agent::Agent(){
   // jamais utilise, je pense
@@ -79,6 +81,11 @@ float Agent::attack(){
 void Agent::setBoundaries(int w, int h){
   this->width = w;
   this->height = h;
+}
+
+// GameManager
+void Agent::setGameManager(GameManager* gameManager){
+  this->gm = gameManager;
 }
 
 float Agent::getHP(){
