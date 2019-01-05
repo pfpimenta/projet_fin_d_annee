@@ -42,7 +42,7 @@ December 14, 2018   ->    January 25, 2019
 
 1. Avec le CMakeLists.txt : 
 
-    * Méthode 1 (non recommandée): Se placer dans le répertoire ./projet/ (où se touve le fichier CMakeLists.txt) puis exécuter les commandes :
+    * Méthode 1 (**non recommandée**): Se placer dans le répertoire ./projet/ (où se touve le fichier CMakeLists.txt) puis exécuter les commandes :
       ```
       $ cmake . #pour generer le makefile dans le meme repertoire
       $ make #afin de compiler le code
@@ -54,10 +54,10 @@ December 14, 2018   ->    January 25, 2019
       Pour lancer l'application.-
 
 
-    * Méthode 2 (**recommandée**): Lancer le CMakeLists.txt avec QTcreator et compiler et exécuter le code avec Qt.
+    * Méthode 2 (**recommandée** pour coder et tester les modifications): Lancer le CMakeLists.txt avec QTcreator et compiler et exécuter le code avec Qt.
 
 
-2. Avec le makefile : 
+2. Avec le makefile (**recommandée** pour une simple exécution): 
 
 
     Il suffit de se placer dans le répertoire ./projet/code_projet/ puis exécuter la commande : 
