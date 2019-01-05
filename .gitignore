@@ -34,3 +34,8 @@
 *.out
 *.app
 projetFA
+
+# Others
+CMakeLists.txt.user
+*build*
+*Build*
