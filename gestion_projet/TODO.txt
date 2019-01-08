@@ -20,17 +20,3 @@ IA:
 ** attaquer (à distance, proche)
 ** soigner
 ** deplacement plusieurs cases
-
-
-
-------------------------------------
-objectifs:
-1 - maps (3d et grid) fixes
- - deplacement dans la scene 3D et dans la grid
- - gestion du combat
-2 - Q-table
-  - animations
-  - action en combat
-3 - IA deep
-  - combat plus complexe
-  - terrain procedurale

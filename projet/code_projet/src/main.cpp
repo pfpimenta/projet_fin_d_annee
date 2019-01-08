@@ -4,6 +4,16 @@
 #include <limits>
 
 
+#include <irrlicht/irrlicht.h>
+
+using namespace irr;
+
+namespace ic = irr::core;
+namespace is = irr::scene;
+namespace iv = irr::video;
+namespace ig = irr::gui;
+
+
 #include "../lib/q_table.hpp"
 #include "../lib/Agent.hpp"
 #include "../lib/GameManager.hpp"
