@@ -25,7 +25,7 @@ class Q_table
 	int takeAction(int state); // retourne la meilleure action dans un etat donne
 	void printTable(); // affiche la Q table
 	void update_table(int action, int etat_courrant, int etat_suivant, float recompense); // actualise le tableau Q
-	//int getState("toutes informations qui l'agent utilise") // a definir
+    int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers); // a definir
 };
 
 #endif
