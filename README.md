@@ -36,7 +36,7 @@ Il s'agit d'un jeu vidéo de type combat, dont les ennemis sont des IA.
 
 Le joueur se déplace dans un environnement en 3D. Lorsqu'il entre dans le champ d'attaque d'un ennemi, le jeu est basculé dans une scène 2D. Le joueur n'a pas la possibilité de fuir lorsque le combat est engagé. Le jeu est de nouveau basculé dans la scène 3D lorsque tous les ennemis sont vaincus.
 
-A tour de rôle, le joueur puis les ennemis réalisent des actions (attaquer, se soigner, se déplacer). Les actions des ennemis seront prédites par reinforcement learning.
+Lorsque le combat est engagé, à tour de rôle, le joueur puis les ennemis réalisent des actions (attaquer, se soigner, se déplacer). Les actions des ennemis seront prédites par reinforcement learning.
 
 
 </br>
