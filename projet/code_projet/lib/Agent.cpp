@@ -18,10 +18,10 @@ Agent::Agent(int x, int y){
   this->attack_force = 15.7;
   
   // asserts
-   assert(this->hp > 0 && printf("hp doit etre positif"));
-   assert(this->pos_x > 0 && printf("position x doit etre positif"));
-   assert(this->pos_y > 0 && printf("position y doit etre positif"));
-   assert(this->attack_force > 0 && printf("attack_force doit etre positive"));
+   assert(this->hp > 0); //hp doit etre positif
+   assert(this->pos_x >= 0); //position x doit etre positif
+   assert(this->pos_y >= 0 ); //position y doit etre positif
+   assert(this->attack_force > 0 ); //attack_force doit etre positive
 }
 
 

@@ -4,6 +4,7 @@
 #define GAME_MANAGER_HPP
 
 #include "Agent.hpp"
+#include "Enemy.hpp"
 
 #include <iostream>
 #include <cassert>

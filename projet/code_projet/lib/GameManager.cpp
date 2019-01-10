@@ -140,6 +140,58 @@ void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
 
 void GameManager::train(){
   // executes the training of the Q tables
-  // until it converges
-  // TODO
+  // without showing on screen
+  
+  // un episode est un jeu avec (max_steps_per_episode) steps
+  int max_episodes = 100;
+  int max_steps_per_episode = 100;
+  
+  int num_learners;
+  std::vector<Enemy*> learners;
+  int pos_x; // pos initialle d'un learner
+  int pos_y;
+  
+  // informations pour le state
+  int dist_x_pers;
+  int dist_y_pers;
+  float hp_soi;
+  float hp_pers;
+  
+  int episode_count, step_count;
+  for( episode_count = 0; episode_count < max_episodes; episode_count ++){
+    // TODO
+    // reset personnages / learners
+    learners.clear();
+    // generer entre 2 et 5 learners
+    num_learners = 2 + std::rand()%4;
+    for(int i = 0; i < num_learners; i++){
+      pos_x = std::rand()%this->width;
+      pos_y = std::rand()%this->height;
+      Enemy new_learner = Enemy(pos_x, pos_y);
+      learners.push_back(&new_learner);
+    }
+
+    // reset autre chose de la grid?
+    
+    // executer la simulation pour l'aprentissage:
+    for( step_count = 0; step_count < max_steps_per_episode; step_count ++){
+      this->step(); // do one step
+      // update q tables for all personnages / learners
+      for(int i = 0; i < num_learners; i++){
+	// calculate state information
+	//dist_x_pers;
+	//dist_y_pers;
+	//hp_soi;
+	//hp_pers;
+	//learners[i]->updateQTable(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+      }
+    } 
+  }
+  std::cout << "...training complete" << std::endl;
+  // print all q-tables
+  Q_table qtable;
+  for(int i = 0; i < num_learners; i++){
+	qtable = learners[i]->getQTable();
+	qtable.printTable();
+  }
 }

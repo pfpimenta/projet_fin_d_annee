@@ -39,13 +39,15 @@ int main(){
   Agent personnage_test3 = Agent(2, 2);
   gameManager.addPersonnage(&personnage_test3);
   
+  // training test
+  //gameManager.train();
 
   // tester le jeu avec l'affichage au terminal
   while(true){
       std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
       gameManager.printGrid();
       gameManager.printHPs();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' );
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
       gameManager.step();
   }
   return 0;

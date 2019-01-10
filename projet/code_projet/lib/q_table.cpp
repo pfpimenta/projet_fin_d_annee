@@ -8,20 +8,48 @@ Q_table::Q_table(){
 	this->taux_exploration = TAUX_EXPLORATION;
 	this->learning_rate = LEARNING_RATE;
 	this->gamma = DISCOUNT_VALUE;
+	this->num_states = NUM_STATES;
+	this->num_actions = NUM_ACTIONS;
+	// set table size
+	this->q_table = new float *[NUM_STATES];
+	for (int i = 0; i < NUM_STATES; ++i)
+	    this->q_table[i] = new float[NUM_ACTIONS];
+	// initialize with zeros
 	for(int i = 0; i < NUM_STATES; i++){
 		for(int j = 0; j < NUM_ACTIONS; j++){
 			this->q_table[i][j] = 0.0f;
 		}
 	}
 	
-	// seed pour des nombres aleatoires
+	// seed pour des nombres aleatoires ?
+}
+
+// constructeur avec taille variable
+Q_table::Q_table(int num_states, int num_actions){
+	this->taux_exploration = TAUX_EXPLORATION;
+	this->learning_rate = LEARNING_RATE;
+	this->gamma = DISCOUNT_VALUE;
+	this->num_states = num_states;
+	this->num_actions = num_actions;
+	// set table size
+	this->q_table = new float *[NUM_STATES];
+	for (int i = 0; i < NUM_STATES; ++i)
+	    this->q_table[i] = new float[NUM_ACTIONS];
+	// initialize with zeros
+	for(int i = 0; i < num_states; i++){
+		for(int j = 0; j < this->num_actions; j++){
+			this->q_table[i][j] = 0.0f;
+		}
+	}
+	
+	// seed pour des nombres aleatoires ?
 }
 
 // affichage
 void Q_table::printTable(){
 	std::cout << "...printing Q_table:" << std::endl;
-	for(int i = 0; i < NUM_STATES; i++){
-		for(int j = 0; j < NUM_ACTIONS; j++){
+	for(int i = 0; i < this->num_states; i++){
+		for(int j = 0; j < this->num_actions; j++){
 			std::cout << this->q_table[i][j] << ",";
 		}
 		std::cout << std::endl;
@@ -35,7 +63,7 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
   float old_value = this->q_table[etat_courrant][action];
   // calculer le max value du next state
   float max_next_state = this->q_table[etat_suivant][0];
-  for(int i = 1; i < NUM_ACTIONS; i++)
+  for(int i = 1; i < this->num_actions; i++)
   {
     if(this->q_table[etat_suivant][i] > max_next_state)
       max_next_state = this->q_table[etat_suivant][i];
@@ -48,10 +76,10 @@ int Q_table::takeAction(int state){
     float rand_num = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
     std::cout << "...printing Q_table:" << std::endl;
 
-    float action_score[NUM_ACTIONS];
+    float action_score[this->num_actions];
     if(rand_num > this->taux_exploration){
         // choisir la meilleure action
-        for(int j = 0; j < NUM_ACTIONS; j++){
+        for(int j = 0; j < this->num_actions; j++){
           // TODO ???
             action_score[j] = this->q_table[state][j];
         }
