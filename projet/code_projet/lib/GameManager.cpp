@@ -74,6 +74,8 @@ void GameManager::step(){
   int attack_x;
   int attack_y;
   float attack_damage;
+  
+  // execution des actions des personnages
   for(int i = 0; i < nombre_personnages; i++){
     // choisir l'action
     a = this->personnages[i]->chooseAction();
@@ -93,13 +95,21 @@ void GameManager::step(){
 	this->personnages[i]->moveRight();
 	break;
       case ATTACK:
-	attack_damage = this->personnages[i]->attack();
+	attack_damage = this->personnages[i]->getAttackForce();
 	attack_x = this->personnages[i]->pos_x;
 	attack_y = this->personnages[i]->pos_y;
 	this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
 	break;
       default:
 	break;
+    }
+  }
+  
+  // verifier si ils sont morts
+  for(int i = 0; i < nombre_personnages; i++){
+    if ( this->personnages[i]->getHP() <= 0.0){
+      // il est mort
+      this->personnages.erase(this->personnages.begin()+i);
     }
   }
 }
@@ -126,4 +136,11 @@ void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
       this->personnages[i]->takeDamage(attack_damage);
     }
   }
+}
+
+void GameManager::train(){
+  // executes the training of the Q tables
+  // until it converges
+  
+  
 }

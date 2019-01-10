@@ -20,9 +20,6 @@ class Agent
 {
 	float hp; //health point
 	float attack_force; // force du attaque
-	Q_table qTable;
-	//vec3 position;
-	// width et height de la grid ou on est
 	GameManager *gm;
 	int width;
 	int height;
@@ -32,15 +29,17 @@ class Agent
 	int pos_x;
 	int pos_y;
 	void takeDamage(float damage); // take damage
-	Action chooseAction(); // take damage
+	Action chooseAction();
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-	float attack();
 	void setBoundaries(int w, int h);
 	void setGameManager(GameManager* gameManager);
+	void setHP(float hp);
 	float getHP();
+	void setAttackForce(float attackForce);
+	float getAttackForce();
 
 };
 

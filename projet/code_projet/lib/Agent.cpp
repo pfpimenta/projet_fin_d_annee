@@ -42,12 +42,12 @@ Action Agent::chooseAction(){
 
   // TODO : action avec la Q table
   // ou input du joueur
+  // ===> ca va etre dans des subclasses Enemy et Player (?)
   
   // DEBUG pour tester la variable gm
   //int w = gm->getWidth();
   //gm->printHPs();
   //std::cout << "debug wwwww : " << w << std::endl;
-
   
   return action;
 }
@@ -77,23 +77,34 @@ if(this->pos_y < this->height - 1)
  return;
 }
 // ATTACK
-float Agent::attack(){
-// TODO
-  
-  return this->attack_force;
-}
+// TODO ?
 
-// width  height
+
+// setters et getters
+
+// width et height du grid actuel (taille du grid)
 void Agent::setBoundaries(int w, int h){
   this->width = w;
   this->height = h;
 }
 
-// GameManager
+// GameManager // pas necessaire?
 void Agent::setGameManager(GameManager* gameManager){
   this->gm = gameManager;
 }
 
+// HP (points de vie)
+void Agent::setHP(float hp){
+  this->hp = hp;
+}
 float Agent::getHP(){
   return this->hp;
+}
+
+// attack force
+void Agent::setAttackForce(float attackForce){
+  this->attack_force = attackForce;
+}
+float Agent::getAttackForce(){
+  return this->attack_force ;
 }
