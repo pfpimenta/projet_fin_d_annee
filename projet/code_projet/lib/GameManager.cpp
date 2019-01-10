@@ -141,6 +141,5 @@ void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
 void GameManager::train(){
   // executes the training of the Q tables
   // until it converges
-  
-  
+  // TODO
 }
