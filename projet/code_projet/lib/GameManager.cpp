@@ -24,6 +24,13 @@ int GameManager::getHeight(){
   return this->height;
 }
 
+int GameManager::findClosestEnemy(int pos_x, int pos_y){
+  int closestEnemyIndex = 0;
+  // TODO
+  return closestEnemyIndex;
+}
+
+
 char GameManager::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
   int nombre_personnages = this->personnages.size();
@@ -62,6 +69,7 @@ void GameManager::printHPs(){
 
 
 void GameManager::addPersonnage(Agent* personnage){
+  // add a personnage to the game
   personnage->setBoundaries(this->width, this->height);
   personnage->setGameManager(this);
   this->personnages.push_back(personnage);
@@ -143,13 +151,14 @@ void GameManager::train(){
   // without showing on screen
   
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 100;
-  int max_steps_per_episode = 100;
+  int max_episodes = 10;
+  int max_steps_per_episode = 10;
   
   int num_learners;
   std::vector<Enemy*> learners;
   int pos_x; // pos initialle d'un learner
   int pos_y;
+  int i_closest_enemy; // index
   
   // informations pour le state
   int dist_x_pers;
@@ -159,10 +168,11 @@ void GameManager::train(){
   
   int episode_count, step_count;
   for( episode_count = 0; episode_count < max_episodes; episode_count ++){
-    // TODO
     // reset personnages / learners
     learners.clear();
-    // generer entre 2 et 5 learners
+    // generer entre 2 et 5 learners au hasard
+    // (a chaque episode il y a un nombre 
+    // different de learners pendant le training)
     num_learners = 2 + std::rand()%4;
     for(int i = 0; i < num_learners; i++){
       pos_x = std::rand()%this->width;
@@ -171,27 +181,30 @@ void GameManager::train(){
       learners.push_back(&new_learner);
     }
 
-    // reset autre chose de la grid?
+    // reset autre chose de la grid? TODO ?
     
     // executer la simulation pour l'aprentissage:
     for( step_count = 0; step_count < max_steps_per_episode; step_count ++){
       this->step(); // do one step
+
       // update q tables for all personnages / learners
       for(int i = 0; i < num_learners; i++){
-	// calculate state information
-	//dist_x_pers;
-	//dist_y_pers;
-	//hp_soi;
-	//hp_pers;
-	//learners[i]->updateQTable(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+      	// calculate state information :
+        // find closest mec :
+        i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
+        dist_x_pers = learners[i_closest_enemy]->pos_x - learners[i]->pos_x;
+        dist_y_pers = learners[i_closest_enemy]->pos_y - learners[i]->pos_y;
+      	hp_soi = learners[i]->getHP();
+      	hp_pers = learners[i_closest_enemy]->getHP();
+      	learners[i]->updateQTable(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
       }
     } 
   }
   std::cout << "...training complete" << std::endl;
   // print all q-tables
-  Q_table qtable;
+  Q_table* qtable;
   for(int i = 0; i < num_learners; i++){
-	qtable = learners[i]->getQTable();
-	qtable.printTable();
+  	qtable = learners[i]->getQTable();
+  	qtable->printTable();
   }
 }

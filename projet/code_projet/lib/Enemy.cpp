@@ -17,7 +17,8 @@ Enemy::Enemy(int x, int y){
   
   this->setHP(HP_MAX);
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
-  //this->qTable = Q_table(); // nombre d'actions et states par default
+  Q_table q_table = Q_table(); // nombre d'actions et states par default
+  this->qTable = &q_table; // nombre d'actions et states par default
     
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif
@@ -38,8 +39,8 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   //action = (Action) random_variable;
 
   // TODO : action avec la Q table
-  int state = this->qTable.getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
-  action = (Action) this->qTable.takeAction(state);
+  int state = this->qTable->getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
+  action = (Action) this->qTable->takeAction(state);
   
   
   // DEBUG pour tester la variable gm
@@ -50,7 +51,17 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   return action;
 }
 
+void Enemy::updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
+    //updates the Q-table associated with this mec
+    // TODO
+  int state = this->qTable->getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+  //this->qTable->update_table(action, etat_courrant, etat_suivant, recompense); // actualise le tableau Q
 
-Q_table Enemy::getQTable(){
+}
+
+Q_table* Enemy::getQTable(){
   return this->qTable;
+}
+void Enemy::setQTable(Q_table* q_table){
+  this->qTable = q_table;
 }

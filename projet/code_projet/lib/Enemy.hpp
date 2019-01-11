@@ -16,14 +16,15 @@ class GameManager;
 
 class Enemy :  public Agent
 {
-	Q_table qTable;
+	Q_table* qTable;
 	public:
 	Enemy(); // constructeur
 	Enemy(int x, int y); // constructeur
 	void takeDamage(float damage); // take damage
 	Action chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
-	// void updateQTable(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
-	Q_table getQTable();
+	void updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers);
+	Q_table* getQTable();
+	void setQTable(Q_table* q_table);
 	int lastAction;
 };
 

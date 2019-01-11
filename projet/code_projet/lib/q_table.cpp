@@ -10,8 +10,13 @@ Q_table::Q_table(){
 	this->gamma = DISCOUNT_VALUE;
 	this->num_states = NUM_STATES;
 	this->num_actions = NUM_ACTIONS;
+    std::cout << "DEBUG NUM_STATES: " << NUM_STATES << std::endl;
+    std::cout << "DEBUG NUM_ACTIONS: " << NUM_ACTIONS << std::endl;
+    std::cout << "DEBUG num_states: " <<this->num_states << std::endl;
+    std::cout << "DEBUG num_actions: " <<this->num_actions << std::endl;
+
 	// set table size
-	this->q_table = new float *[NUM_STATES];
+	this->q_table = new float * [NUM_STATES];
 	for (int i = 0; i < NUM_STATES; ++i)
 	    this->q_table[i] = new float[NUM_ACTIONS];
 	// initialize with zeros
@@ -30,6 +35,8 @@ Q_table::Q_table(int num_states, int num_actions){
 	this->learning_rate = LEARNING_RATE;
 	this->gamma = DISCOUNT_VALUE;
 	this->num_states = num_states;
+    std::cout << "DEBUG num_states: " <<num_states << std::endl;
+    std::cout << "DEBUG num_actions: " <<num_actions << std::endl;
 	this->num_actions = num_actions;
 	// set table size
 	this->q_table = new float *[NUM_STATES];
@@ -47,7 +54,7 @@ Q_table::Q_table(int num_states, int num_actions){
 
 // affichage
 void Q_table::printTable(){
-	std::cout << "...printing Q_table:" << std::endl;
+	std::cout << "...printing Q_table ("<<this->num_states<<" states X "<<this->num_actions<<" actions):" << std::endl;
 	for(int i = 0; i < this->num_states; i++){
 		for(int j = 0; j < this->num_actions; j++){
 			std::cout << this->q_table[i][j] << ",";
@@ -68,6 +75,7 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
     if(this->q_table[etat_suivant][i] > max_next_state)
       max_next_state = this->q_table[etat_suivant][i];
   }
+  // formule du Q-learning
   this->q_table[etat_courrant][action] =  (1-lr)*old_value + lr*(recompense + this->gamma * max_next_state);
 }
 

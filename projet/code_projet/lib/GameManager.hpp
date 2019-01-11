@@ -22,15 +22,20 @@ class GameManager
 	GameManager(int width, int height); // constructeur
 	int getWidth();
 	int getHeight();
+	// the returns a character according to what is in the point (pos_x, pos_y) :
 	char charAtPosition(int x, int y);
+	// returns the index of the closest enemy to the point (pos_x, pos_y) : 
+	int findClosestEnemy(int pos_x, int pos_y); 
 	//auto atPosition(int x, int y); //??
+	// print the grid at the current moment
 	void printGrid();
+	// print the current HPs of all personnages
 	void printHPs();
+	// add a personnage to the game :
 	void addPersonnage(Agent* personnage);
 	void step();
 	void doDamageAroundPoint(int x, int y, float attack_damage);
 	void train();
-
 };
 
 #endif
