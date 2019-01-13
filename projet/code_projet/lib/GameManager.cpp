@@ -120,6 +120,7 @@ void GameManager::step(){
   }
 }
 
+
 // cause dommage autour du point (x,y)
 void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
   int nombre_personnages = this->personnages.size();
@@ -163,8 +164,12 @@ void GameManager::train(){
   // informations pour le state
   int dist_x_pers;
   int dist_y_pers;
-  float hp_soi;
-  float hp_pers;
+  float hp_soi = 100.0f;
+  float hp_pers = 100.0f;
+
+  int state, lastState;
+  Action action;
+  float reward = 0.0f;
 
   // table qu'on va entrainer
   int num_states = getNumStates();
@@ -191,7 +196,8 @@ void GameManager::train(){
 
     // executer la simulation pour l'aprentissage:
     for( step_count = 0; step_count < max_steps_per_episode; step_count ++){
-      this->step(); // do one step
+      //this->step(); // do one step
+      this->train_step(learners); // do one step
 
       // update q tables for all personnages / learners
       for(int i = 0; i < num_learners; i++){
@@ -202,12 +208,73 @@ void GameManager::train(){
         dist_y_pers = learners[i_closest_enemy]->pos_y - learners[i]->pos_y;
       	hp_soi = learners[i]->getHP();
       	hp_pers = learners[i_closest_enemy]->getHP();
-      	learners[i]->updateQTable(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+        // get Q-table
+      	qtable_pointer = learners[i]->getQTable();
+        // get action, state, lastState, and reward   to update Q-table
+        action = learners[i]->getLastAction();
+        state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+        if(step_count!=0){
+          lastState = learners[i]->getLastState();
+          reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
+          std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
+          //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
+          qtable_pointer->update_table(action, lastState, state, reward); // actualise le tableau Q
+          std::cout << "DEBUG apres update_table" << std::endl;
+        }
+        // set lastState
+        learners[i]->setLastState(state);
       }
     }
   }
   std::cout << "...training complete" << std::endl;
 
   // print q-table
-  qtable_pointer->printTable();
+  qtable.printTable();
+}
+
+// avance un tour du jeu
+void GameManager::train_step(std::vector<Enemy*> learners){
+  int nombre_personnages = learners.size();
+  Action a;
+  int attack_x;
+  int attack_y;
+  float attack_damage;
+
+  // execution des actions des personnages
+  for(int i = 0; i < nombre_personnages; i++){
+    // choisir l'action
+    a = learners[i]->chooseAction();
+
+    // faire l'action
+    switch(a){
+      case UP:
+	learners[i]->moveUp();
+	break;
+      case DOWN:
+	learners[i]->moveDown();
+	break;
+      case LEFT:
+	learners[i]->moveLeft();
+	break;
+      case RIGHT:
+	learners[i]->moveRight();
+	break;
+      case ATTACK:
+	attack_damage = learners[i]->getAttackForce();
+	attack_x = learners[i]->pos_x;
+	attack_y = learners[i]->pos_y;
+	this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
+	break;
+      default:
+	break;
+    }
+  }
+
+  // verifier si ils sont morts
+  for(int i = 0; i < nombre_personnages; i++){
+    if ( learners[i]->getHP() <= 0.0){
+      // il est mort
+      learners.erase(learners.begin()+i);
+    }
+  }
 }

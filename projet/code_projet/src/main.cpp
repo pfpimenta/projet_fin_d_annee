@@ -32,6 +32,9 @@ int main(){
   // pour tester le GameManager
   GameManager gameManager = GameManager(7, 7);
 
+  // training test
+  gameManager.train();
+
   // ajouter des personnage
   Agent personnage_test = Agent(2, 5);
   gameManager.addPersonnage(&personnage_test);
@@ -40,16 +43,13 @@ int main(){
   Agent personnage_test3 = Agent(2, 2);
   gameManager.addPersonnage(&personnage_test3);
 
-  // training test
-  //gameManager.train();
-
   // tester le jeu avec l'affichage au terminal
-  while(true){
-      std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
-      gameManager.printGrid();
-      gameManager.printHPs();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
-      gameManager.step();
-  }
+  // while(true){
+  //     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
+  //     gameManager.printGrid();
+  //     gameManager.printHPs();
+  //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
+  //     gameManager.step();
+  // }
   return 0;
 }

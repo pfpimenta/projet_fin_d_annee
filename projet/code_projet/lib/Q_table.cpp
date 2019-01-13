@@ -25,7 +25,6 @@ Q_table::Q_table(): num_states(NUM_STATES){
 			this->q_table[i][j] = 0.0f;
 		}
 	}
-
 	// seed pour des nombres aleatoires ?
 }
 
@@ -49,9 +48,6 @@ Q_table::Q_table(int n_states, int n_actions){
 			this->q_table[i][j] = 0.0f;
 		}
 	}
-	std::cout << "DEBUG fin constructeur q_table "  << std::endl;
-
-
 	// seed pour des nombres aleatoires ?
 }
 
@@ -69,8 +65,12 @@ void Q_table::printTable(){
 // actualise le tableau Q
 void Q_table::update_table(int action, int etat_courrant, int etat_suivant, float recompense)
 {
+
   float lr = this->learning_rate;
+	std::cout << "DEBUG debut update_table: " << etat_courrant<< "  " << (int)action << std::endl;
+
   float old_value = this->q_table[etat_courrant][action];
+
   // calculer le max value du next state
   float max_next_state = this->q_table[etat_suivant][0];
   for(int i = 1; i < this->num_actions; i++)

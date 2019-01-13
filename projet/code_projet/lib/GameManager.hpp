@@ -37,6 +37,8 @@ class GameManager
 	void step();
 	void doDamageAroundPoint(int x, int y, float attack_damage);
 	void train();
+	void train_step(std::vector<Enemy*> learners);
+
 };
 
 #endif
