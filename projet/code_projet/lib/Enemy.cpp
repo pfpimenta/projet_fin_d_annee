@@ -10,16 +10,32 @@ Enemy::Enemy(){
   std::exit(EXIT_FAILURE);
 }
 
-// constructeur
+// constructeur avec position
 Enemy::Enemy(int x, int y){
   this->pos_x = x;
   this->pos_y = y;
-  
+
   this->setHP(HP_MAX);
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
   Q_table q_table = Q_table(); // nombre d'actions et states par default
   this->qTable = &q_table; // nombre d'actions et states par default
-    
+
+  // asserts
+   assert(this->getHP() > 0); //hp doit etre positif
+   assert(this->pos_x >= 0); //position x doit etre positif
+   assert(this->pos_y >= 0); //position y doit etre positif
+   assert(this->getAttackForce() > 0); // attack force doit etre positif
+}
+
+// constructeur avec position et q_table pointer
+Enemy::Enemy(int x, int y, Q_table* q_table){
+  this->pos_x = x;
+  this->pos_y = y;
+
+  this->setHP(HP_MAX);
+  this->setAttackForce(DEFAULT_ATTACK_FORCE);
+  this->qTable = q_table;
+
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif
    assert(this->pos_x >= 0); //position x doit etre positif
@@ -39,10 +55,10 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   //action = (Action) random_variable;
 
   // TODO : action avec la Q table
-  int state = this->qTable->getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
+  int state = getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
   action = (Action) this->qTable->takeAction(state);
-  
-  
+
+
   // DEBUG pour tester la variable gm
   //int w = gm->getWidth();
   //gm->printHPs();
@@ -54,7 +70,7 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
 void Enemy::updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
     //updates the Q-table associated with this mec
     // TODO
-  int state = this->qTable->getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+  int state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
   //this->qTable->update_table(action, etat_courrant, etat_suivant, recompense); // actualise le tableau Q
 
 }

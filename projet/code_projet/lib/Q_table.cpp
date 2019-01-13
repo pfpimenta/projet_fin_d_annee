@@ -1,14 +1,14 @@
 ﻿#include <iostream>
 
-#include "q_table.hpp"
+#include "Q_table.hpp"
 
 
 // constructeur
-Q_table::Q_table(){
+Q_table::Q_table(): num_states(NUM_STATES){
 	this->taux_exploration = TAUX_EXPLORATION;
 	this->learning_rate = LEARNING_RATE;
 	this->gamma = DISCOUNT_VALUE;
-	this->num_states = NUM_STATES;
+	//this->num_states = NUM_STATES;
 	this->num_actions = NUM_ACTIONS;
     std::cout << "DEBUG NUM_STATES: " << NUM_STATES << std::endl;
     std::cout << "DEBUG NUM_ACTIONS: " << NUM_ACTIONS << std::endl;
@@ -25,30 +25,33 @@ Q_table::Q_table(){
 			this->q_table[i][j] = 0.0f;
 		}
 	}
-	
+
 	// seed pour des nombres aleatoires ?
 }
 
 // constructeur avec taille variable
-Q_table::Q_table(int num_states, int num_actions){
+Q_table::Q_table(int n_states, int n_actions){
 	this->taux_exploration = TAUX_EXPLORATION;
 	this->learning_rate = LEARNING_RATE;
 	this->gamma = DISCOUNT_VALUE;
-	this->num_states = num_states;
-    std::cout << "DEBUG num_states: " <<num_states << std::endl;
-    std::cout << "DEBUG num_actions: " <<num_actions << std::endl;
-	this->num_actions = num_actions;
+	this->num_states = n_states;
+	this->num_actions = n_actions;
+  std::cout << "DEBUG num_states: " << this->num_states << std::endl;
+  std::cout << "DEBUG num_actions: " << this->num_actions << std::endl;
+
 	// set table size
-	this->q_table = new float *[NUM_STATES];
-	for (int i = 0; i < NUM_STATES; ++i)
-	    this->q_table[i] = new float[NUM_ACTIONS];
+	this->q_table = new float *[this->num_states];
+	for (int i = 0; i < this->num_states; ++i)
+	    this->q_table[i] = new float[this->num_actions];
 	// initialize with zeros
-	for(int i = 0; i < num_states; i++){
+	for(int i = 0; i < this->num_states; i++){
 		for(int j = 0; j < this->num_actions; j++){
 			this->q_table[i][j] = 0.0f;
 		}
 	}
-	
+	std::cout << "DEBUG fin constructeur q_table "  << std::endl;
+
+
 	// seed pour des nombres aleatoires ?
 }
 
@@ -80,7 +83,7 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
 }
 
 int Q_table::takeAction(int state){
-// retourne le meilleur etat
+		// retourne le meilleur etat
     float rand_num = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
     std::cout << "...printing Q_table:" << std::endl;
 
@@ -96,39 +99,4 @@ int Q_table::takeAction(int state){
         // prendre l'action au hasard
         return 0;
     }
-}
-
-int Q_table::getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
-// retourne l'etat
-
-    //discretization:
-    // dist_x_pers : une case, entre deux e cinc, plus que cinc (3)
-    // dist_y_pers : une case, entre deux e cinc, plus que cinc (3)
-    // hp_soi : moins ou plus de 25% (2)
-    // hp_pers : moins ou plus de 25% (2)
-    // total num etats : 3*3*2*2 = 36
-
-    int state = 0;
-    // dist_x_pers
-    if(dist_x_pers >= 2 && dist_x_pers <= 5){
-        state = state + 1;
-    }else if(dist_x_pers > 5){
-        state = state + 2;
-    }
-    // dist_y_pers
-    if(dist_y_pers >= 2 && dist_y_pers <= 5){
-        state = state + 3;
-    }else if(dist_y_pers > 5){
-        state = state + 6;
-    }
-    // hp_soi
-    if(hp_soi <= 25){
-        state = state + 9;
-    }
-    // hp_pers
-    if(hp_pers <= 25){
-        state = state + 18;
-    }
-
-    return state;
 }

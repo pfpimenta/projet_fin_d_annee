@@ -8,14 +8,14 @@
 #include <iostream>
 #include <cassert>
 #include <string>
-#include "q_table.hpp"
+#include "Q_table.hpp"
 //#include "GameManager.hpp"
 
 
 class GameManager;
 
 enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
- 
+
 class Agent
 {
 	float hp; //health point

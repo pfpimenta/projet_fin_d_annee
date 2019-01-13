@@ -5,6 +5,7 @@
 
 #include "Agent.hpp"
 #include "Enemy.hpp"
+#include "Q_table.hpp"
 
 #include <iostream>
 #include <cassert>
@@ -24,8 +25,8 @@ class GameManager
 	int getHeight();
 	// the returns a character according to what is in the point (pos_x, pos_y) :
 	char charAtPosition(int x, int y);
-	// returns the index of the closest enemy to the point (pos_x, pos_y) : 
-	int findClosestEnemy(int pos_x, int pos_y); 
+	// returns the index of the closest enemy to the point (pos_x, pos_y) :
+	int findClosestEnemy(int pos_x, int pos_y);
 	//auto atPosition(int x, int y); //??
 	// print the grid at the current moment
 	void printGrid();
