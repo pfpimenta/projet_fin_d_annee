@@ -58,9 +58,25 @@ int main(){
 
 
 //    // pour tester le GameManager
-
-//    MyEventReceiver *r = (MyEventReceiver *)receiver;
     GameManager *gameManager = new GameManager(20, 10, smgr, timerCursorBlink, receiver);
+
+
+    // ajout d'obstacles
+    std::vector<position> trucs; int nbTruc = 10;
+    for(int k = 0; k < nbTruc; k++)
+    {
+        trucs.push_back(position(alea(1, DEFAULT_HEIGHT - 1), alea(1, DEFAULT_WIDTH - 1)));
+        std::cout << trucs[k].printPosition(0) << std::endl;
+    }
+
+
+    gameManager->grid->addObstacle(trucs);
+
+    // ajout d'ennemis
+    gameManager->grid->addEnemy(position(0, 3));
+    gameManager->grid->addEnemy(position(2, 8));
+    gameManager->grid->addEnemy(position(4, 15));
+
 
 
 
