@@ -12,6 +12,7 @@ Répartition des tâches pour la :
   ([Lien vers le git de Cédric pour la gestion de la scène 2D](https://github.com/KASCedric/grid_mapping_projet_fin_d_annee))
 
   - Dylan se chargera de la mise en place de la **scène 3D** et de la gestion des déplacements du joueur dans cette scène (3D).
+  ([Lien vers le git de Dylan pour la gestion de la scène 3DD](https://github.com/ToDylan/projet-majeur-scene3D))
 
 * Réalisation de l'étape 1 de l'objectif 2 (Gestion de l’ennemi) : Pedro se chargera de créer la Q-Table et de l’entraînement de l'agent (ennemi).
 
