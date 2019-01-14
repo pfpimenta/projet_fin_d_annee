@@ -57,8 +57,18 @@ int main(){
 
 
 
-//    // pour tester le GameManager
-    GameManager *gameManager = new GameManager(20, 10, smgr, timerCursorBlink, receiver);
+//cration du gameManager
+
+/** DO NOT EDIT **/
+    GameManager *gameManager = new GameManager(20, 10, smgr, timerCursorBlink);
+
+    // /!\ toujours rattacher le receiver au gameManager ET gameManager->grid
+    receiver->gmngr = gameManager;
+    receiver->grid = gameManager->grid;
+
+/** ******** **/
+
+
 
     // ajout d'obstacles
     std::vector<position> trucs; int nbTruc = 10;
@@ -122,12 +132,18 @@ int main(){
         // Dessin de la scène :
         smgr->drawAll();
 
-        std::cout << "perso pedro : ";
-        std::cout << gameManager->personnages[0]->pos_x << " "
-                << gameManager->personnages[0]->pos_y  << std::endl;
-        std::cout << "perso ced : ";
-        std::cout << gameManager->grid->mechant[0].pos.ligne << " "
-                << gameManager->grid->mechant[0].pos.colonne  << std::endl;
+
+        // debug : verifier que l'ennemi se deplace vraiment
+//        std::cout << "perso pedro : ";
+//        std::cout << gameManager->personnages[0]->pos_x << " "
+//                << gameManager->personnages[0]->pos_y  << std::endl;
+//        std::cout << "perso ced : ";
+//        std::cout << gameManager->grid->mechant[0].pos.ligne << " "
+//                << gameManager->grid->mechant[0].pos.colonne  << std::endl;
+
+
+        gameManager->printHPs();
+
 
         // pour faire clignoter le curseur
         gameManager->makeCurseurBlink(true);

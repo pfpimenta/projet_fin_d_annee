@@ -16,7 +16,7 @@
 
 #include "./libGridMapping/gridMapping.hpp"
 
-
+#include "GameManager.hpp"
 
 struct MyEventReceiver : irr::IEventReceiver
 {
@@ -40,6 +40,10 @@ public:
 
     //la grid qui sera modifiee en fonction des touches appuyees
     gridMapping *grid;
+
+    // le gameManager pour pouvoir utiliser directement les touches du clavier pour declencher
+    // des fonctions de gmngr
+    GameManager *gmngr;
 
 
 

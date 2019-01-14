@@ -41,7 +41,7 @@ public:
 
 
 	GameManager(); // constructeur
-    GameManager(int width, int height, scene::ISceneManager *smgr, ITimer *timerCursorBlink, MyEventReceiver *receiver); // constructeur
+    GameManager(int width, int height, scene::ISceneManager *smgr, ITimer *timerCursorBlink); // constructeur
 	int getWidth();
 	int getHeight();
 	// the returns a character according to what is in the point (pos_x, pos_y) :
