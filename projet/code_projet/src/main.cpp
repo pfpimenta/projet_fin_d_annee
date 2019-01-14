@@ -142,7 +142,7 @@ int main(){
 //                << gameManager->grid->mechant[0].pos.colonne  << std::endl;
 
 
-        gameManager->printHPs();
+        //gameManager->printHPs();
 
 
         // pour faire clignoter le curseur

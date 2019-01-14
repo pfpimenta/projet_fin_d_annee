@@ -93,6 +93,11 @@ void GameManager::addPersonnage(Agent* personnage){
 
 // avance un tour du jeu
 void GameManager::step(){
+
+  // l'ennemi ne doit pas aller la ou se trouve le curseur sinon le joueur au prochain tour
+  // se trouvera a la mm position que lennemi => gros BUG
+  // solution : reset la position du curseur avant chaque mouvement de l'ennemi :
+  grid->mouvement(RESET);
   int nombre_personnages = this->personnages.size();
   Action a;
   int attack_x;
@@ -150,6 +155,7 @@ void GameManager::step(){
   for(int i = 0; i < nombre_personnages; i++){
     if ( this->personnages[i]->getHP() <= 0.0){
       // il est mort
+      grid->enemyDied(i);
       this->personnages.erase(this->personnages.begin()+i);
     }
   }
