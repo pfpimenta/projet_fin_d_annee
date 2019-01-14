@@ -7,6 +7,15 @@
 GameManager::GameManager(){
 }
 
+// constructeur avec w et h :
+// nombre de cases en epaisseur et hauteur
+GameManager::GameManager(int w, int h){
+  assert(w > 0);
+  assert(h > 0);
+  this->width = w;
+  this->height = h;
+}
+
 
 
 // constructeur
@@ -19,12 +28,9 @@ GameManager::GameManager(int w, int h, is::ISceneManager *smgr, ITimer *timerCur
   this->width = w;
   this->height = h;
 
-
   /** construction du grid **/
   // creation d'une grid avec les dimensions (w x h) et la position du curseur par defaut (position : (0, 0))
   grid = new gridMapping (position(DEFAULT_LIGNE, DEFAULT_COLONNE), w, h, smgr, timerCursorBlink);
-
-
 }
 
 
