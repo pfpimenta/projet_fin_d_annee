@@ -1,7 +1,7 @@
 # Partie configurable
 TARGET  := projetFA
 BUILD   := build
-SOURCES := lib src
+SOURCES := lib lib/libGridMapping src
 # INCLUDE := lib
 
 CXXFLAGS += -Wall -Wextra -O2 -g -std=c++11 -Wno-unused-parameter
