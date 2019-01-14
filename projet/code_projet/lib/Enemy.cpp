@@ -84,9 +84,8 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
 void Enemy::updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
     //updates the Q-table associated with this mec
     // TODO
-  int state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
-  //this->qTable->update_table(action, etat_courrant, etat_suivant, recompense); // actualise le tableau Q
-
+    //int state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+    //this->qTable->update_table(action, etat_courrant, etat_suivant, recompense); // actualise le tableau Q
 }
 
 // setters et getters

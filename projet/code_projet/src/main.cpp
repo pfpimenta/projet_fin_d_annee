@@ -23,7 +23,31 @@ namespace ig = irr::gui;
 
 
 
-int main(){
+int main(int argc, char* argv[]){
+
+    int mode_execution; // 0: jouer/play, 1: train, 2: test1, 3: test2
+    if(argc == 1){
+      std::cout << "...mode JOUER / PLAY ..." << '\n';
+      mode_execution = 0;
+    }else if (argc == 2){
+      char* param = argv[1];
+      if(strcmp(param,"train")==0){
+          std::cout << "...mode TRAIN ..." << '\n';
+          mode_execution = 1;
+      }else if(strcmp(param,"test1")==0){
+          std::cout << "...mode TEST 1 (Cedric) ..." << '\n';
+          mode_execution = 2;
+      }else if(strcmp(param,"test2")==0){
+          std::cout << "...mode TEST 2 (Pedro)..." << '\n';
+          mode_execution = 3;
+      }else{
+        std::cout << "ERROR : parametre non reconnu" << '\n';
+        std::exit(EXIT_FAILURE);
+      }
+    }else{
+      std::cout << "ERROR : trop de parametres " << '\n';
+      std::exit(EXIT_FAILURE);
+    }
 
     /** DO NOT EDIT **/
 
@@ -159,4 +183,3 @@ int main(){
 
     return 0;
 }
-

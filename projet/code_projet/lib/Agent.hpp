@@ -17,7 +17,6 @@
 
 class GameManager;
 
-enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
 
 class Agent
 {

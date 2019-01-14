@@ -82,21 +82,26 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
   this->q_table[etat_courrant][action] =  (1-lr)*old_value + lr*(recompense + this->gamma * max_next_state);
 }
 
-int Q_table::takeAction(int state){
+Action Q_table::takeAction(int state){
 		// retourne le meilleur etat
-    float rand_num = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
-    std::cout << "...printing Q_table:" << std::endl;
+    float rand_num = static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
 
-    float action_score[this->num_actions];
+    float max_action_score;
+		int action;
     if(rand_num > this->taux_exploration){
         // choisir la meilleure action
-        for(int j = 0; j < this->num_actions; j++){
-          // TODO ???
-            action_score[j] = this->q_table[state][j];
+				max_action_score = this->q_table[state][0];
+				action = 0;
+        for(int j = 1; j < this->num_actions; j++){
+					if(this->q_table[state][j] > max_action_score){
+            max_action_score = this->q_table[state][j];
+						action = j;
+					}
         }
-        return 0;
     }else{
         // prendre l'action au hasard
-        return 0;
+				int random_variable = std::rand()%5;
+				action = random_variable;
     }
+		return (Action) action;
 }
