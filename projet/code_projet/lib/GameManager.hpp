@@ -17,7 +17,6 @@
 
 #include "./libGridMapping/globalHeader.hpp"
 
-#include "MyEventReceiver.hpp"
 
 
 class GameManager
