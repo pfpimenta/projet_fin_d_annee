@@ -3,6 +3,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
+
 #define DEFAULT_ATTACK_FORCE 15.7
 
 #include <iostream>
@@ -11,6 +12,8 @@
 #include "Q_table.hpp"
 #include "Agent.hpp"
 #include "State.hpp"
+
+
 
 
 class GameManager;

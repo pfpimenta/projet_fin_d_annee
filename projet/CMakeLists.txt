@@ -20,6 +20,7 @@ file(
 	source_files
         code_projet/src/*.[ch]pp
         code_projet/lib/*.[ch]pp
+        code_projet/lib/libGridMapping/*.[ch]pp
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

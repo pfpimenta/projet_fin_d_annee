@@ -9,6 +9,8 @@
 
 #define NUM_FEATURES 4 // dist_x_pers, dist_y_pers, hp_soi, hp_pers
 
+
+
 // returns the state given the feature information
 int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers);
 // return the total number of states

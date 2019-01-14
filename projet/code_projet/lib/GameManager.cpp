@@ -7,12 +7,26 @@
 GameManager::GameManager(){
 }
 
+
+
 // constructeur
-GameManager::GameManager(int w, int h){
+// w et h : nombre de cases en epaisseur et hauteur
+// smgr : scene manager (declare dans le main)
+// timerCursorBlink : timer pour que le curseur blink
+GameManager::GameManager(int w, int h, is::ISceneManager *smgr, ITimer *timerCursorBlink, MyEventReceiver *receiver){
   assert(w > 0);
   assert(h > 0);
   this->width = w;
   this->height = h;
+
+
+  /** construction du grid **/
+  // creation d'une grid avec les dimensions (w x h) et la position du curseur par defaut (position : (0, 0))
+  grid = new gridMapping (position(DEFAULT_LIGNE, DEFAULT_COLONNE), w, h, smgr, timerCursorBlink);
+
+  receiver->grid = this->grid; // attachement du receiver a la grid
+
+
 }
 
 

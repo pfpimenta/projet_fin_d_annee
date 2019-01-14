@@ -3,6 +3,8 @@
 #ifndef GAME_MANAGER_HPP
 #define GAME_MANAGER_HPP
 
+
+
 #include "Agent.hpp"
 #include "Enemy.hpp"
 #include "Q_table.hpp"
@@ -12,15 +14,32 @@
 #include <vector>
 
 
+
+#include "./libGridMapping/globalHeader.hpp"
+
+#include "MyEventReceiver.hpp"
+
+
 class GameManager
 {
 	std::vector<Agent*> personnages;
 	// objets ? pierre etc
 	int width;
 	int height;
+
+
 	public:
+
+    //la grille dans laquelle se passe l'action
+    gridMapping *grid;
+    void makeCurseurBlink(bool val)
+    {
+        grid->makeCurseurBlink(val);
+    }
+
+
 	GameManager(); // constructeur
-	GameManager(int width, int height); // constructeur
+    GameManager(int width, int height, scene::ISceneManager *smgr, ITimer *timerCursorBlink, MyEventReceiver *receiver); // constructeur
 	int getWidth();
 	int getHeight();
 	// the returns a character according to what is in the point (pos_x, pos_y) :

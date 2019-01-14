@@ -13,6 +13,8 @@
 #define LEARNING_RATE 0.05 // changer
 #define DISCOUNT_VALUE 0.9 // changer
 
+
+
 class Q_table
 {
 	float taux_exploration; // pourcentage de prendre une action au hasard

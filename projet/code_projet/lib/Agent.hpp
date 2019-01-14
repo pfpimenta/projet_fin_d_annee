@@ -12,6 +12,9 @@
 //#include "GameManager.hpp"
 
 
+
+
+
 class GameManager;
 
 enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
