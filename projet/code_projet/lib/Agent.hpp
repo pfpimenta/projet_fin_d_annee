@@ -11,10 +11,6 @@
 #include "Q_table.hpp"
 //#include "GameManager.hpp"
 
-
-
-
-
 class GameManager;
 
 
@@ -25,11 +21,14 @@ class Agent
 	GameManager *gm;
 	int width;
 	int height;
+
+	protected:
+	int pos_x;
+	int pos_y;
+
 	public:
 	Agent(); // constructeur
 	Agent(int x, int y); // constructeur
-	int pos_x;
-	int pos_y;
 	void takeDamage(float damage); // take damage
 	Action chooseAction();
 	void moveUp();
@@ -42,7 +41,10 @@ class Agent
 	float getHP();
 	void setAttackForce(float attackForce);
 	float getAttackForce();
-
+	void setPosX(int x);
+	int getPosX();
+	void setPosY(int y);
+	int getPosY();
 };
 
 #endif

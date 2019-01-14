@@ -25,8 +25,8 @@ namespace ig = irr::gui;
 void mode_train(){
   // training
   // version de test
-  GameManager gameManager = GameManager(7, 7);
-  gameManager.train();
+  GameManager* gameManager = new GameManager(7, 7);
+  gameManager->train();
 }
 void mode_test1(){
   // avec la main de Cedric
@@ -119,13 +119,18 @@ void mode_test2(){
 
   // creation du grid
   GameManager* gameManager = new GameManager(7, 7);
+
   // ajout d'ennemis
+  std::cout << "DEBUG loko1\n";
   Agent personnage_test = Agent(2, 5);
   gameManager->addPersonnage(&personnage_test);
+  std::cout << "DEBUG loko2\n";
+
   Agent personnage_test2 = Agent(5, 2);
   gameManager->addPersonnage(&personnage_test2);
   Agent personnage_test3 = Agent(2, 2);
   gameManager->addPersonnage(&personnage_test3);
+
   // tester le jeu avec l'affichage au terminal
   while(true){
       std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear

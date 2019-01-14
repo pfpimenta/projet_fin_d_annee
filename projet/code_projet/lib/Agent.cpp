@@ -10,13 +10,10 @@ Agent::Agent(){
 }
 
 // constructeur
-Agent::Agent(int x, int y){
-  this->pos_x = x;
-  this->pos_y = y;
-  
+Agent::Agent(int x, int y) : pos_x(x),pos_y(y){
   this->hp = HP_MAX;
   this->attack_force = 15.7;
-  
+
   // asserts
    assert(this->hp > 0); //hp doit etre positif
    assert(this->pos_x >= 0); //position x doit etre positif
@@ -43,12 +40,12 @@ Action Agent::chooseAction(){
   // TODO : action avec la Q table
   // ou input du joueur
   // ===> ca va etre dans des subclasses Enemy et Player (?)
-  
+
   // DEBUG pour tester la variable gm
   //int w = gm->getWidth();
   //gm->printHPs();
   //std::cout << "debug wwwww : " << w << std::endl;
-  
+
   return action;
 }
 
@@ -107,4 +104,19 @@ void Agent::setAttackForce(float attackForce){
 }
 float Agent::getAttackForce(){
   return this->attack_force ;
+}
+
+// pos_x
+void Agent::setPosX(int x){
+  this->pos_x = x;
+}
+int Agent::getPosX(){
+  return this->pos_x;
+}
+// pos_y
+void Agent::setPosY(int y){
+  this->pos_y = y;
+}
+int Agent::getPosY(){
+  return this->pos_y;
 }

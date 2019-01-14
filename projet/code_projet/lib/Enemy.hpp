@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cassert>
 #include <string>
+#include <vector>
 #include "Q_table.hpp"
 #include "Agent.hpp"
 #include "State.hpp"
@@ -30,7 +31,7 @@ class Enemy :  public Agent
 	void takeDamage(float damage); // take damage
 	Action chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
 	Action chooseAction();
-	void updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers);
+	int findClosestEnemy(std::vector<Enemy*> learners);
 	Q_table* getQTable();
 	void setQTable(Q_table* q_table);
 	int getLastState();

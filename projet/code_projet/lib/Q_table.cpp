@@ -67,7 +67,7 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
 {
 
   float lr = this->learning_rate;
-	std::cout << "DEBUG debut update_table: " << etat_courrant<< "  " << (int)action << std::endl;
+	//std::cout << "DEBUG debut update_table: " << etat_courrant<< "  " << (int)action << std::endl;
 
   float old_value = this->q_table[etat_courrant][action];
 

@@ -53,11 +53,22 @@ char GameManager::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
   int nombre_personnages = this->personnages.size();
   for(int i = 0; i < nombre_personnages; i++){
-    if(x == this->personnages[i]->pos_x && y == this->personnages[i]->pos_y){
+    if(x == this->personnages[i]->getPosX() && y == this->personnages[i]->getPosY()){
       return 'x';
     }
   }
   return '-';
+}
+
+
+bool GameManager::isSomeoneAtPosition(int x, int y, std::vector<Enemy*> learners){
+  // retourne un char qui represente ce qui est dans cette position dans la grid
+  for(int i = 0; i < (int) learners.size(); i++){
+    if(x == learners[i]->getPosX() && y == learners[i]->getPosY()){
+      return true;
+    }
+  }
+  return false;
 }
 
 // affichage du grid
@@ -89,7 +100,7 @@ void GameManager::printHPs(){
 // on essaie d'ajouter le personnage
 // addEnemy() renvoie false si la position est occupee
 void GameManager::addPersonnage(Agent* personnage){
-  if (grid->addEnemy(position(personnage->pos_x, personnage->pos_y)))
+  if (grid->addEnemy(position(personnage->getPosX(), personnage->getPosY())))
   {
       personnage->setBoundaries(this->width, this->height);
       personnage->setGameManager(this);
@@ -106,8 +117,7 @@ void GameManager::step(){
   grid->mouvement(RESET);
   int nombre_personnages = this->personnages.size();
   Action a;
-  int attack_x;
-  int attack_y;
+  int attack_x, attack_y;
   float attack_damage;
 
   // execution des actions des personnages
@@ -120,36 +130,36 @@ void GameManager::step(){
     switch(a){
       case UP:
         this->personnages[i]->moveUp();
-        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        tmp = position(personnages[i]->getPosX(), personnages[i]->getPosY());
         grid->setEnemyCursor(i, tmp);
-        personnages[i]->pos_x = tmp.ligne;
-        personnages[i]->pos_y = tmp.colonne;
+        personnages[i]->setPosX(tmp.ligne);
+        personnages[i]->setPosY(tmp.colonne);
         break;
       case DOWN:
         this->personnages[i]->moveDown();
-        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        tmp = position(personnages[i]->getPosX(), personnages[i]->getPosY());
         grid->setEnemyCursor(i, tmp);
-        personnages[i]->pos_x = tmp.ligne;
-        personnages[i]->pos_y = tmp.colonne;
+        personnages[i]->setPosX(tmp.ligne);
+        personnages[i]->setPosY(tmp.colonne);
         break;
       case LEFT:
         this->personnages[i]->moveLeft();
-        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        tmp = position(personnages[i]->getPosX(), personnages[i]->getPosY());
         grid->setEnemyCursor(i, tmp);
-        personnages[i]->pos_x = tmp.ligne;
-        personnages[i]->pos_y = tmp.colonne;
+        personnages[i]->setPosX(tmp.ligne);
+        personnages[i]->setPosY(tmp.colonne);
         break;
       case RIGHT:
         this->personnages[i]->moveRight();
-        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        tmp = position(personnages[i]->getPosX(), personnages[i]->getPosY());
         grid->setEnemyCursor(i, tmp);
-        personnages[i]->pos_x = tmp.ligne;
-        personnages[i]->pos_y = tmp.colonne;
+        personnages[i]->setPosX(tmp.ligne);
+        personnages[i]->setPosY(tmp.colonne);
         break;
       case ATTACK:
         attack_damage = this->personnages[i]->getAttackForce();
-        attack_x = this->personnages[i]->pos_x;
-        attack_y = this->personnages[i]->pos_y;
+        attack_x = this->personnages[i]->getPosX();
+        attack_y = this->personnages[i]->getPosY();
         this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
         break;
       default:
@@ -173,21 +183,21 @@ void GameManager::doDamageAroundPoint(int x, int y, float attack_damage){
   int nombre_personnages = this->personnages.size();
   for(int i = 0; i < nombre_personnages; i++){
     // verifie pour les 8 carres autour du attaquant
-    if(this->personnages[i]->pos_x == x + 1 && this->personnages[i]->pos_y == y + 1){
+    if(this->personnages[i]->getPosX() == x + 1 && this->personnages[i]->getPosY() == y + 1){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x + 1 && this->personnages[i]->pos_y == y){
+    }else if(this->personnages[i]->getPosX() == x + 1 && this->personnages[i]->getPosY() == y){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x + 1 && this->personnages[i]->pos_y == y - 1){
+    }else if(this->personnages[i]->getPosX() == x + 1 && this->personnages[i]->getPosY() == y - 1){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x  && this->personnages[i]->pos_y == y + 1){
+    }else if(this->personnages[i]->getPosX() == x  && this->personnages[i]->getPosY() == y + 1){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x  && this->personnages[i]->pos_y == y - 1){
+    }else if(this->personnages[i]->getPosX() == x  && this->personnages[i]->getPosY() == y - 1){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x - 1 && this->personnages[i]->pos_y == y + 1){
+    }else if(this->personnages[i]->getPosX() == x - 1 && this->personnages[i]->getPosY() == y + 1){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x - 1 && this->personnages[i]->pos_y == y){
+    }else if(this->personnages[i]->getPosX() == x - 1 && this->personnages[i]->getPosY() == y){
       this->personnages[i]->takeDamage(attack_damage);
-    }else if(this->personnages[i]->pos_x == x - 1 && this->personnages[i]->pos_y == y - 1){
+    }else if(this->personnages[i]->getPosX() == x - 1 && this->personnages[i]->getPosY() == y - 1){
       this->personnages[i]->takeDamage(attack_damage);
     }
   }
@@ -250,9 +260,10 @@ void GameManager::train(){
       for(int i = 0; i < num_learners; i++){
       	// calculate state information :
         // find closest mec :
-        i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
-        dist_x_pers = learners[i_closest_enemy]->pos_x - learners[i]->pos_x;
-        dist_y_pers = learners[i_closest_enemy]->pos_y - learners[i]->pos_y;
+        //i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
+        i_closest_enemy = learners[i]->findClosestEnemy(learners);
+        dist_x_pers = learners[i_closest_enemy]->getPosX() - learners[i]->getPosX();
+        dist_y_pers = learners[i_closest_enemy]->getPosY() - learners[i]->getPosY();
       	hp_soi = learners[i]->getHP();
       	hp_pers = learners[i_closest_enemy]->getHP();
         // get Q-table
@@ -263,10 +274,10 @@ void GameManager::train(){
         if(step_count!=0){
           lastState = learners[i]->getLastState();
           reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
-          std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
+          //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
           //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
           qtable_pointer->update_table(action, lastState, state, reward); // actualise le tableau Q
-          std::cout << "DEBUG apres update_table" << std::endl;
+          //std::cout << "DEBUG apres update_table" << std::endl;
         }
         // set lastState
         learners[i]->setLastState(state);
@@ -281,44 +292,51 @@ void GameManager::train(){
 
 // avance un tour du jeu
 void GameManager::train_step(std::vector<Enemy*> learners){
-  int nombre_personnages = learners.size();
+  int num_learners = learners.size();
   Action a;
-  int attack_x;
-  int attack_y;
+  int pos_x, pos_y;
   float attack_damage;
 
   // execution des actions des personnages
-  for(int i = 0; i < nombre_personnages; i++){
+  for(int i = 0; i < num_learners; i++){
     // choisir l'action
     a = learners[i]->chooseAction();
+    pos_x = learners[i]->getPosX();
+    pos_y = learners[i]->getPosY();
 
     // faire l'action
     switch(a){
       case UP:
-	learners[i]->moveUp();
-	break;
+        if(this->isSomeoneAtPosition(pos_x-1, pos_y, learners) == false){
+          learners[i]->moveUp();
+        }
+        break;
       case DOWN:
-	learners[i]->moveDown();
-	break;
+        if(this->isSomeoneAtPosition(pos_x+1, pos_y, learners) == false){
+          learners[i]->moveDown();
+        }
+        break;
       case LEFT:
-	learners[i]->moveLeft();
-	break;
+        if(this->isSomeoneAtPosition(pos_x, pos_y-1, learners)== false){
+          learners[i]->moveLeft();
+        }
+        break;
       case RIGHT:
-	learners[i]->moveRight();
-	break;
+        if(this->isSomeoneAtPosition(pos_x, pos_y+1, learners)== false){
+          learners[i]->moveRight();
+        }
+        break;
       case ATTACK:
-	attack_damage = learners[i]->getAttackForce();
-	attack_x = learners[i]->pos_x;
-	attack_y = learners[i]->pos_y;
-	this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
-	break;
+        attack_damage = learners[i]->getAttackForce();
+        this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
+        break;
       default:
-	break;
+        break;
     }
   }
 
   // verifier si ils sont morts
-  for(int i = 0; i < nombre_personnages; i++){
+  for(int i = 0; i < num_learners; i++){
     if ( learners[i]->getHP() <= 0.0){
       // il est mort
       learners.erase(learners.begin()+i);

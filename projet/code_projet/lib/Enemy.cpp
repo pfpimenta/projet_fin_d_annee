@@ -55,7 +55,7 @@ Action Enemy::chooseAction(){
   int random_variable = std::rand()%5;
   action = (Action) random_variable;
   this->lastAction = action;
-  std::cout << "DEBUG update lastAction: " << this->lastAction << std::endl;
+  //std::cout << "DEBUG update lastAction: " << this->lastAction << std::endl;
   return action;
 }
 
@@ -81,13 +81,35 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   return action;
 }
 
-void Enemy::updateQTable(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
-    //updates the Q-table associated with this mec
-    // TODO
-    //int state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
-    //this->qTable->update_table(action, etat_courrant, etat_suivant, recompense); // actualise le tableau Q
+int Enemy::findClosestEnemy(std::vector<Enemy*> learners){
+  int closestEnemyIndex = 0;
+  int dist_x, dist_y, current_distance, current_min_distance;
+
+  if(learners[0] != this){
+    closestEnemyIndex = 0;
+    dist_x = learners[0]->pos_x - this->pos_x;
+    dist_y = learners[0]->pos_y - this->pos_y;
+    current_min_distance = dist_x*dist_x + dist_y*dist_y;
+  }else{
+    closestEnemyIndex = 1;
+    dist_x = learners[1]->pos_x - this->pos_x;
+    dist_y = learners[1]->pos_y - this->pos_y;
+    current_min_distance = dist_x*dist_x + dist_y*dist_y;
+  }
+  for(int i = 1; i < (int)learners.size(); i++){
+    dist_x = learners[i]->pos_x - this->pos_x;
+    dist_y = learners[i]->pos_y - this->pos_y;
+    current_distance = dist_x*dist_x + dist_y*dist_y;
+    if(current_distance < current_min_distance){
+      current_min_distance = current_distance;
+    }
+  }
+  std::cout << "DEBUG dist_x , dist_y :"<< dist_x<<" , " <<dist_y<< '\n';
+  return closestEnemyIndex;
 }
 
+
+//
 // setters et getters
 Q_table* Enemy::getQTable(){
   return this->qTable;
