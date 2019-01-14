@@ -242,7 +242,7 @@ void gridMapping::removeObstacle(position p)
 /** gestion des ennemis **/
 
 // ajout d'ennemis
-void gridMapping::addEnemy(position p)
+bool gridMapping::addEnemy(position p)
 {
     // on verifie que la position ou on veut ajouter l'ennemi n est pas occupee
     if (!isObstacle(p, barrier) && !(p == j1.pos))
@@ -253,15 +253,18 @@ void gridMapping::addEnemy(position p)
         mechant.push_back(enemy(p.ligne, p.colonne, myGrid));
 
         std::cout << "Ennemi ajoute avec succes" << std::endl;
+
+        return true;
     }
     else
         std::cout << " Impossible d'ajouter cet ennemi. la position : ("
                   << p.ligne << ", " << p.colonne << ") est deja occupee " << std::endl;
 
+    return false;
 }
 
 // gestion de l'affichage / deplacement de l'ennemi sur la grid
-void gridMapping::setEnemyCursor(int i /* i = numero de l'ennemi*/, position &p_i)
+bool gridMapping::setEnemyCursor(int i /* i = numero de l'ennemi*/, position &p_i)
 {
 
     /**
@@ -285,6 +288,10 @@ void gridMapping::setEnemyCursor(int i /* i = numero de l'ennemi*/, position &p_
                 mechant[i].setPosition(p_i);
                 addObstacle(p_i); // maj de la nouvelle position de l'ennemi
                 myGrid->getGridNode(mechant[i].pos)->setCouleur(ENNEMY);
+
+                std::cout << "position de l'ennemi modifiee avec succes" << std::endl;
+
+                return true;
             }
             else
             {
@@ -293,6 +300,10 @@ void gridMapping::setEnemyCursor(int i /* i = numero de l'ennemi*/, position &p_
             }
         }
     }
+
+    std::cout << "echec de modification de la position" << std::endl;
+
+    return false;
 }
 
 

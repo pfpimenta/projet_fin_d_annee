@@ -22,11 +22,13 @@
 
 class GameManager
 {
-	std::vector<Agent*> personnages;
+public:
+    std::vector<Agent*> personnages; // ennemis
 	// objets ? pierre etc
 	int width;
 	int height;
 
+    //TODO player
 
 	public:
 

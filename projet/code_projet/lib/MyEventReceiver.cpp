@@ -73,7 +73,8 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
                   act = VALIDATE;
                   break;
                 case KEY_KEY_W: // pour tester les nouvelles features
-                  act = DEBUG;
+                  //act = DEBUG;
+                  //gmngr->step();
                   std::cout << "ok" << std::endl;
                   break;
                 default:;

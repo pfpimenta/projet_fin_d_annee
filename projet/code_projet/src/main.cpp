@@ -60,7 +60,6 @@ int main(){
 //    // pour tester le GameManager
     GameManager *gameManager = new GameManager(20, 10, smgr, timerCursorBlink, receiver);
 
-
     // ajout d'obstacles
     std::vector<position> trucs; int nbTruc = 10;
     for(int k = 0; k < nbTruc; k++)
@@ -68,14 +67,16 @@ int main(){
         trucs.push_back(position(alea(1, DEFAULT_HEIGHT - 1), alea(1, DEFAULT_WIDTH - 1)));
         std::cout << trucs[k].printPosition(0) << std::endl;
     }
-
-
     gameManager->grid->addObstacle(trucs);
 
+
     // ajout d'ennemis
-    gameManager->grid->addEnemy(position(0, 3));
-    gameManager->grid->addEnemy(position(2, 8));
-    gameManager->grid->addEnemy(position(4, 15));
+    Agent personnage_test = Agent(2, 5);
+    gameManager->addPersonnage(&personnage_test);
+    Agent personnage_test2 = Agent(5, 2);
+    gameManager->addPersonnage(&personnage_test2);
+    Agent personnage_test3 = Agent(2, 2);
+    gameManager->addPersonnage(&personnage_test3);
 
 
 
@@ -83,13 +84,7 @@ int main(){
 //    // training test
 //    gameManager.train();
 
-//    // ajouter des personnage
-//    Agent personnage_test = Agent(2, 5);
-//    gameManager.addPersonnage(&personnage_test);
-//    Agent personnage_test2 = Agent(5, 2);
-//    gameManager.addPersonnage(&personnage_test2);
-//    Agent personnage_test3 = Agent(2, 2);
-//    gameManager.addPersonnage(&personnage_test3);
+
 
 
 
@@ -127,9 +122,12 @@ int main(){
         // Dessin de la scène :
         smgr->drawAll();
 
-
-        //affichage des infos de la grid
-        //grid->printInfo();
+        std::cout << "perso pedro : ";
+        std::cout << gameManager->personnages[0]->pos_x << " "
+                << gameManager->personnages[0]->pos_y  << std::endl;
+        std::cout << "perso ced : ";
+        std::cout << gameManager->grid->mechant[0].pos.ligne << " "
+                << gameManager->grid->mechant[0].pos.colonne  << std::endl;
 
         // pour faire clignoter le curseur
         gameManager->makeCurseurBlink(true);

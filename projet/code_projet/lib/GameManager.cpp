@@ -23,7 +23,6 @@ GameManager::GameManager(int w, int h, is::ISceneManager *smgr, ITimer *timerCur
   /** construction du grid **/
   // creation d'une grid avec les dimensions (w x h) et la position du curseur par defaut (position : (0, 0))
   grid = new gridMapping (position(DEFAULT_LIGNE, DEFAULT_COLONNE), w, h, smgr, timerCursorBlink);
-
   receiver->grid = this->grid; // attachement du receiver a la grid
 
 
@@ -80,11 +79,17 @@ void GameManager::printHPs(){
   }
 }
 
+
 // add a personnage to the game
+// on essaie d'ajouter le personnage
+// addEnemy() renvoie false si la position est occupee
 void GameManager::addPersonnage(Agent* personnage){
-  personnage->setBoundaries(this->width, this->height);
-  personnage->setGameManager(this);
-  this->personnages.push_back(personnage);
+  if (grid->addEnemy(position(personnage->pos_x, personnage->pos_y)))
+  {
+      personnage->setBoundaries(this->width, this->height);
+      personnage->setGameManager(this);
+      this->personnages.push_back(personnage);
+  }
 }
 
 // avance un tour du jeu
@@ -101,27 +106,44 @@ void GameManager::step(){
     a = this->personnages[i]->chooseAction();
 
     // faire l'action
+    position tmp;
     switch(a){
       case UP:
-	this->personnages[i]->moveUp();
-	break;
+        this->personnages[i]->moveUp();
+        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        grid->setEnemyCursor(i, tmp);
+        personnages[i]->pos_x = tmp.ligne;
+        personnages[i]->pos_y = tmp.colonne;
+        break;
       case DOWN:
-	this->personnages[i]->moveDown();
-	break;
+        this->personnages[i]->moveDown();
+        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        grid->setEnemyCursor(i, tmp);
+        personnages[i]->pos_x = tmp.ligne;
+        personnages[i]->pos_y = tmp.colonne;
+        break;
       case LEFT:
-	this->personnages[i]->moveLeft();
-	break;
+        this->personnages[i]->moveLeft();
+        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        grid->setEnemyCursor(i, tmp);
+        personnages[i]->pos_x = tmp.ligne;
+        personnages[i]->pos_y = tmp.colonne;
+        break;
       case RIGHT:
-	this->personnages[i]->moveRight();
-	break;
+        this->personnages[i]->moveRight();
+        tmp = position(personnages[i]->pos_x, personnages[i]->pos_y);
+        grid->setEnemyCursor(i, tmp);
+        personnages[i]->pos_x = tmp.ligne;
+        personnages[i]->pos_y = tmp.colonne;
+        break;
       case ATTACK:
-	attack_damage = this->personnages[i]->getAttackForce();
-	attack_x = this->personnages[i]->pos_x;
-	attack_y = this->personnages[i]->pos_y;
-	this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
-	break;
+        attack_damage = this->personnages[i]->getAttackForce();
+        attack_x = this->personnages[i]->pos_x;
+        attack_y = this->personnages[i]->pos_y;
+        this->doDamageAroundPoint(attack_x, attack_y, attack_damage);
+        break;
       default:
-	break;
+        break;
     }
   }
 

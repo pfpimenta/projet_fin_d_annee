@@ -19,7 +19,7 @@
 
 class gridMapping
 {
-
+public:
     // width et height : dimensions de la grid
     int width;
     int height;
@@ -129,9 +129,9 @@ class gridMapping
     /** gestion de l'ennemi **/
 
     // ajout d'ennemis
-    void addEnemy(position p);
+    bool addEnemy(position p);
     // gestion de l'affichage de l'ennemi sur la grid
-    void setEnemyCursor(int i, position &p_i);
+    bool setEnemyCursor(int i, position &p_i);
     // gestion de la suppression des donnee de l'ennemi mort
     void enemyDied(int i);
 
