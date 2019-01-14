@@ -1,7 +1,5 @@
 # Projet_fin_d_annee
 
-## /!\ Problème de compilation avec le makefile à résoudre !
-## En attendant que le problème soit résolu, veuillez compiler à partir du CMakeLists.tx
 
 December 14, 2018   ->    January 25, 2019
 
