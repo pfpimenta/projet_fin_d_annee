@@ -18,7 +18,7 @@ Projet de majeure Image, modélisation et informatique (IMI) à [CPE Lyon](https
 * Cédric KUASSIVI
 * Dylan TOSTI
 
-
+ 
 </br>
 
 ### Description du projet:
