@@ -12,6 +12,7 @@ Learner::Learner(){
 
 // constructeur avec position
 Learner::Learner(int x, int y){
+  this->estMort = false;
   this->pos_x = x;
   this->pos_y = y;
 
@@ -30,6 +31,7 @@ Learner::Learner(int x, int y){
 
 // constructeur avec position et q_table pointer
 Learner::Learner(int x, int y, Q_table* q_table){
+  this->estMort = false;
   this->pos_x = x;
   this->pos_y = y;
 
@@ -111,6 +113,14 @@ int Learner::findClosestEnemy(std::vector<Learner*> learners){
   return closestEnemyIndex;
 }
 
+// mourir
+void Learner::die(){
+  this->estMort = true;
+}
+
+bool Learner::isDead(){
+  return this->estMort;
+}
 
 //
 // setters et getters

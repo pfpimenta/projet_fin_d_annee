@@ -123,6 +123,15 @@ void Trainer::train(){
       num_learners = learners.size();
       // update q tables for all personnages / learners
       for(int i = 0; i < num_learners; i++){
+        // verifier si ils sont morts
+        if ( this->learners[i]->getHP() <= 0.0){
+          // il est mort
+          // rewards :
+          // TODO
+          // toggle boolean
+          this->learners[i]->die();
+        }
+
       	// calculate state information :
         // find closest mec :
         //i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
@@ -147,6 +156,14 @@ void Trainer::train(){
         }
         // set lastState
         this->learners[i]->setLastState(state);
+
+        if(learners[i]->isDead()){
+            // effacer du vecteur :
+            this->learners.erase(this->learners.begin()+i);
+            // ajuster index et num_learners :
+            i--;
+            num_learners--;
+        }
       }
     }
   }
@@ -203,15 +220,6 @@ void Trainer::step(){
     }
   }
 
-  // verifier si ils sont morts
-  for(int i = 0; i < num_learners; i++){
-    if ( this->learners[i]->getHP() <= 0.0){
-      // il est mort
-      this->learners.erase(this->learners.begin()+i);
-      i--;
-      num_learners--;
-    }
-  }
 }
 
 // getters et setters :

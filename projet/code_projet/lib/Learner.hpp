@@ -24,15 +24,17 @@ class Learner :  public Agent
 	Q_table* qTable;
 	int lastState;
 	Action lastAction;
+	bool estMort;
 	public:
 	Learner(); // constructeur
 	Learner(int x, int y); // constructeur avec position
 	Learner(int x, int y, Q_table* q_table); // constructeur avec position et Qtable
-	//void takeDamage(float damage); // take damage
 	Action chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
 	Action chooseAction();
 	// return index of the closest mec to this mec
 	int findClosestEnemy(std::vector<Learner*> learners);
+	void die(); // pour bool isDead = true
+	bool isDead(); // pour bool isDead = true
 	// getters et setters :
 	Q_table* getQTable();
 	void setQTable(Q_table* q_table);
