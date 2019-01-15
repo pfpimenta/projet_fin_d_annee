@@ -18,6 +18,7 @@ namespace ig = irr::gui;
 #include "../lib/Agent.hpp"
 #include "../lib/GameManager.hpp"
 #include "../lib/State.hpp"
+#include "../lib/Trainer.hpp"
 
 #include "../lib/MyEventReceiver.hpp"
 
@@ -25,10 +26,10 @@ namespace ig = irr::gui;
 void mode_train(){
   // training
   // version de test
-  GameManager* gameManager = new GameManager(7, 7);
-  gameManager->train();
-  //Trainer* trainer = new Trainer(7, 7);
-  //trainer->train();
+  // GameManager* gameManager = new GameManager(7, 7);
+  // gameManager->train();
+  Trainer* trainer = new Trainer(7, 7);
+  trainer->train();
 }
 void mode_test1(){
   // avec la main de Cedric
