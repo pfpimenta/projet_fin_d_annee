@@ -196,7 +196,7 @@ void GameManager::train(){
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 1;
+  int max_episodes = 10;
   int max_steps_per_episode = 10;
 
   int num_learners;

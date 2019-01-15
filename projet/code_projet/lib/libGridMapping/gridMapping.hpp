@@ -32,7 +32,6 @@ public:
     // attribut qui contiendra les positions (ligne et colonne) de tous les obstacles de la scene 2D
     obstacle barrier;
 
-
     // node pour l'affichage 3D
     gridMesh *myGrid;
 
@@ -45,13 +44,10 @@ public:
     // enemy
     std::vector<enemy> mechant;
 
-
     // variable inutile (juste pour le debug)
     // pour verifier que l ennemi n est pas dans la mm case qu 'un autre ennemi
     position pos_debug = position(alea(1, DEFAULT_HEIGHT - 1), alea(1, DEFAULT_WIDTH - 1));
     //position pos_debug = position(0, 0);
-
-
 
     public:
 
@@ -61,11 +57,9 @@ public:
     /** constructeurs **/
     gridMapping(position curseur, int width, int height, is::ISceneManager *smgr, ITimer *timerCursorBlink); // constructeur
 
-
     /** Pour le debug **/
     std::string printCurseur(bool display); // affichage curseur
     void printInfo(); // affichage des infos de la classe
-
 
     /** Autres **/
     void setCurseur(position curseur); //pour modifier la position du curseur
@@ -79,7 +73,6 @@ public:
 
     // suppression d'obstacles
     void removeObstacle(position p);
-
 
     // pour faire clignoter le curseur
     void curseurBlink(bool b)
@@ -134,13 +127,8 @@ public:
     bool setEnemyCursor(int i, position &p_i);
     // gestion de la suppression des donnee de l'ennemi mort
     void enemyDied(int i);
-
-
 };
 
 
 
 #endif
-
-
-

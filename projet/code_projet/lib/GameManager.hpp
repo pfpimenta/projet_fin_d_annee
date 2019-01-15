@@ -22,7 +22,7 @@
 class GameManager
 {
 public:
-    std::vector<Agent*> personnages; // ennemis
+  std::vector<Agent*> personnages; // ennemis
 	// objets ? pierre etc
 	int width;
 	int height;
@@ -37,7 +37,6 @@ public:
     {
         grid->makeCurseurBlink(val);
     }
-
 
 	GameManager(); // constructeur
   GameManager(int w, int h);

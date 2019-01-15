@@ -27,6 +27,8 @@ void mode_train(){
   // version de test
   GameManager* gameManager = new GameManager(7, 7);
   gameManager->train();
+  //Trainer* trainer = new Trainer(7, 7);
+  //trainer->train();
 }
 void mode_test1(){
   // avec la main de Cedric
