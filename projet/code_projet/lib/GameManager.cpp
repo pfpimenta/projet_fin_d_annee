@@ -16,8 +16,6 @@ GameManager::GameManager(int w, int h){
   this->height = h;
 }
 
-
-
 // constructeur
 // w et h : nombre de cases en epaisseur et hauteur
 // smgr : scene manager (declare dans le main)
@@ -27,12 +25,10 @@ GameManager::GameManager(int w, int h, is::ISceneManager *smgr, ITimer *timerCur
   assert(h > 0);
   this->width = w;
   this->height = h;
-
   /** construction du grid **/
   // creation d'une grid avec les dimensions (w x h) et la position du curseur par defaut (position : (0, 0))
   grid = new gridMapping (position(DEFAULT_LIGNE, DEFAULT_COLONNE), w, h, smgr, timerCursorBlink);
 }
-
 
 int GameManager::getWidth(){
   return this->width;
@@ -42,12 +38,11 @@ int GameManager::getHeight(){
   return this->height;
 }
 
-int GameManager::findClosestEnemy(int pos_x, int pos_y){
-  int closestEnemyIndex = 0;
-  // TODO
-  return closestEnemyIndex;
-}
-
+// int GameManager::findClosestEnemy(int pos_x, int pos_y){
+//   int closestEnemyIndex = 0;
+//   // TODO
+//   return closestEnemyIndex;
+// }
 
 char GameManager::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
@@ -59,7 +54,6 @@ char GameManager::charAtPosition(int x, int y){
   }
   return '-';
 }
-
 
 bool GameManager::isSomeoneAtPosition(int x, int y, std::vector<Enemy*> learners){
   // retourne un char qui represente ce qui est dans cette position dans la grid
@@ -95,13 +89,11 @@ void GameManager::printHPs(){
   }
 }
 
-
 // add a personnage to the game
 // on essaie d'ajouter le personnage
 // addEnemy() renvoie false si la position est occupee
 void GameManager::addPersonnage(Agent* personnage){
-  if (grid->addEnemy(position(personnage->getPosX(), personnage->getPosY())))
-  {
+  if (grid->addEnemy(position(personnage->getPosX(), personnage->getPosY()))){
       personnage->setBoundaries(this->width, this->height);
       personnage->setGameManager(this);
       this->personnages.push_back(personnage);
@@ -110,7 +102,6 @@ void GameManager::addPersonnage(Agent* personnage){
 
 // avance un tour du jeu
 void GameManager::step(){
-
   // l'ennemi ne doit pas aller la ou se trouve le curseur sinon le joueur au prochain tour
   // se trouvera a la mm position que lennemi => gros BUG
   // solution : reset la position du curseur avant chaque mouvement de l'ennemi :
@@ -208,8 +199,10 @@ void GameManager::train(){
   // executes the training of the Q tables
   // without showing on screen
 
+  std::srand(std::time(nullptr)); // use current time as seed for random generator
+
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 10;
+  int max_episodes = 1;
   int max_steps_per_episode = 10;
 
   int num_learners;
@@ -243,8 +236,10 @@ void GameManager::train(){
     // different de learners pendant le training)
     num_learners = 2 + std::rand()%4;
     for(int i = 0; i < num_learners; i++){
-      pos_x = std::rand()%this->width;
-      pos_y = std::rand()%this->height;
+      do{
+        pos_x = std::rand()%this->width;
+        pos_y = std::rand()%this->height;
+      }while(this->isSomeoneAtPosition(pos_x, pos_y, learners));
       Enemy new_learner = Enemy(pos_x, pos_y, qtable_pointer);
       learners.push_back(&new_learner);
     }
@@ -287,7 +282,7 @@ void GameManager::train(){
   std::cout << "...training complete" << std::endl;
 
   // print q-table
-  qtable.printTable();
+  // qtable.printTable();
 }
 
 // avance un tour du jeu

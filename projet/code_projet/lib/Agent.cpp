@@ -76,8 +76,9 @@ if(this->pos_y < this->height - 1)
 // ATTACK
 // TODO ?
 
-
+//
 // setters et getters
+//
 
 // width et height du grid actuel (taille du grid)
 void Agent::setBoundaries(int w, int h){

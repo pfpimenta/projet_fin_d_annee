@@ -142,7 +142,6 @@ void mode_test2(){
 }
 
 int main(int argc, char* argv[]){
-
     int mode_execution; // 0: jouer/play, 1: train, 2: test1, 3: test2
     if(argc == 1){
       std::cout << "...mode JOUER / PLAY ..." << '\n';

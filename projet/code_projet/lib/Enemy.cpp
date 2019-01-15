@@ -38,14 +38,14 @@ Enemy::Enemy(int x, int y, Q_table* q_table){
   this->qTable = q_table;
   //this->lastAction = UP;
 
+  std::cout << "DEBUG Enemy created : "<<this->pos_x<< " , " <<this->pos_y<< std::endl;
+
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif
    assert(this->pos_x >= 0); //position x doit etre positif
    assert(this->pos_y >= 0); //position y doit etre positif
    assert(this->getAttackForce() > 0); // attack force doit etre positif
 }
-
-
 
 
 // choose action
@@ -85,6 +85,8 @@ int Enemy::findClosestEnemy(std::vector<Enemy*> learners){
   int closestEnemyIndex = 0;
   int dist_x, dist_y, current_distance, current_min_distance;
 
+  //std::cout << "DEBUG x, y :"<< this->pos_x<<" , " << this->pos_y << '\n';
+
   if(learners[0] != this){
     closestEnemyIndex = 0;
     dist_x = learners[0]->pos_x - this->pos_x;
@@ -104,13 +106,14 @@ int Enemy::findClosestEnemy(std::vector<Enemy*> learners){
       current_min_distance = current_distance;
     }
   }
-  std::cout << "DEBUG dist_x , dist_y :"<< dist_x<<" , " <<dist_y<< '\n';
+  //std::cout << "DEBUG dist_x , dist_y :"<< dist_x<<" , " <<dist_y<< '\n';
   return closestEnemyIndex;
 }
 
 
 //
 // setters et getters
+//
 Q_table* Enemy::getQTable(){
   return this->qTable;
 }
