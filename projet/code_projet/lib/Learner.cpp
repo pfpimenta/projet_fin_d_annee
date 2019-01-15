@@ -1,17 +1,17 @@
 #include <iostream>
 
-#include "Enemy.hpp"
+#include "Learner.hpp"
 
 
 // constructeur
-Enemy::Enemy(){
+Learner::Learner(){
   // jamais utilisee
-  std::cout << "ERROR !!! on a appele le constructeur trompe pour Enemy" << std::endl;
+  std::cout << "ERROR !!! on a appele le constructeur trompe pour Learner" << std::endl;
   std::exit(EXIT_FAILURE);
 }
 
 // constructeur avec position
-Enemy::Enemy(int x, int y){
+Learner::Learner(int x, int y){
   this->pos_x = x;
   this->pos_y = y;
 
@@ -29,7 +29,7 @@ Enemy::Enemy(int x, int y){
 }
 
 // constructeur avec position et q_table pointer
-Enemy::Enemy(int x, int y, Q_table* q_table){
+Learner::Learner(int x, int y, Q_table* q_table){
   this->pos_x = x;
   this->pos_y = y;
 
@@ -38,7 +38,7 @@ Enemy::Enemy(int x, int y, Q_table* q_table){
   this->qTable = q_table;
   //this->lastAction = UP;
 
-  //std::cout<<"DEBUG enemy at x, y :"<<pos_x<<" , "<<pos_y<<'\n';
+  //std::cout<<"DEBUG learner at x, y :"<<pos_x<<" , "<<pos_y<<'\n';
 
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif
@@ -49,7 +49,7 @@ Enemy::Enemy(int x, int y, Q_table* q_table){
 
 
 // choose action
-Action Enemy::chooseAction(){
+Action Learner::chooseAction(){
   Action action;
   // action aleatoire (test)
   int random_variable = std::rand()%5;
@@ -61,7 +61,7 @@ Action Enemy::chooseAction(){
 
 
 // choose action (overcharge)
-Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
+Action Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   Action action;
 
   // action aleatoire (test)
@@ -82,7 +82,7 @@ Action Enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   return action;
 }
 
-int Enemy::findClosestEnemy(std::vector<Enemy*> learners){
+int Learner::findClosestEnemy(std::vector<Learner*> learners){
   int closestEnemyIndex = 0;
   int dist_x, dist_y, current_distance, current_min_distance;
 
@@ -115,23 +115,23 @@ int Enemy::findClosestEnemy(std::vector<Enemy*> learners){
 //
 // setters et getters
 //
-Q_table* Enemy::getQTable(){
+Q_table* Learner::getQTable(){
   return this->qTable;
 }
-void Enemy::setQTable(Q_table* q_table){
+void Learner::setQTable(Q_table* q_table){
   this->qTable = q_table;
 }
 
-int Enemy::getLastState(){
+int Learner::getLastState(){
   return this->lastState;
 }
-void Enemy::setLastState(int state){
+void Learner::setLastState(int state){
   this->lastState = state;
 }
 
-Action Enemy::getLastAction(){
+Action Learner::getLastAction(){
   return this->lastAction;
 }
-void Enemy::setLastAction(Action action){
+void Learner::setLastAction(Action action){
   this->lastAction = action;
 }

@@ -6,7 +6,6 @@
 
 
 #include "Agent.hpp"
-#include "Enemy.hpp"
 #include "Q_table.hpp"
 
 #include <iostream>

@@ -4,7 +4,7 @@
 #define TRAINER_HPP
 
 #include "Agent.hpp"
-#include "Enemy.hpp"
+#include "Learner.hpp"
 #include "Q_table.hpp"
 
 #include <iostream>
@@ -14,7 +14,7 @@
 
 class Trainer
 {
-    std::vector<Enemy*> learners;
+    std::vector<Learner*> learners;
   	// objets ? pierre etc
   	int width;
   	int height;
@@ -35,7 +35,7 @@ class Trainer
     void step();
     void doDamageAroundPoint(int x, int y, float attack_damage);
     void train();
-    void train_step(std::vector<Enemy*> learners);
+    void train_step(std::vector<Learner*> learners);
     int getWidth();
     int getHeight();
 

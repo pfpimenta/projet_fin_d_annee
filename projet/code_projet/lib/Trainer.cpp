@@ -108,7 +108,7 @@ void Trainer::train(){
         pos_x = std::rand()%this->width;
         pos_y = std::rand()%this->height;
       }while(this->isSomeoneAtPosition(pos_x, pos_y));
-      Enemy* new_learner = new Enemy(pos_x, pos_y, qtable_pointer);
+      Learner* new_learner = new Learner(pos_x, pos_y, qtable_pointer);
       new_learner->setBoundaries(this->width, this->height);
       this->learners.push_back(new_learner);
     }
