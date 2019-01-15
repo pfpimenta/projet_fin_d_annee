@@ -70,8 +70,8 @@ void Trainer::train(){
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 10;
-  int max_steps_per_episode = 10;
+  int max_episodes = 100;
+  int max_steps_per_episode = 1000;
 
   int num_learners;
   int pos_x; // pos initialle d'un learner
@@ -116,10 +116,11 @@ void Trainer::train(){
     // reset autre chose de la grid? TODO ?
 
     // executer la simulation pour l'aprentissage:
-    for( step_count = 0; step_count < max_steps_per_episode; step_count ++){
+    for( step_count = 0; step_count < max_steps_per_episode && num_learners !=1; step_count ++){
       //this->step(); // do one step
       this->step(); // do one step
 
+      num_learners = learners.size();
       // update q tables for all personnages / learners
       for(int i = 0; i < num_learners; i++){
       	// calculate state information :
@@ -135,6 +136,7 @@ void Trainer::train(){
         // get action, state, lastState, and reward   to update Q-table
         action = this->learners[i]->getLastAction();
         state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+        //std::cout << "DEBUG state: "<< state << std::endl;
         if(step_count!=0){
           lastState = this->learners[i]->getLastState();
           reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
@@ -206,6 +208,8 @@ void Trainer::step(){
     if ( this->learners[i]->getHP() <= 0.0){
       // il est mort
       this->learners.erase(this->learners.begin()+i);
+      i--;
+      num_learners--;
     }
   }
 }

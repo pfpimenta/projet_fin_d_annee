@@ -11,16 +11,31 @@ int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
 		std::vector<int> cumul_num_states;
 		cumul_num_states.push_back(getNumStatesOfFeature(0));
 		for(int i = 1; i < NUM_FEATURES; i++){
-			cumul_num_states[i] = cumul_num_states[i-1] + getNumStatesOfFeature(i);
+			cumul_num_states[i] = cumul_num_states[i-1] * getNumStatesOfFeature(i);
 		}
 
+    //std::cout << "DEBUG state dx: "<<dist_x_pers<<" dy: " <<dist_y_pers;
+    //std::cout << " HPs: "<<hp_soi<<" HPp: " <<hp_pers<< '\n';
+
     // dist_x_pers
-    if(dist_x_pers >= 2){
+    if(dist_x_pers <= -2){
+        state = state;
+    }else if(dist_x_pers == -1){
         state = state + 1;
+    }else if(dist_x_pers == 1){
+        state = state + 2;
+    }else if(dist_x_pers >= 2){
+        state = state + 3;
     }
     // dist_y_pers
-    if(dist_y_pers >= 2 && dist_y_pers <= 5){
-        state = state + cumul_num_states[0];
+    if(dist_y_pers <= -2){
+        state = state;
+    }else if(dist_y_pers == -1){
+        state = state + 1*cumul_num_states[0];
+    }else if(dist_y_pers == 1){
+        state = state + 2*cumul_num_states[0];
+    }else if(dist_y_pers >= 2){
+        state = state + 3*cumul_num_states[0];
     }
     // hp_soi
     if(hp_soi <= 25){
@@ -30,7 +45,6 @@ int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
     if(hp_pers <= 25){
       state = state + cumul_num_states[2];
     }
-
     return state;
 }
 
