@@ -21,13 +21,11 @@ Agent::Agent(int x, int y) : pos_x(x),pos_y(y){
    assert(this->attack_force > 0 ); //attack_force doit etre positive
 }
 
-
 // take damage
 void Agent::takeDamage(float damage){
   this->hp = this->hp - damage;
   //std::cout << "debug hp : " << this->hp << std::endl;
 }
-
 
 // choose action
 Action Agent::chooseAction(){
@@ -51,35 +49,34 @@ Action Agent::chooseAction(){
 
 //  UP
 void Agent::moveUp(){
-  if(this->pos_x > 0)
-    this->pos_x -= 1;
+  if(this->pos_y < this->height - 1)
+    this->pos_y += 1;
   return;
 }
 // DOWN
 void Agent::moveDown(){
-if(this->pos_x < this->width - 1)
-  this->pos_x += 1;
- return;
-}
-// LEFT
-void Agent::moveLeft(){
   if(this->pos_y > 0)
     this->pos_y -= 1;
   return;
 }
+// LEFT
+void Agent::moveLeft(){
+  if(this->pos_x > 0)
+    this->pos_x -= 1;
+  return;
+}
 // RIGHT
 void Agent::moveRight(){
-if(this->pos_y < this->height - 1)
-  this->pos_y += 1;
+if(this->pos_x < this->width - 1)
+  this->pos_x += 1;
  return;
 }
 // ATTACK
 // TODO ?
 
 //
-// setters et getters
+// setters et getters :
 //
-
 // width et height du grid actuel (taille du grid)
 void Agent::setBoundaries(int w, int h){
   this->width = w;

@@ -10,10 +10,8 @@ Q_table::Q_table(): num_states(NUM_STATES){
 	this->gamma = DISCOUNT_VALUE;
 	//this->num_states = NUM_STATES;
 	this->num_actions = NUM_ACTIONS;
-    std::cout << "DEBUG NUM_STATES: " << NUM_STATES << std::endl;
-    std::cout << "DEBUG NUM_ACTIONS: " << NUM_ACTIONS << std::endl;
-    std::cout << "DEBUG num_states: " <<this->num_states << std::endl;
-    std::cout << "DEBUG num_actions: " <<this->num_actions << std::endl;
+  // std::cout << "DEBUG num_states: " <<this->num_states << std::endl;
+  // std::cout << "DEBUG num_actions: " <<this->num_actions << std::endl;
 
 	// set table size
 	this->q_table = new float * [NUM_STATES];
@@ -35,8 +33,8 @@ Q_table::Q_table(int n_states, int n_actions){
 	this->gamma = DISCOUNT_VALUE;
 	this->num_states = n_states;
 	this->num_actions = n_actions;
-  std::cout << "DEBUG num_states: " << this->num_states << std::endl;
-  std::cout << "DEBUG num_actions: " << this->num_actions << std::endl;
+  //std::cout << "DEBUG num_states: " << this->num_states << std::endl;
+  //std::cout << "DEBUG num_actions: " << this->num_actions << std::endl;
 
 	// set table size
 	this->q_table = new float *[this->num_states];

@@ -48,8 +48,6 @@ public:
 	char charAtPosition(int x, int y);
   // returns true if there's a learner at (x,y), and false otherwise
   bool isSomeoneAtPosition(int x, int y, std::vector<Enemy*> learners);
-	// returns the index of the closest enemy to the point (pos_x, pos_y) :
-	//int findClosestEnemy(int pos_x, int pos_y);
 	//auto atPosition(int x, int y); //??
 	// print the grid at the current moment
 	void printGrid();

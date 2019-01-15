@@ -38,7 +38,7 @@ Enemy::Enemy(int x, int y, Q_table* q_table){
   this->qTable = q_table;
   //this->lastAction = UP;
 
-  std::cout << "DEBUG Enemy created : "<<this->pos_x<< " , " <<this->pos_y<< std::endl;
+  //std::cout<<"DEBUG enemy at x, y :"<<pos_x<<" , "<<pos_y<<'\n';
 
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif

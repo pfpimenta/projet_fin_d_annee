@@ -38,12 +38,6 @@ int GameManager::getHeight(){
   return this->height;
 }
 
-// int GameManager::findClosestEnemy(int pos_x, int pos_y){
-//   int closestEnemyIndex = 0;
-//   // TODO
-//   return closestEnemyIndex;
-// }
-
 char GameManager::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
   int nombre_personnages = this->personnages.size();
@@ -236,12 +230,14 @@ void GameManager::train(){
     // different de learners pendant le training)
     num_learners = 2 + std::rand()%4;
     for(int i = 0; i < num_learners; i++){
+      // positions aleatoires uniques pour chaque mec
       do{
         pos_x = std::rand()%this->width;
         pos_y = std::rand()%this->height;
       }while(this->isSomeoneAtPosition(pos_x, pos_y, learners));
-      Enemy new_learner = Enemy(pos_x, pos_y, qtable_pointer);
-      learners.push_back(&new_learner);
+      Enemy* new_learner = new Enemy(pos_x, pos_y, qtable_pointer);
+      new_learner->setBoundaries(this->width, this->height);
+      learners.push_back(new_learner);
     }
 
     // reset autre chose de la grid? TODO ?
@@ -282,7 +278,7 @@ void GameManager::train(){
   std::cout << "...training complete" << std::endl;
 
   // print q-table
-  // qtable.printTable();
+  qtable.printTable();
 }
 
 // avance un tour du jeu
@@ -294,10 +290,12 @@ void GameManager::train_step(std::vector<Enemy*> learners){
 
   // execution des actions des personnages
   for(int i = 0; i < num_learners; i++){
+
     // choisir l'action
     a = learners[i]->chooseAction();
     pos_x = learners[i]->getPosX();
     pos_y = learners[i]->getPosY();
+
 
     // faire l'action
     switch(a){
