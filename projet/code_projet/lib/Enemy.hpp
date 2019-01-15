@@ -28,7 +28,7 @@ class Enemy :  public Agent
 	Enemy(); // constructeur
 	Enemy(int x, int y); // constructeur avec position
 	Enemy(int x, int y, Q_table* q_table); // constructeur avec position et Qtable
-	void takeDamage(float damage); // take damage
+	//void takeDamage(float damage); // take damage
 	Action chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
 	Action chooseAction();
 	// return index of the closest enemy to this mec
