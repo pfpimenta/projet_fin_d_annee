@@ -70,8 +70,8 @@ void Trainer::train(){
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 100;
-  int max_steps_per_episode = 1000;
+  int max_episodes = 1000;
+  int max_steps_per_episode = 2500;
 
   int num_learners;
   int pos_x; // pos initialle d'un learner
@@ -90,8 +90,7 @@ void Trainer::train(){
 
   // table qu'on va entrainer
   int num_states = getNumStates();
-  Q_table qtable = Q_table(num_states, NUM_ACTIONS);
-  Q_table* qtable_pointer = &qtable;
+  Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
 
 
   int episode_count, step_count;
@@ -108,7 +107,7 @@ void Trainer::train(){
         pos_x = std::rand()%this->width;
         pos_y = std::rand()%this->height;
       }while(this->isSomeoneAtPosition(pos_x, pos_y));
-      Learner* new_learner = new Learner(pos_x, pos_y, qtable_pointer);
+      Learner* new_learner = new Learner(pos_x, pos_y, qtable);
       new_learner->setBoundaries(this->width, this->height);
       this->learners.push_back(new_learner);
     }
@@ -132,8 +131,6 @@ void Trainer::train(){
         dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[i]->getPosY();
       	hp_soi = this->learners[i]->getHP();
       	hp_pers = this->learners[i_closest_enemy]->getHP();
-        // get Q-table
-      	qtable_pointer = this->learners[i]->getQTable();
         // get action, state, lastState, and reward   to update Q-table
         action = this->learners[i]->getLastAction();
         state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
@@ -142,9 +139,8 @@ void Trainer::train(){
           lastState = this->learners[i]->getLastState();
           reward = this->learners[i]->getReward();
           //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
-          //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
-          qtable_pointer->update_table(action, lastState, state, reward); // actualise le tableau Q
-          //std::cout << "DEBUG apres update_table" << std::endl;
+          // actualise le tableau Q
+          this->learners[i]->getQTable()->update_table(action, lastState, state, reward);
         }
         // set lastState
         this->learners[i]->setLastState(state);
@@ -162,7 +158,10 @@ void Trainer::train(){
   std::cout << "...training complete" << std::endl;
 
   // print q-table
-  qtable.printTable();
+  //qtable->printTable();
+  //qtable->printTableBestActions();
+  qtable->saveTable("test_table");
+  qtable->loadTable("test_table");
 }
 
 // avance un tour du jeu

@@ -54,9 +54,27 @@ void Q_table::printTable(){
 	std::cout << "...printing Q_table ("<<this->num_states<<" states X "<<this->num_actions<<" actions):" << std::endl;
 	for(int i = 0; i < this->num_states; i++){
 		for(int j = 0; j < this->num_actions; j++){
-			std::cout << this->q_table[i][j] << ",";
+			std::cout << this->q_table[i][j] << ",\t";
 		}
 		std::cout << std::endl;
+	}
+}
+void Q_table::printTableBestActions(){
+	int bestAction;
+	float max_action_score;
+	std::cout << "...printing Q_table best actions("<<this->num_states<<" states):" << std::endl;
+	for(int state = 0; state < this->num_states; state++){
+		max_action_score = this->q_table[state][0];
+		bestAction = 0;
+		//std::cout << "DEBUG takeAction (state "<<state<<"): ";
+		for(int j = 1; j < this->num_actions; j++){
+			//std::cout << this->q_table[state][j] << ", "; //DEBUG
+			if(this->q_table[state][j] > max_action_score){
+				max_action_score = this->q_table[state][j];
+				bestAction = j;
+			}
+		}
+		std::cout <<"state ("<<state<<"):\t"<<bestAction << "\n";
 	}
 }
 
@@ -89,19 +107,56 @@ Action Q_table::takeAction(int state){
         // choisir la meilleure action
 				max_action_score = this->q_table[state][0];
 				action = 0;
-				std::cout << "DEBUG takeAction (state "<<state<<"): ";
+				//std::cout << "DEBUG takeAction (state "<<state<<"): ";
         for(int j = 1; j < this->num_actions; j++){
-					std::cout << this->q_table[state][j] << ", ";
+					//std::cout << this->q_table[state][j] << ", "; //DEBUG
 					if(this->q_table[state][j] > max_action_score){
             max_action_score = this->q_table[state][j];
 						action = j;
 					}
         }
-				std::cout<< '\n'; // DEBUG
+				//std::cout<< '\n'; // DEBUG
     }else{
         // prendre l'action au hasard
 				int random_variable = std::rand()%5;
 				action = random_variable;
     }
 		return (Action) action;
+}
+
+// saves the Q-table in a txt file
+void Q_table::saveTable(std::string tableName){
+	tableName = tableName + ".txt";
+	std::string string;
+	char* tableValue = new char[7];
+	//char* buffer[this->num_states*this->num_actions*2 + 1];
+	for(int i = 0; i < this->num_states; i++){
+		for(int j = 0; j < this->num_actions; j++){
+			sprintf(tableValue, "%.3f", this->q_table[i][j]);
+			string = string + tableValue  + ",";
+		}
+	}
+	//char *buffer = new char[string.length() + 1];
+	char *buffer = (char*)string.c_str();
+	std::ofstream out(tableName);
+  out.write(buffer,(int)string.length()+1);
+  out.close();
+}
+
+// loads a Q-table from a txt file
+void Q_table::loadTable(std::string tableName){
+	tableName = tableName + ".txt";
+	int bufferLenght = 8*this->num_states*this->num_actions + 1;
+	std::string string;
+	//char* tableValue = new char[7];
+	char *buffer = new char[bufferLenght];
+
+	std::ifstream in(tableName);
+	in.read(buffer, bufferLenght);
+	std::cout << "DEBUG loaded table buffer: "<<buffer << '\n';
+
+	for(int i = 0; i < this->num_states; i++){
+		for(int j = 0; j < this->num_actions; j++){
+		}
+	}
 }

@@ -33,6 +33,7 @@ class Trainer
       void printGrid();
       // print the current HPs of all personnages
       void printHPs();
+      // commence l'entrainement
       void train();
       int getWidth();
       int getHeight();

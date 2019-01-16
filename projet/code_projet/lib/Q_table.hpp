@@ -4,6 +4,8 @@
 #define Q_TABLE_HPP
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <cstdlib>
 #include <ctime>
 
@@ -31,7 +33,10 @@ class Q_table
 			Q_table(int n_states, int n_actions); // constructeur avec taille variable
 			Action takeAction(int state); // retourne la meilleure action dans un etat donne
 			void printTable(); // affiche la Q table
+			void printTableBestActions(); // afficher la "meilleure" action pour chaque etat
 			void update_table(int action, int etat_courrant, int etat_suivant, float recompense); // actualise le tableau Q
+			void saveTable(std::string tableName);
+			void loadTable(std::string tableName);
 };
 
 #endif

@@ -65,20 +65,12 @@ Action Learner::chooseAction(){
 // choose action (overcharge)
 Action Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   Action action;
-
   // action aleatoire (test)
   //int random_variable = std::rand()%5;
   //action = (Action) random_variable;
-
-  // TODO : action avec la Q table
   int state = getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
   action = (Action) this->qTable->takeAction(state);
-  std::cout << "DEBUG action "<< (int)action <<'\n';
-
-  // DEBUG pour tester la variable gm
-  //int w = gm->getWidth();
-  //gm->printHPs();
-  //std::cout << "debug wwwww : " << w << std::endl;
+  //std::cout << "DEBUG action "<< (int)action <<'\n';
 
   this->lastAction = action;
 
@@ -134,10 +126,11 @@ bool Learner::hasKilledSomeone(){
 float Learner::getReward(){
   float reward = 0.0f;
   //reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
-  if(estMort){
+  if(this->estMort){
     reward = -1;
-  }else if(aTue){
+  }else if(this->aTue){
     reward = 1;
+    this->aTue = false; // reset
   }
   return reward;
 }
