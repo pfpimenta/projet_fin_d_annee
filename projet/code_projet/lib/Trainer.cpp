@@ -171,15 +171,23 @@ void Trainer::step(){
   Action a;
   int pos_x, pos_y;
   float attack_damage;
+  int i_closest_enemy, dist_x_pers, dist_y_pers;
+  float hp_pers;
 
   // execution des actions des personnages
   for(int i = 0; i < num_learners; i++){
 
+    // get informations pour choisir l'action
+    i_closest_enemy = this->learners[i]->findClosestEnemy(this->learners);
+    dist_x_pers = this->learners[i_closest_enemy]->getPosX() - this->learners[i]->getPosX();
+    dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[i]->getPosY();
+    hp_pers = this->learners[i_closest_enemy]->getHP();
     // choisir l'action
-    a = this->learners[i]->chooseAction();
+    //a = this->learners[i]->chooseAction(); // DEBUG enlever
+    a = this->learners[i]->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+
     pos_x = this->learners[i]->getPosX();
     pos_y = this->learners[i]->getPosY();
-
 
     // faire l'action
     switch(a){

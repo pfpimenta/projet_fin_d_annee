@@ -73,6 +73,7 @@ Action Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   // TODO : action avec la Q table
   int state = getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
   action = (Action) this->qTable->takeAction(state);
+  std::cout << "DEBUG action "<< (int)action <<'\n';
 
   // DEBUG pour tester la variable gm
   //int w = gm->getWidth();
