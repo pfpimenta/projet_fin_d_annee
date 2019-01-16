@@ -117,9 +117,28 @@ int Learner::findClosestEnemy(std::vector<Learner*> learners){
 void Learner::die(){
   this->estMort = true;
 }
-
 bool Learner::isDead(){
   return this->estMort;
+}
+
+// ce learner a tue qqn
+void Learner::killedSomeone(){
+  this->aTue = true;
+}
+// return true si ce learner a tue qqn
+bool Learner::hasKilledSomeone(){
+  return this->aTue;
+}
+
+float Learner::getReward(){
+  float reward = 0.0f;
+  //reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
+  if(estMort){
+    reward = -1;
+  }else if(aTue){
+    reward = 1;
+  }
+  return reward;
 }
 
 //

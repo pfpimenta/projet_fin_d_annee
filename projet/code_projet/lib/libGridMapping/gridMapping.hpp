@@ -24,8 +24,6 @@ public:
     int width;
     int height;
 
-
-
     // curseur : position actuelle du curseur sur la grid
     position curseur;
 
@@ -117,7 +115,6 @@ public:
             }
         }
     }
-
 
     /** gestion de l'ennemi **/
 

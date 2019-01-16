@@ -23,7 +23,6 @@ struct MyEventReceiver : irr::IEventReceiver
 
 
 public:
-
     irr::scene::IAnimatedMeshSceneNode * perso1; //correspondra au perso principal
 
     irr::scene::ICameraSceneNode * cam1; //correspondra a la camera principale
@@ -33,8 +32,7 @@ public:
     float speed = 3;
 
     //bool isCombat = false; // a decommenter plus tard pour le basculement vers le combat
-
-
+    
     // action a realiser lorsqu'on appuie sur une touche
     gridAction act;
 
@@ -45,21 +43,13 @@ public:
     // des fonctions de gmngr
     GameManager *gmngr;
 
-
-
     //constructeur(s) :
     MyEventReceiver();
 
-
-
     //methodes :
     bool OnEvent(const irr::SEvent &event); //surcharge de la fonction OnEvent() pour ajouter nos propres events
-
     bool keyboard_combat(const irr::SEvent &event);
     bool mouse(const irr::SEvent &event);
-
-
-
 };
 
 #endif

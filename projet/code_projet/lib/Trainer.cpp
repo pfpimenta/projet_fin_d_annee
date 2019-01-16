@@ -123,14 +123,6 @@ void Trainer::train(){
       num_learners = learners.size();
       // update q tables for all personnages / learners
       for(int i = 0; i < num_learners; i++){
-        // verifier si ils sont morts
-        if ( this->learners[i]->getHP() <= 0.0){
-          // il est mort
-          // rewards :
-          // TODO
-          // toggle boolean
-          this->learners[i]->die();
-        }
 
       	// calculate state information :
         // find closest mec :
@@ -148,7 +140,7 @@ void Trainer::train(){
         //std::cout << "DEBUG state: "<< state << std::endl;
         if(step_count!=0){
           lastState = this->learners[i]->getLastState();
-          reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
+          reward = this->learners[i]->getReward();
           //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
           //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
           qtable_pointer->update_table(action, lastState, state, reward); // actualise le tableau Q
@@ -214,12 +206,31 @@ void Trainer::step(){
       case ATTACK:
         attack_damage = this->learners[i]->getAttackForce();
         this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
+        if(this->verifyDeadLearners()){
+          // qqn est mort par cet attaque
+          this->learners[i]->killedSomeone();
+        }
         break;
       default:
         break;
     }
   }
 
+}
+
+// mettre les booleans a jour des mecs qui sont morts
+bool Trainer::verifyDeadLearners(){
+  bool aLearnerDied = false;
+  for(int i = 0; i < (int) this->learners.size(); i++){
+    // verifier si ils sont morts
+    if ( this->learners[i]->getHP() <= 0.0 && this->learners[i]->isDead()==false){
+      // il est mort
+      //toggle boolean
+      this->learners[i]->die();
+      aLearnerDied = true;
+    }
+  }
+  return aLearnerDied;
 }
 
 // getters et setters :
