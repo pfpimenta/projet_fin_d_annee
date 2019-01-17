@@ -76,8 +76,11 @@ void gridMapping::setCurseur(position curseur)
 }
 
 // gere les mouvements du curseur et les actions sur la grid (VALIDATE par ex)
-void gridMapping::mouvementGridPlayer(Action act)
+bool gridMapping::mouvementGridPlayer(Action act)
 {
+
+    bool voieLibre = true;
+
     switch (act) {
     /**
      * Pour le mouvement du curseur, veut une animation :
@@ -95,7 +98,7 @@ void gridMapping::mouvementGridPlayer(Action act)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
         curseur.colonne ++;
-        if (isObstacle(curseur, barrier)){ curseur.colonne --;}
+        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne --;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
     case LEFT:
@@ -103,7 +106,7 @@ void gridMapping::mouvementGridPlayer(Action act)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
         curseur.colonne --;
-        if (isObstacle(curseur, barrier)){  curseur.colonne ++;}
+        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne ++;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
     case UP:
@@ -111,7 +114,7 @@ void gridMapping::mouvementGridPlayer(Action act)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
         curseur.ligne --;
-        if (isObstacle(curseur, barrier)){  curseur.ligne ++;}
+        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.ligne ++;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
     case DOWN:
@@ -119,7 +122,7 @@ void gridMapping::mouvementGridPlayer(Action act)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
         curseur.ligne ++;
-        if (isObstacle(curseur, barrier)){  curseur.ligne --;}
+        if (isObstacle(curseur, barrier)){  voieLibre = 0;  curseur.ligne --;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
 
@@ -177,6 +180,9 @@ void gridMapping::mouvementGridPlayer(Action act)
             curseurBlink(true); // on veut que le curseur blink a ce moment
         break;
     }
+
+
+    return voieLibre;
 }
 
 

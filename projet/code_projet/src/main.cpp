@@ -185,10 +185,6 @@ void interface()
         driver->beginScene(true, true, irr::video::SColor(255, 0, 0, 0)); // fond noir
         smgr->drawAll();
 
-//        std::cout <<
-//        (gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition() /*+ core::vector3df(gameManager->getGridMapping()->j1.pos.colonne, 0, gameManager->getGridMapping()->j1.pos.ligne)*/).X
-//        << std::endl;
-
 
         // faire clignoter le curseur
         if (gameManager->getGridMapping() != NULL)

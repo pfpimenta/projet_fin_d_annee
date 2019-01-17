@@ -62,7 +62,7 @@ public:
 
     /** Autres **/
     void setCurseur(position curseur); //pour modifier la position du curseur
-    void mouvementGridPlayer(Action act); // pour effectuer un mouvement / action (droite / gauche / haut / bas / etc...)
+    bool mouvementGridPlayer(Action act); // pour effectuer un mouvement / action (droite / gauche / haut / bas / etc...)
     bool isObstacle(position p, const obstacle &obs); // renvoie 1 s'il y a un obstacle a la position p
     bool isObstacle(position p, const obstacle &obs, bool val); // juste pour le debug
 

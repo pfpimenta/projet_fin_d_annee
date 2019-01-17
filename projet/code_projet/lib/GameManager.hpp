@@ -67,7 +67,7 @@ public:
     bool isFin = 1;
     int currentAnimationTime;
 
-    void playAnimation(Action act, is::IAnimatedMeshSceneNode *perso);
+    void playAnimation(bool voieLibre, Action act, is::IAnimatedMeshSceneNode *perso);
     void animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso);
     void animATTACK(is::IAnimatedMeshSceneNode *perso);
     void animUP(is::IAnimatedMeshSceneNode *perso);

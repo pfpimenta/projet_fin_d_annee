@@ -314,7 +314,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
-void GameManager::playAnimation(Action act, scene::IAnimatedMeshSceneNode *perso)
+void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMeshSceneNode *perso)
 {
     switch (act) {
     case VALIDATE:
@@ -327,19 +327,23 @@ void GameManager::playAnimation(Action act, scene::IAnimatedMeshSceneNode *perso
 
 
     case UP: // haut
-        animator(0, 1, perso);
+        if (voieLibre)
+            animator(0, 1, perso);
         //animUP(getPlayer()->node);
         break;
     case DOWN: // bas
-        animator(0, -1, perso);
+        if (voieLibre)
+            animator(0, -1, perso);
         //animDOWN(getPlayer()->node);
         break;
     case RIGHT: // droite
-        animator(1, 0, perso);
+        if (voieLibre)
+            animator(1, 0, perso);
         //animRIGHT(getPlayer()->node);
         break;
     case LEFT: // gauche
-        animator(-1, 0, perso);
+        if (voieLibre)
+            animator(-1, 0, perso);
         //animLEFT(getPlayer()->node);
         break;
     case ATTACK: // attack
