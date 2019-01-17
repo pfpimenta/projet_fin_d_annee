@@ -18,7 +18,7 @@ Projet de majeure Image, modélisation et informatique (IMI) à [CPE Lyon](https
 * Cédric KUASSIVI
 * Dylan TOSTI
 
- 
+
 </br>
 
 ### Description du projet:
@@ -64,13 +64,17 @@ En cours de développement ...
   $ cmake . #pour generer le makefile dans le meme repertoire
   $ make #afin de compiler le code
   ```
-  Pour compiler le code puis la commande :
+  Copier ensuite le dossier data/ présent à la racine du projet (présent dans le même répertoire que les dossiers src/ et lib/) dans le répertoire ou a été créé le fichier exécutable `projetFA` a l'issue de la compilation.
+
+  Pour exécuter le code, lancer la commande :
   ```
   $ ./projetFA
   ```
-  Pour lancer l'application.
+  Dans un terminal.
 
   * Possibilité 2 (**recommandée** pour modifier le code et tester les modifications): Lancer le CMakeLists.txt avec QTcreator et compiler et exécuter le code avec Qt.
+
+  _Penser à copier le dossier data/ présent à la racine du projet (présent dans le même répertoire que les dossiers src/ et lib/) dans le répertoire build créé au lancement de Qt._
 
 
 2. Avec le makefile (**recommandée** pour une simple exécution):

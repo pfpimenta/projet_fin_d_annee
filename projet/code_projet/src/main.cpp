@@ -4,7 +4,7 @@
 #include "../lib/Trainer.hpp"
 
 // DEFAULT_PATH_TO_DATA "../projet/code_projet/data/" // compilation depuis le CMakeLists.txt
-// DEFAULT_PATH_TO_DATA "../data/" // compilation depuis le makefile
+// DEFAULT_PATH_TO_DATA "./data/" // compilation depuis le makefile
 
 
 
@@ -96,11 +96,11 @@ void interface()
 
 
     // chargement du mesh (puisqu'il sera utilise plusieurs fois)
-    irr::scene::IAnimatedMesh *mesh = smgr->getMesh("../projet/code_projet/data/tris/tris.md2");
+    irr::scene::IAnimatedMesh *mesh = smgr->getMesh("./data/tris/tris.md2");
 
     // chargement des textures
-    irr::video::ITexture* textureJoueur = driver->getTexture("../projet/code_projet/data/tris/blue_texture.pcx");
-    irr::video::ITexture* textureEnemy = driver->getTexture("../projet/code_projet/data/tris/red_texture.pcx");
+    irr::video::ITexture* textureJoueur = driver->getTexture("./data/tris/blue_texture.pcx");
+    irr::video::ITexture* textureEnemy = driver->getTexture("./data/tris/red_texture.pcx");
 
 
     //creation du gameManager
