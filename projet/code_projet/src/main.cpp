@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
     if(argc == 1)
     {
         std::cout << "... Player mode (interface) ..." << std::endl;
+        std::cout << "    N'oubliez pas de mettre le dossier data au bon endroit !" << std::endl;
         interface();
     }
 
@@ -87,7 +88,7 @@ void interface()
 
     // Création de la fenêtre et du système de rendu.
     irr::IrrlichtDevice *device = createDevice(irr::video::EDT_OPENGL,
-                                              irr::core::dimension2d<u32>(1920, 1080),
+                                              irr::core::dimension2d<u32>(700, 600),
                                               16, false, false, false, receiver);
 
     irr::ITimer *Timer = device->getTimer();
@@ -132,7 +133,7 @@ void interface()
                            textureEnemy, // texture du joueur
                            ic::vector3df(-DEFAULT_GRID_NODE_SIZE * 5, 0, -DEFAULT_GRID_NODE_SIZE * 3)); // positions 3D dans le monde 3D du joueur
 
-gameManager->removeEnemy(1);
+
 
     gameManager->sceneRenderer(Timer);
 
@@ -179,9 +180,14 @@ gameManager->removeEnemy(1);
 
     while(device->run())
     {
+
+
         driver->beginScene(true, true, irr::video::SColor(255, 0, 0, 0)); // fond noir
         smgr->drawAll();
 
+//        std::cout <<
+//        (gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition() /*+ core::vector3df(gameManager->getGridMapping()->j1.pos.colonne, 0, gameManager->getGridMapping()->j1.pos.ligne)*/).X
+//        << std::endl;
 
 
         // faire clignoter le curseur

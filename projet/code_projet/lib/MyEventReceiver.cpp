@@ -65,19 +65,15 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
                     case KEY_ESCAPE: // echap
                       exit(0);
                     case KEY_KEY_Z: // haut
-                      gmngr->animUP(gmngr->getPlayer()->node);
                       act = UP;
                       break;
                     case KEY_KEY_S: // bas
-                      gmngr->animDOWN(gmngr->getPlayer()->node);
                       act = DOWN;
                       break;
                     case KEY_KEY_D: // droite
-                      gmngr->animRIGHT(gmngr->getPlayer()->node);
                       act = RIGHT;
                       break;
                     case KEY_KEY_Q: // gauche
-                      gmngr->animLEFT(gmngr->getPlayer()->node);
                       act = LEFT;
                       break;
                     case KEY_KEY_M: // validate
@@ -105,7 +101,7 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 
         gmngr->getGridMapping()->mouvementGridPlayer(act);
         gmngr->playAnimation(act, gmngr->getPlayer()->node);
-        //gmngr->getPlayer()->personAction(act);
+
 
 
     return false;

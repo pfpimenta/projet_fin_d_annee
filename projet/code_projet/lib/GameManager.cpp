@@ -88,22 +88,6 @@ player *GameManager::getPlayer()
 }
 
 
-void GameManager::playAnimation(Action act, scene::IAnimatedMeshSceneNode *perso)
-{
-    switch (act) {
-    case VALIDATE:
-        animator( 1 /*int nombreCasesHorizontales*/, -2 /*int nombreCasesVerticales*/, perso);
-        break;
-    case NOTHING:
-        if (device->getTimer()->getTime() - this->currentAnimationTime >= DEFAULT_DUREE_ANIMATION)
-            perso->setMD2Animation(is::EMAT_STAND);
-        break;
-    default:
-        if (device->getTimer()->getTime() - this->currentAnimationTime >= DEFAULT_DUREE_ANIMATION)
-            perso->setMD2Animation(is::EMAT_STAND);
-        break;
-    }
-}
 
 
 
@@ -311,7 +295,139 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     if (isCombat && !isPromenade)
         combat(Timer);
     if (isPromenade && !isCombat)
-        combat(Timer);
+        promenade(Timer);
     else
         std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
 }
+
+
+
+
+
+
+
+
+
+
+
+/** Animations **/
+
+
+
+void GameManager::playAnimation(Action act, scene::IAnimatedMeshSceneNode *perso)
+{
+    switch (act) {
+    case VALIDATE:
+        //animator( 1 /*int nombreCasesHorizontales*/, -4 /*int nombreCasesVerticales*/, perso);
+        break;
+    case RESET: // reset
+        perso->setPosition((core::vector3df(0, 25, 0) + getGridMapping()->myGrid->getGridNode(0)->getPosition() + core::vector3df(-getGridMapping()->j1.pos.ligne * DEFAULT_GRID_NODE_SIZE, 0, -getGridMapping()->j1.pos.colonne * DEFAULT_GRID_NODE_SIZE)));
+        break;
+
+
+
+    case UP: // haut
+        animator(0, 1, perso);
+        //animUP(getPlayer()->node);
+        break;
+    case DOWN: // bas
+        animator(0, -1, perso);
+        //animDOWN(getPlayer()->node);
+        break;
+    case RIGHT: // droite
+        animator(1, 0, perso);
+        //animRIGHT(getPlayer()->node);
+        break;
+    case LEFT: // gauche
+        animator(-1, 0, perso);
+        //animLEFT(getPlayer()->node);
+        break;
+
+
+
+    case NOTHING:
+        if (device->getTimer()->getTime() - currentAnimationTime >= DEFAULT_DUREE_ANIMATION )
+            perso->setMD2Animation(is::EMAT_STAND);
+        break;
+    default:
+        if (device->getTimer()->getTime() - currentAnimationTime >= DEFAULT_DUREE_ANIMATION )
+            perso->setMD2Animation(is::EMAT_STAND);
+        break;
+    }
+}
+
+
+
+void GameManager::animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso)
+{
+    ic::vector3df depart = perso->getPosition();
+    ic::vector3df arrivee = depart + ic::vector3df(nombreCasesVerticales * DEFAULT_GRID_NODE_SIZE, 0, - nombreCasesHorizontales * DEFAULT_GRID_NODE_SIZE);
+    perso->setPosition(arrivee);
+
+}
+
+
+
+void GameManager::animUP(is::IAnimatedMeshSceneNode *perso)
+{
+    ic::vector3df depart = perso->getPosition();
+    ic::vector3df arrivee = depart + ic::vector3df(DEFAULT_GRID_NODE_SIZE, 0, 0);
+    perso->setRotation(ic::vector3df(0, 0, 0));
+    is::ISceneNodeAnimator *anim = smgr->createFlyStraightAnimator(depart, // position de depart
+                                                                   arrivee, // position d'arrivee
+                                                                   DEFAULT_DUREE_ANIMATION, // duree de l'animation en ms
+                                                                   false); // recommencer l'animation en boucle ?
+    currentAnimationTime = device->getTimer()->getTime();
+    perso->addAnimator(anim);
+    anim->drop();
+    perso->setMD2Animation(is::EMAT_RUN);
+
+}
+
+void GameManager::animDOWN(is::IAnimatedMeshSceneNode *perso)
+{
+    ic::vector3df depart = perso->getPosition();
+    ic::vector3df arrivee = depart + ic::vector3df(-DEFAULT_GRID_NODE_SIZE, 0, 0);
+    perso->setRotation(ic::vector3df(0, 180, 0));
+    is::ISceneNodeAnimator *anim = smgr->createFlyStraightAnimator(depart, // position de depart
+                                                                   arrivee, // position d'arrivee
+                                                                   DEFAULT_DUREE_ANIMATION, // duree de l'animation en ms
+                                                                   false); // recommencer l'animation en boucle ?
+    currentAnimationTime = device->getTimer()->getTime();
+    perso->addAnimator(anim);
+    anim->drop();
+    perso->setMD2Animation(is::EMAT_RUN);
+}
+
+void GameManager::animLEFT(is::IAnimatedMeshSceneNode *perso)
+{
+    ic::vector3df depart = perso->getPosition();
+    ic::vector3df arrivee = depart + ic::vector3df(0, 0, DEFAULT_GRID_NODE_SIZE);
+    perso->setRotation(ic::vector3df(0, -90, 0));
+    is::ISceneNodeAnimator *anim = smgr->createFlyStraightAnimator(depart, // position de depart
+                                                                   arrivee, // position d'arrivee
+                                                                   DEFAULT_DUREE_ANIMATION, // duree de l'animation en ms
+                                                                   false); // recommencer l'animation en boucle ?
+    currentAnimationTime = device->getTimer()->getTime();
+    perso->addAnimator(anim);
+    anim->drop();
+    perso->setMD2Animation(is::EMAT_RUN);
+}
+
+void GameManager::animRIGHT(is::IAnimatedMeshSceneNode *perso)
+{
+    ic::vector3df depart = perso->getPosition();
+    ic::vector3df arrivee = depart + ic::vector3df(0, 0, -DEFAULT_GRID_NODE_SIZE);
+    perso->setRotation(ic::vector3df(0, 90, 0));
+    is::ISceneNodeAnimator *anim = smgr->createFlyStraightAnimator(depart, // position de depart
+                                                                   arrivee, // position d'arrivee
+                                                                   DEFAULT_DUREE_ANIMATION, // duree de l'animation en ms
+                                                                   false); // recommencer l'animation en boucle ?
+    currentAnimationTime = device->getTimer()->getTime();
+    perso->addAnimator(anim);
+    anim->drop();
+    perso->setMD2Animation(is::EMAT_RUN);
+}
+
+
+
