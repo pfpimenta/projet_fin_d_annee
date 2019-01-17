@@ -24,6 +24,8 @@ public:
     int width;
     int height;
 
+
+
     // curseur : position actuelle du curseur sur la grid
     position curseur;
 
@@ -34,13 +36,13 @@ public:
     gridMesh *myGrid;
 
     // joueur
-    player j1;
+    gridPlayer j1;
 
     // pour le curseur qui blink
     irr::ITimer *timerCursorBlink;
 
     // enemy
-    std::vector<enemy> mechant;
+    std::vector<gridEnemy> mechant;
 
     // variable inutile (juste pour le debug)
     // pour verifier que l ennemi n est pas dans la mm case qu 'un autre ennemi
@@ -56,12 +58,11 @@ public:
     gridMapping(position curseur, int width, int height, is::ISceneManager *smgr, ITimer *timerCursorBlink); // constructeur
 
     /** Pour le debug **/
-    std::string printCurseur(bool display); // affichage curseur
-    void printInfo(); // affichage des infos de la classe
+    void infos(); // affichage des infos de la classe
 
     /** Autres **/
     void setCurseur(position curseur); //pour modifier la position du curseur
-    void mouvement(gridAction act); // pour effectuer un mouvement / action (droite / gauche / haut / bas / etc...)
+    void mouvementGridPlayer(Action act); // pour effectuer un mouvement / action (droite / gauche / haut / bas / etc...)
     bool isObstacle(position p, const obstacle &obs); // renvoie 1 s'il y a un obstacle a la position p
     bool isObstacle(position p, const obstacle &obs, bool val); // juste pour le debug
 
@@ -75,15 +76,16 @@ public:
     // pour faire clignoter le curseur
     void curseurBlink(bool b)
     {
+        static auto currentTime = timerCursorBlink->getTime();
         if (b)
         {
-            if(timerCursorBlink->getTime() >= DEFAULT_BLINK_DELAY) // periode de blink
+            if(timerCursorBlink->getTime() - currentTime >= DEFAULT_BLINK_DELAY) // periode de blink
             {
                 // si le curseur etait en wireframe, il devient rempli et inversement
                 myGrid->getGridNode(curseur)->setWireframe();
 
                 // timer reinitialise
-                timerCursorBlink->setTime(0);
+                currentTime = timerCursorBlink->getTime();
             }
         }
         else if (!b)
@@ -94,7 +96,7 @@ public:
     void makeCurseurBlink(bool val)
     {
         // pour faire blinker le curseur, il faut que isBlinking = true
-        // voir la fonction void mouvement(gridAction act); pour mieux comprendre
+        // voir la fonction void mouvement(Action act); pour mieux comprendre
         isBlinking = val;
         curseurBlink(isBlinking);
     }
@@ -115,6 +117,7 @@ public:
             }
         }
     }
+
 
     /** gestion de l'ennemi **/
 

@@ -9,13 +9,14 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "utils.hpp"
+
 #define NUM_STATES 5 // changer
 #define NUM_ACTIONS 5 // changer
 #define TAUX_EXPLORATION 0.07 // changer
 #define LEARNING_RATE 0.05 // changer
 #define DISCOUNT_VALUE 0.9 // changer
 
-enum Action { UP, DOWN, LEFT, RIGHT, ATTACK};
 
 
 

@@ -16,33 +16,11 @@
 #define GLOBAL_HEADER_HPP
 
 
-#include <irrlicht/irrlicht.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include "../utils.hpp"
 
-
-
-using namespace irr;
-
-
-namespace ic = irr::core;
-namespace is = irr::scene;
-namespace iv = irr::video;
-
-
-
-// nombre de cases par defaut de la grid
-#define DEFAULT_WIDTH 20 // en largeur donc nb de colonnes
-#define DEFAULT_HEIGHT 10 // en hauteur donc nombre de lignes
-
-// positions par defaut du curseur et donc du joueur
-#define DEFAULT_LIGNE 0
-#define DEFAULT_COLONNE 0
 
 // taille par defaut du carre elementaire de la grid
-#define DEFAULT_GRID_NODE_SIZE 5
+#define DEFAULT_GRID_NODE_SIZE 20
 
 // decallage par defaut du carre elementaire par rapport au centre de la fenetre
 // on en a besoin au moment de creer les nodes personnalises
@@ -57,14 +35,6 @@ namespace iv = irr::video;
 #define DEFAULT_BLINK_DELAY 500 //ms
 
 
-
-/** action que le joueur peut effectuer sur la grid **/
-enum gridAction {HAUT, BAS, GAUCHE, DROITE, RESET, NOTHING, VALIDATE, DEBUG};
-
-
-/** action que le joueur peut effectuer en tant qu'objet **/
-//enum playerAction {ATTACK};
-
 /** couleurs des grid nodes **/
 enum gridColor {PLAYER, SELECTED, UNSELECTED, OBSTACLE, ENNEMY};
 
@@ -76,37 +46,6 @@ static int alea(int min, int max)
 {
     return rand()%(max-min+1) + min;
 }
-
-
-/** positions des objets (obstacles, joueur, ennemis, etc ..) et aussi du curseur de la grid **/
-struct position
-{
-    /** attributs **/
-    int ligne; //ligne
-    int colonne; //colonne
-
-    /** constructeurs **/
-    position(int ligne, int colonne){this->ligne = ligne; this->colonne = colonne;}
-    position(const position &p){this->ligne = p.ligne; this->colonne = p.colonne;}
-    position(){}
-
-    /** pour le debug **/
-    std::string printPosition(bool display)
-    {
-        std::string s = "position : ligne = " + std::to_string(ligne) + "; colonne = " + std::to_string(colonne);
-        if (display)(std::cout << s << std::endl);
-        return s;
-    }
-
-    /** comparaison de 2 positions **/
-    bool operator==(const position &p)
-    {
-        if (ligne == p.ligne && colonne == p.colonne)
-            return true;
-        return false;
-    }
-
-};
 
 
 
@@ -253,8 +192,8 @@ public:
 
         // pour l'auto-culling : present dans le tuto...
         Box.reset(Vertices[0].Pos);
-            for (s32 i=1; i<4; ++i)
-                Box.addInternalPoint(Vertices[i].Pos);
+        for (s32 i=1; i<4; ++i)
+            Box.addInternalPoint(Vertices[i].Pos);
     }
 
 
@@ -278,7 +217,7 @@ public:
          * J ai opte pour les QUADS parce qu'on veut afficher des carres vides (wireframe) ou remplis.
          **/
 
-        u16 indices[] = {   0, 1, 2, 3  }; // connexite a prendre en compte
+        u16 indices[] = {   3, 2, 1, 0  }; // connexite a prendre en compte
         video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
         driver->setMaterial(Material);
@@ -347,7 +286,7 @@ public:
     // centrage automatique de la grille a la position (0, 0, 0) selon les axes X et Z
     void centrageAuto(int nodeSize)
     {
-        core::vector3df t((float)nodeSize/2.0 * (float)(height - 1), 0, -(float)nodeSize/2.0 * (float)(width - 1));
+        core::vector3df t((float)nodeSize/2.0 * (float)(height - 1), 0, (float)nodeSize/2.0 * (float)(width - 1));
         translation(t);
     }
 
@@ -379,7 +318,7 @@ public:
         {
             for (int j = 0; j < this->height; j++)
             {
-                gridNode *gridCase = new gridNode(parent, smgr, (s32)i, nodeSize, -j * nodeSize, i * nodeSize);
+                gridNode *gridCase = new gridNode(parent, smgr, (s32)i, nodeSize, -j * nodeSize, -i * nodeSize);
                 mesh.push_back(gridCase);
             }
         }
@@ -413,21 +352,21 @@ public:
 
 // joueur
 
-class player
+class gridPlayer
 {
 public:
     position pos;
 
     gridMesh *theGrid;
 
-    player(int ligne, int colonne, gridMesh *theGrid)
+    gridPlayer(int ligne, int colonne, gridMesh *theGrid)
         :pos(ligne, colonne)
     {
         theGrid->getGridNode(pos)->setCouleur(PLAYER);
     }
 
 
-    player(){}
+    gridPlayer(){}
 
     void setPosition(const position &p)
     {
@@ -442,7 +381,7 @@ public:
 
 // enemy
 
-class enemy
+class gridEnemy
 {
 public:
     position pos;
@@ -451,14 +390,14 @@ public:
 
     gridMesh *theGrid = NULL;
 
-    enemy(int ligne, int colonne, gridMesh *theGrid)
+    gridEnemy(int ligne, int colonne, gridMesh *theGrid)
         :pos(ligne, colonne), isAlive(1)
     {
         theGrid->getGridNode(pos)->setCouleur(ENNEMY);
     }
 
 
-    enemy(){}
+    gridEnemy(){}
 
     void setPosition(const position &p)
     {

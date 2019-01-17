@@ -1,38 +1,45 @@
-/**
- * Author : Cédric KUASSIVI
- *
- * MyEventReceiver.cpp :
- *
- * Il s'agit de la classe principale de gestion des events (appuie sur touches du clavier, etc...)
- *
-**/
-
 #include "MyEventReceiver.hpp"
+
+
+
+// constructeur
+MyEventReceiver::MyEventReceiver()
+    :button_pressed(false)
+{}
 
 
 
 bool MyEventReceiver::OnEvent(const irr::SEvent &event)
   {
+    // Press esc key to exit ...
+    if (event.EventType == EET_KEY_INPUT_EVENT && event.KeyInput.PressedDown && event.KeyInput.Key == KEY_ESCAPE)
+        exit(0);
 
 
 
     /********** Clavier et souris ***********/
-    //if (!grid ) return false;
 
-    bool isCombat = true; // par la suite il s'agira d'un attribut qu'on mettra a 1 quand le combat commence
-    if (isCombat)
+    if (gmngr->isCombat)
     {
         switch (event.EventType)
         {
         case irr::EET_KEY_INPUT_EVENT:
             return keyboard_combat(event);
         case irr::EET_MOUSE_INPUT_EVENT:
-            return mouse(event);
+            return mouse_combat(event);
         default:;
         }
     }
 
 
+    if (gmngr->isPromenade)
+    {
+        switch (event.EventType)
+        {
+        case irr::EET_KEY_INPUT_EVENT:
+        default:;
+        }
+    }
 
 
     return false;
@@ -41,111 +48,101 @@ bool MyEventReceiver::OnEvent(const irr::SEvent &event)
 
 
 
+
+/*------------------------------------------------------------------------*\
+ * EventReceiver::keyboard_combat                                         *
+\*------------------------------------------------------------------------*/
 bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 {
 
 
-    /** Clavier **/
     if (event.EventType == EET_KEY_INPUT_EVENT) // event de type clavier
-    {
-        if(event.KeyInput.PressedDown) // touche appuyee
         {
-            switch (event.KeyInput.Key)
+            if(event.KeyInput.PressedDown) // touche appuyee
             {
-                case KEY_ESCAPE: // echap
-                  exit(0);
-                case KEY_KEY_Z: // haut
-                  act = HAUT;
-                  break;
-                case KEY_KEY_S: // bas
-                  act = BAS;
-                  break;
-                case KEY_KEY_D: // droite
-                  act = DROITE;
-                  break;
-                case KEY_KEY_Q: // gauche
-                  act = GAUCHE;
-                  break;
-                case KEY_KEY_A: // reset
-                  act = RESET;
-                  break;
-                case KEY_KEY_M: // validate
-                  act = VALIDATE;
-                  break;
-                case KEY_KEY_W: // pour tester les nouvelles features
-                  //act = DEBUG;
-                  gmngr->step();
-                  break;
-                default:;
+                switch (event.KeyInput.Key)
+                {
+                    case KEY_ESCAPE: // echap
+                      exit(0);
+                    case KEY_KEY_Z: // haut
+                      gmngr->animUP(gmngr->getPlayer()->node);
+                      act = UP;
+                      break;
+                    case KEY_KEY_S: // bas
+                      gmngr->animDOWN(gmngr->getPlayer()->node);
+                      act = DOWN;
+                      break;
+                    case KEY_KEY_D: // droite
+                      gmngr->animRIGHT(gmngr->getPlayer()->node);
+                      act = RIGHT;
+                      break;
+                    case KEY_KEY_Q: // gauche
+                      gmngr->animLEFT(gmngr->getPlayer()->node);
+                      act = LEFT;
+                      break;
+                    case KEY_KEY_M: // validate
+                      act = VALIDATE;
+                      break;
+                    case KEY_KEY_A: // reset
+                      act = RESET;
+                      break;
+                    case KEY_KEY_W: // pour tester les nouvelles features
+                      act = DEBUG;
+                      break;
+                    default:;
+                }
+            }
+            else if(!event.KeyInput.PressedDown) // touche relachee
+            {
+                act = NOTHING;
             }
         }
-        else if(!event.KeyInput.PressedDown) // touche relachee
-        {
+
+        else if (event.EventType != EET_KEY_INPUT_EVENT) // si on n'appuie pas sur le clavier
             act = NOTHING;
-        }
-    }
-
-    else if (event.EventType != EET_KEY_INPUT_EVENT) // si on n'appuie pas sur le clavier
-        act = NOTHING;
 
 
 
+        gmngr->getGridMapping()->mouvementGridPlayer(act);
+        gmngr->playAnimation(act, gmngr->getPlayer()->node);
+        //gmngr->getPlayer()->personAction(act);
 
 
-    grid->mouvement(act); // le mouvement correspondant est realise
-
-
-  return false;
+    return false;
 }
-
-
-
-
 
 
 
 /*------------------------------------------------------------------------*\
- * EventReceiver::mouse                                                   *
+ * EventReceiver::mouse_combat                                            *
 \*------------------------------------------------------------------------*/
-bool MyEventReceiver::mouse(const irr::SEvent &event)
+bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
 {
-  switch(event.MouseInput.Event)
-  {
-    case irr::EMIE_LMOUSE_PRESSED_DOWN:
-      button_pressed = true;
-      old_x = event.MouseInput.X;
-      old_y = event.MouseInput.Y;
-      break;
-    case irr::EMIE_LMOUSE_LEFT_UP:
-      button_pressed = false;
-      break;
-    case irr::EMIE_MOUSE_MOVED:
-      if (button_pressed)
-      {
-        irr::core::vector3df rotation = cam1->getRotation();
-//        irr::core::vector3df rotation = grid->myGrid->getGridNode(0)->getRotation();
-        rotation.Y -= (event.MouseInput.X - old_x);
+    switch(event.MouseInput.Event)
+    {
+      case irr::EMIE_LMOUSE_PRESSED_DOWN:
+        button_pressed = true;
         old_x = event.MouseInput.X;
         old_y = event.MouseInput.Y;
-//        grid->myGrid->getGridNode(0)->setRotation(rotation);
-        cam1->setRotation(rotation);
-      }
-      break;
-    default:
-      ;
+        break;
+      case irr::EMIE_LMOUSE_LEFT_UP:
+        button_pressed = false;
+        break;
+      case irr::EMIE_MOUSE_MOVED:
+        if (button_pressed)
+        {
+          irr::core::vector3df rotation = gmngr->getPlayer()->node->getRotation();
+          rotation.Y -= (event.MouseInput.X - old_x);
+          old_x = event.MouseInput.X;
+          old_y = event.MouseInput.Y;
+          gmngr->getPlayer()->node->setRotation(rotation);
+        }
+        break;
+      default:
+        ;
   }
-
   return false;
 }
-
-
-
-
-
-MyEventReceiver::MyEventReceiver():
-    perso1(nullptr), button_pressed(false)
-{}
-
 
 
 

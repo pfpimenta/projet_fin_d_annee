@@ -29,7 +29,7 @@ gridMapping::gridMapping(position curseur, int width, int height, scene::ISceneM
     myGrid->centrageAuto(DEFAULT_GRID_NODE_SIZE);
 
     // le joueur est initialise a la position (DEFAULT_LIGNE, DEFAULT_COLONNE)
-    j1 = player(DEFAULT_LIGNE, DEFAULT_COLONNE, myGrid);
+    j1 = gridPlayer(this->curseur.ligne, this->curseur.colonne, myGrid);
 
     // initialisation du timer pour faire clignoter le curseur
     this->timerCursorBlink = timerCursorBlink;
@@ -44,18 +44,13 @@ gridMapping::gridMapping(position curseur, int width, int height, scene::ISceneM
 
 
 /** Pour le debug **/
-// affichage curseur
-std::string gridMapping::printCurseur(bool display)
-{
-    return curseur.printPosition(display);
-}
 
 // affichage des infos de la classe
-void gridMapping::printInfo()
+void gridMapping::infos()
 {
     std::cout << std::endl;
     std::cout << "***** Debut Infos *****" << std::endl;
-    curseur.printPosition(1);
+    curseur.printPosition();
     std::cout << "width : " << width << " | height : " << height << std::endl;
     //isObstacle(curseur, barrier, 1);
 
@@ -81,7 +76,7 @@ void gridMapping::setCurseur(position curseur)
 }
 
 // gere les mouvements du curseur et les actions sur la grid (VALIDATE par ex)
-void gridMapping::mouvement(gridAction act)
+void gridMapping::mouvementGridPlayer(Action act)
 {
     switch (act) {
     /**
@@ -95,7 +90,7 @@ void gridMapping::mouvement(gridAction act)
      * on verifie que la position du curseur n'est pas parmi les obstacles (variable barrier).
      * Si un obstacle est deja a cette position, on laisse le curseur a sa position actuelle.
      **/
-    case DROITE:
+    case RIGHT:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
@@ -103,7 +98,7 @@ void gridMapping::mouvement(gridAction act)
         if (isObstacle(curseur, barrier)){ curseur.colonne --;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
-    case GAUCHE:
+    case LEFT:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
@@ -111,7 +106,7 @@ void gridMapping::mouvement(gridAction act)
         if (isObstacle(curseur, barrier)){  curseur.colonne ++;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
-    case HAUT:
+    case UP:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
@@ -119,7 +114,7 @@ void gridMapping::mouvement(gridAction act)
         if (isObstacle(curseur, barrier)){  curseur.ligne ++;}
         myGrid->getGridNode(curseur)->setWireframe();
         break;
-    case BAS:
+    case DOWN:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
         myGrid->getGridNode(curseur)->setWireframe();
@@ -141,7 +136,7 @@ void gridMapping::mouvement(gridAction act)
         myGrid->getGridNode(j1.pos)->setCouleur(UNSELECTED);
         j1.setPosition(curseur);
         myGrid->getGridNode(j1.pos)->setCouleur(PLAYER);
-        mouvement(RESET);
+        mouvementGridPlayer(RESET);
         break;
 
 
@@ -250,7 +245,7 @@ bool gridMapping::addEnemy(position p)
         // on ajoute les ennemis en tant qu'obstacles (dans la variable barrier avec la fct addObstacle())
         // pour ne pas y placer d'autres ennemis, d'autres obstacles, ou le joueur
         addObstacle(p);
-        mechant.push_back(enemy(p.ligne, p.colonne, myGrid));
+        mechant.push_back(gridEnemy(p.ligne, p.colonne, myGrid));
 
         std::cout << "Ennemi ajoute avec succes" << std::endl;
 

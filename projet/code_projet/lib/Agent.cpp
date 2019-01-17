@@ -83,10 +83,6 @@ void Agent::setBoundaries(int w, int h){
   this->height = h;
 }
 
-// GameManager // pas necessaire?
-void Agent::setGameManager(GameManager* gameManager){
-  this->gm = gameManager;
-}
 
 // HP (points de vie)
 void Agent::setHP(float hp){

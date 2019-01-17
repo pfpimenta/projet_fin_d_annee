@@ -9,16 +9,13 @@
 #include <cassert>
 #include <string>
 #include "Q_table.hpp"
-//#include "GameManager.hpp"
 
-class GameManager;
 
 
 class Agent
 {
 			float hp; //health point
 			float attack_force; // force du attaque
-			GameManager *gm;
 			int width;
 			int height;
 	protected:
@@ -34,7 +31,6 @@ class Agent
 			void moveLeft();
 			void moveRight();
 			void setBoundaries(int w, int h);
-			void setGameManager(GameManager* gameManager);
 			void setHP(float hp);
 			float getHP();
 			void setAttackForce(float attackForce);
