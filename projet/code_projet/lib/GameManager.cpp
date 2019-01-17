@@ -342,7 +342,9 @@ void GameManager::playAnimation(Action act, scene::IAnimatedMeshSceneNode *perso
         animator(-1, 0, perso);
         //animLEFT(getPlayer()->node);
         break;
-
+    case ATTACK: // attack
+        animATTACK(getPlayer()->node);
+        break;
 
 
     case NOTHING:
@@ -363,7 +365,14 @@ void GameManager::animator(int nombreCasesHorizontales, int nombreCasesVerticale
     ic::vector3df depart = perso->getPosition();
     ic::vector3df arrivee = depart + ic::vector3df(nombreCasesVerticales * DEFAULT_GRID_NODE_SIZE, 0, - nombreCasesHorizontales * DEFAULT_GRID_NODE_SIZE);
     perso->setPosition(arrivee);
+    perso->setRotation(ic::vector3df(0, atan2(nombreCasesHorizontales, nombreCasesVerticales) * 180 / M_PI, 0));
+}
 
+
+void GameManager::animATTACK(is::IAnimatedMeshSceneNode *perso)
+{
+    currentAnimationTime = device->getTimer()->getTime();
+    perso->setMD2Animation(is::EMAT_CROUCH_ATTACK);
 }
 
 

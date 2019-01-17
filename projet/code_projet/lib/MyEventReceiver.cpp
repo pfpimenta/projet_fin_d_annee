@@ -64,6 +64,8 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
                 {
                     case KEY_ESCAPE: // echap
                       exit(0);
+
+
                     case KEY_KEY_Z: // haut
                       act = UP;
                       break;
@@ -76,12 +78,18 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
                     case KEY_KEY_Q: // gauche
                       act = LEFT;
                       break;
+                    case KEY_SPACE: // attack
+                      act = ATTACK;
+                      break;
+
                     case KEY_KEY_M: // validate
                       act = VALIDATE;
                       break;
                     case KEY_KEY_A: // reset
                       act = RESET;
                       break;
+
+
                     case KEY_KEY_W: // pour tester les nouvelles features
                       act = DEBUG;
                       break;

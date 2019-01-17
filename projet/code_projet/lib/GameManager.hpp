@@ -69,6 +69,7 @@ public:
 
     void playAnimation(Action act, is::IAnimatedMeshSceneNode *perso);
     void animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso);
+    void animATTACK(is::IAnimatedMeshSceneNode *perso);
     void animUP(is::IAnimatedMeshSceneNode *perso);
     void animDOWN(is::IAnimatedMeshSceneNode *perso);
     void animLEFT(is::IAnimatedMeshSceneNode *perso);
