@@ -57,6 +57,8 @@ En cours de développement ...
   _Remarque : Si vous souhaitez compiler le code juste pour le tester, il est conseillé d'utiliser la méthode 2 (utilisation du makefile fourni).
   Si vous souhaitez modifier le code et tester les modifications, il est conseillé d'utiliser Qt pour lancer le CMakeLists.txt fourni (méthode 1.2)._
 
+  _Il est également possible de passer en argument lors de l'exécution du code la chîne de caractère "train" ( `$ ./projetFA train` ) ce qui a pour effet d'entraîner les ennemis et de générer un nouveau fichier test__table.txt qui servira de LUT pour la gestion du choix des actions de l'ennemi en fonction de son état._
+
 
 1. Avec le CMakeLists.txt :
   * Possibilité 1 (**non recommandée**): Se placer dans le répertoire ./projet/ (où se touve le fichier CMakeLists.txt) puis exécuter les commandes suivantes dans un terminal :
@@ -94,8 +96,18 @@ En cours de développement ...
 
 #### Comment jouer (touches à appuyer pour les actions):
 
-A compléter ...
+##### Mode Combat :
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements.png" width="280" height="130"></div>
+</br>
+En mode combat (lorsque la grille 3D est visible sur le sol), les touches (**Z, S, Q, D**) permettent de se déplacer respectivement en haut, en bas, à gauche et à droite. Lorsqu'une case est colorée en Bleu, il s'agit de la position actuelle du joueur. Tant que celui-ci n'a pas validé sa nouvelle position avec la touche **M**, la position réelle du joueur reste inchangée. Pour ramener le curseur (et donc le joueur) à sa position réelle, il suffit d'appuyer sur la touche **A**.
+La touche **SPACE** permet d'attaquer.
 
+
+
+</br> </br>
+
+##### Mode Jeu libre :
+A compléter ...
 #### Rapport de bugs:
 
 Bugs non fixés à résoudre, etc... (A compléter ...)

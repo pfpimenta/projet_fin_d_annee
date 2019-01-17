@@ -272,6 +272,9 @@ gridMapping *GameManager::getGridMapping()
 void GameManager::combat(irr::ITimer *Timer)
 {
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
+
+    //getGridMapping()->addObstacle(position(3, 1));
+
 }
 
 

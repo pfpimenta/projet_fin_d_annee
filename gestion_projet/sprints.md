@@ -22,11 +22,13 @@ Répartition des tâches pour la :
 
 **Date de fin :** Mardi 15 Janvier 2019
 
-- [ ] Succès
+- [x] Succès
 - [ ] Échec
 
 ### Remarques :
+Le premier sprint a été un succès. Chacun a travaillé de son côté. Nous nous sommes cependant retrouvés chez Cédric le Vendredi 11/01 et Mardi 15/01 pour discuter de l'avancement du projet ainsi que des fonctionnalités à implémenter.
 
+Ayant travaillé chacun de son côté, les mêmes fonctionnalités pour la gestion du jeu ont été codées plus d'une fois d'où le sujet du sprint 2 qui a été effectué en parallèle du sprint 1.
 
 
 </br>
@@ -35,12 +37,66 @@ Répartition des tâches pour la :
 
 ### Description :
 
+Fusionner les codes de Pedro et Cédric pour la gestion de jeu.
+
+
+**Date de début :** Vendredi 11 Janvier 2019
+
+**Date de fin :** Dimanche 13 Janvier 2019
+
+- [x] Succès
+- [ ] Échec
+
+### Remarques :
+Le sprint a été un succès. Au début, nous avons eu beaucoup de problèmes avec les pointeurs (erreurs de segmentation) qui ont pu être déboguées.  La principale difficulté a été de comprendre le raisonnement les codes réalisés au préalable.
+
+
+
+
+
+
+</br>
+
+
+## Numéro de sprint : 3
+
+### Description :
+
+ Fusionner tous les codes ( de Pedro, Cédric et Dylan ) pour pouvoir basculer du mode jeu Libre au mode combat et aussi gérer l'entraînement des ennemis.
 
 
 
 **Date de début :** Mardi 15 Janvier 2019
 
-**Date de fin :** ... ... Janvier 2019
+**Date de fin :** Dimanche 20 Janvier 2019
+
+- [ ] Succès
+- [ ] Échec
+
+### Remarques :
+
+
+
+
+</br>
+
+
+## Numéro de sprint : 4
+
+### Description :
+
+* Fusionner tous les codes ( de Pedro, Cédric et Dylan ).
+* Avoir un début de jeu :
+  - gestion du tour à tour
+  - le joueur doit pouvoir effectuer toutes les actions qui luis sont attribuées. (ATTACK, UP, DOWN, etc...)
+  - Le(s) ennemi(s) doivent pouvoir effectuer les actions qu'ils ont apprises pendant la phase d'entraînement (même si les actions ne sont pas logiques) lorsque ce sera à leur tour d'effectuer une action.
+  - basculer du mode jeu Libre à combat
+
+Ce sprint correspond donc à la réalisation des **étapes 2 & 3 de l'objectif 2** et de l'**étape 3 de l'objectif 1**.
+
+**Date de début :** Mardi 15 Janvier 2019
+
+**Date de fin :** Mardi 22 Janvier 2019
 
 - [ ] Succès
 - [ ] Échec
