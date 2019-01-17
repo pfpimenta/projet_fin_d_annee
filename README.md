@@ -74,7 +74,7 @@ En cours de développement ...
 
   * Possibilité 2 (**recommandée** pour modifier le code et tester les modifications): Lancer le CMakeLists.txt avec QTcreator et compiler et exécuter le code avec Qt.
 
-  _Penser à copier le dossier data/ présent à la racine du projet (présent dans le même répertoire que les dossiers src/ et lib/) dans le répertoire build créé au lancement de Qt._
+    _Penser à copier le dossier data/ présent à la racine du projet (présent dans le même répertoire que les dossiers src/ et lib/) dans le répertoire build créé au lancement de Qt._
 
 
 2. Avec le makefile (**recommandée** pour une simple exécution):
