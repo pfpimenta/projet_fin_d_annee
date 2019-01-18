@@ -27,6 +27,11 @@ class GameManager
     std::vector<gridMapping*> grid;
 
 
+    // cameras
+    std::vector<scene::ICameraSceneNode*> cameraCombat;
+    std::vector<scene::ICameraSceneNode*> cameraJeuLibre;
+
+
 public:
 
     //device : correspond exactement au device dans le main
@@ -56,6 +61,17 @@ public:
     bool removeGridMapping();
     gridMapping *getGridMapping();
 
+
+    /** cameras **/
+    // combat
+    bool addCameraCombat();
+    bool removeCameraCombat();
+    scene::ICameraSceneNode *getCameraCombat();
+
+    // jeu libre
+    bool addCameraJeuLibre();
+    bool removeCameraJeuLibre();
+    scene::ICameraSceneNode *getCameraJeuLibre();
 
 
     /** Animations **/

@@ -263,9 +263,130 @@ gridMapping *GameManager::getGridMapping()
 
 
 
+
+
+
+/** cameras **/
+// combat
+bool GameManager::addCameraCombat()
+{
+    if( cameraCombat.size() == 0 )
+    {
+        if (cameraJeuLibre.size() == 0)
+        {
+            irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
+            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+            camera->setPosition(camCombatPosition + translationCamCombat);
+            camera->setTarget(camera->getTarget() + translationCamCombat);
+            cameraCombat.push_back(camera);
+            std::cout << "... GameManager::addCameraCombat : CameraCombat ajoutee avec succes !  ..." << std::endl;
+            return 1;
+        }
+        else if (cameraJeuLibre.size() != 0)
+        {
+            std::cout << "... GameManager::addCameraCombat : CameraCombat non ajoutee ! cameraJeuLibre deja presente.  ..."
+                      << "     Utilisez la fonction GameManager::removeCameraJeuLibre(), puis reessayez."
+                      << std::endl;
+            return 0;
+        }
+    }
+    std::cout << "... GameManager::addCameraCombat : CameraCombat non ajoutee ! Une CameraCombat est deja presente ..." << std::endl;
+    return 0;
+}
+
+
+bool GameManager::removeCameraCombat()
+{
+    if( cameraCombat.size() == 1 )
+    {
+        cameraCombat[0]->remove();
+        cameraCombat.erase(cameraCombat.begin());
+        std::cout << "... GameManager::removeCameraCombat() : La CameraCombat a ete bien effacee ..." << std::endl;
+        return 1;
+    }
+
+    std::cout << "... GameManager::removeCameraCombat() : Aucune CameraCombat presente !  ..." << std::endl;
+    return 0;
+}
+
+
+
+scene::ICameraSceneNode *GameManager::getCameraCombat()
+{
+    if( cameraCombat.size() == 1 )
+    {
+        //std::cout << "... GameManager::getCameraCombat() : La CameraCombat a ete bien recupere ..." << std::endl;
+        return cameraCombat[0];
+    }
+    //std::cout << "... GameManager::getCameraCombat() : Aucune CameraCombat presente ! Vous avez recupere un pointeur NULL ! ..." << std::endl;
+    return NULL;
+}
+
+
+
+// JeuLibre
+bool GameManager::addCameraJeuLibre()
+{
+    if( cameraJeuLibre.size() == 0 )
+    {
+        if (cameraCombat.size() == 0)
+        {
+            if (getPlayer() == NULL)
+            {
+                std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre non ajoutee ! Aucun joueur present !  ..." << std::endl;
+                return 0;
+            }
+            irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+            cameraJeuLibre.push_back(camera);
+            std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre ajoutee avec succes !  ..." << std::endl;
+            return 1;
+        }
+        else if (cameraCombat.size() != 0)
+        {
+            std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre non ajoutee ! cameraCombat deja presente.  ..."
+                      << "     Utilisez la fonction GameManager::removeCameraCombat(), puis reessayez."
+                      << std::endl;
+            return 0;
+        }
+    }
+    std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre non ajoutee ! Une CameraJeuLibre est deja presente ..." << std::endl;
+    return 0;
+}
+
+
+bool GameManager::removeCameraJeuLibre()
+{
+    if( cameraJeuLibre.size() == 1 )
+    {
+        cameraJeuLibre[0]->remove();
+        cameraJeuLibre.erase(cameraJeuLibre.begin());
+        std::cout << "... GameManager::removeCameraJeuLibre() : La CameraJeuLibre a ete bien effacee ..." << std::endl;
+        return 1;
+    }
+
+    std::cout << "... GameManager::removeCameraJeuLibre() : Aucune CameraJeuLibre presente !  ..." << std::endl;
+    return 0;
+}
+
+
+
+scene::ICameraSceneNode *GameManager::getCameraJeuLibre()
+{
+    if( cameraJeuLibre.size() == 1 )
+    {
+        //std::cout << "... GameManager::getCameraJeuLibre() : La CameraJeuLibre a ete bien recupere ..." << std::endl;
+        return cameraJeuLibre[0];
+    }
+    //std::cout << "... GameManager::getCameraJeuLibre() : Aucune CameraJeuLibre presente ! Vous avez recupere un pointeur NULL ! ..." << std::endl;
+    return NULL;
+}
+
+
+
+
+
 /** Animations **/
-
-
 
 void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMeshSceneNode *perso)
 {
@@ -315,8 +436,6 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
     }
 }
 
-
-
 void GameManager::animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso)
 {
     ic::vector3df depart = perso->getPosition();
@@ -331,8 +450,6 @@ void GameManager::animATTACK(is::IAnimatedMeshSceneNode *perso)
     currentAnimationTime = device->getTimer()->getTime();
     perso->setMD2Animation(is::EMAT_CROUCH_ATTACK);
 }
-
-
 
 void GameManager::animUP(is::IAnimatedMeshSceneNode *perso)
 {
@@ -543,16 +660,6 @@ void GameManager::combat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
 
 
-
-    // next step : une fonction pour bien placer la camera de combat
-    /** Ajout d'une camera **/
-    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-    irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
-    irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
-    camera->setPosition(camCombatPosition + translationCamCombat);
-    camera->setTarget(camera->getTarget() + translationCamCombat);
-
-
 }
 
 
@@ -567,9 +674,14 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
 
-    isCombat = 0;
-    isPromenade = 1;
+    isCombat = 1;
+    isPromenade = 0;
 
+    addCameraCombat();
+    addCameraCombat();
+    addCameraJeuLibre();
+
+    combat(Timer);
 
 //    ////variables aléatoires pour lancement combat////
 //    float probaFight = 0.0005;
@@ -650,8 +762,8 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //    scene::ICameraSceneNode* camera_promenade = smgr->addCameraSceneNode(getPlayer()->node);
 //    camera_promenade->setPosition(ic::vector3df(-50, 30, 0));
 
-    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-    camera->setPosition(ic::vector3df(-50, 30, 0));
+//    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+//    camera->setPosition(ic::vector3df(-50, 30, 0));
     //camera->setTarget(camera->getTarget() + translationCamCombat);
 
 //    scene::ISceneNodeAnimator *animcam;
@@ -721,6 +833,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //        promenade(Timer);
 //    else
 //        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
+
 
 
 

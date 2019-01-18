@@ -23,6 +23,7 @@ bool MyEventReceiver::OnEvent(const irr::SEvent &event)
     /** Durant le mode combat **/
     if (gmngr->isCombat && !gmngr->isPromenade)
     {
+        if(!gmngr->getGridMapping()) return false;
         switch (event.EventType)
         {
             case irr::EET_KEY_INPUT_EVENT:
