@@ -18,7 +18,10 @@ Menu de la scène 3D
 <div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/menuScene3D.png" width="280" height="130"></div>
 
 #### Etape 2: Déplacement dans la scène 3D et dans la grid
+
 <div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/animDeplacements.png" width="280" height="130"></div>
+
+
 - [x] Déplacements du joueur et des ennemis dans la grid (2D)
 - [x] Animations des déplacements du joueur dans la grid (animations 3D)
 - [x] Déplacements du joueur dans la scène 3D
