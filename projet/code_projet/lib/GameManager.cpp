@@ -541,6 +541,18 @@ void GameManager::create_window(ig::IGUIEnvironment *gui)
 void GameManager::combat(irr::ITimer *Timer)
 {
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
+
+
+
+    // next step : une fonction pour bien placer la camera de combat
+    /** Ajout d'une camera **/
+    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+    irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
+    irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+    camera->setPosition(camCombatPosition + translationCamCombat);
+    camera->setTarget(camera->getTarget() + translationCamCombat);
+
+
 }
 
 
@@ -555,8 +567,8 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
 
-    isCombat = 1;
-    isPromenade = 0;
+    isCombat = 0;
+    isPromenade = 1;
 
 
 //    ////variables aléatoires pour lancement combat////
@@ -637,6 +649,11 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 //    scene::ICameraSceneNode* camera_promenade = smgr->addCameraSceneNode(getPlayer()->node);
 //    camera_promenade->setPosition(ic::vector3df(-50, 30, 0));
+
+    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+    camera->setPosition(ic::vector3df(-50, 30, 0));
+    //camera->setTarget(camera->getTarget() + translationCamCombat);
+
 //    scene::ISceneNodeAnimator *animcam;
 //    scene::ISceneNodeAnimator *animcam2;
 
@@ -698,13 +715,34 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //      driver->endScene();
 //    }
 
-    if (isCombat && !isPromenade)
-        combat(Timer);
-    if (isPromenade && !isCombat)
-        promenade(Timer);
-    else
-        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
+//    if (isCombat && !isPromenade)
+//        combat(Timer);
+//    if (isPromenade && !isCombat)
+//        promenade(Timer);
+//    else
+//        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
 
+
+
+
+    while(device->run())
+    {
+
+
+        device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 0, 0, 0)); // fond noir
+        smgr->drawAll();
+
+
+
+
+
+
+        // faire clignoter le curseur
+        if (getGridMapping() != NULL)
+            getGridMapping()->makeCurseurBlink(true);
+
+        device->getVideoDriver()->endScene();
+    }
 
 }
 

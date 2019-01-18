@@ -96,6 +96,18 @@ void interface()
     irr::scene::ISceneManager *smgr = device->getSceneManager();
 
 
+
+    //creation du gameManager
+    GameManager *gameManager = new GameManager(device);
+    receiver->gmngr = gameManager; // /!\ toujours rattacher le receiver au gameManager
+
+    /** ************* **/
+
+
+
+
+
+
     // chargement du mesh (puisqu'il sera utilise plusieurs fois)
     irr::scene::IAnimatedMesh *mesh = smgr->getMesh("./data/tris/tris.md2");
 
@@ -104,9 +116,7 @@ void interface()
     irr::video::ITexture* textureEnemy = driver->getTexture("./data/tris/red_texture.pcx");
 
 
-    //creation du gameManager
-    GameManager *gameManager = new GameManager(device);
-    receiver->gmngr = gameManager; // /!\ toujours rattacher le receiver au gameManager
+
 
 
     // ajout d'un joueur
@@ -135,46 +145,10 @@ void interface()
 
 
 
+
+
+
     gameManager->sceneRenderer(Timer);
-
-    /** *********** **/
-
-
-
-
-
-
-
-    // next step : une fonction pour bien placer la camera de combat
-    /** Ajout d'une camera **/
-    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-    irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
-    irr::core::vector3df translationCamCombat(0, 0, (gameManager->getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
-    camera->setPosition(camCombatPosition + translationCamCombat);
-    camera->setTarget(camera->getTarget() + translationCamCombat);
-
-
-
-
-
-
-
-    while(device->run())
-    {
-
-
-        driver->beginScene(true, true, irr::video::SColor(255, 0, 0, 0)); // fond noir
-        smgr->drawAll();
-
-
-        // faire clignoter le curseur
-        if (gameManager->getGridMapping() != NULL)
-            gameManager->getGridMapping()->makeCurseurBlink(true);
-
-        driver->endScene();
-    }
-
-
 
 
     device->drop();
