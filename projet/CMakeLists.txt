@@ -14,12 +14,13 @@ set(CMAKE_LD_FLAGS "-lIrrlicht -lGL -lGLU -lXxf86vm -lXext -lX11")
 FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 find_package( OpenCV REQUIRED )
-
+ 
 file(
 	GLOB
-	source_files
+        source_files
         code_projet/src/*.[ch]pp
         code_projet/lib/*.[ch]pp
+        code_projet/lib/*.h
         code_projet/lib/libGridMapping/*.[ch]pp
 )
 

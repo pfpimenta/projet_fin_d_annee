@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "gui_ids.h"
 #include "GameManager.hpp"
 
 GameManager::GameManager(irr::IrrlichtDevice *device)
@@ -7,9 +8,6 @@ GameManager::GameManager(irr::IrrlichtDevice *device)
 {
     smgr = this->device->getSceneManager();
 }
-
-
-
 
 
 
@@ -206,8 +204,6 @@ enemy *GameManager::getEnemy(int id)
 
 
 
-
-
 /** gridMapping **/
 bool GameManager::addGridMapping(int width, int height, ITimer *Timer)
 {
@@ -261,52 +257,6 @@ gridMapping *GameManager::getGridMapping()
     //std::cout << "... GameManager::getGridMapping() : Aucun gridMapping present ! Vous avez recupere un pointeur NULL ! ..." << std::endl;
     return NULL;
 }
-
-
-
-
-
-
-/** gestionnaire de jeu **/
-
-void GameManager::combat(irr::ITimer *Timer)
-{
-    addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
-
-    //getGridMapping()->addObstacle(position(3, 1));
-
-}
-
-
-
-
-
-
-
-
-
-void GameManager::promenade(irr::ITimer *Timer)
-{}
-
-
-
-
-
-
-void GameManager::sceneRenderer(irr::ITimer *Timer)
-{
-    if (isCombat && !isPromenade)
-        combat(Timer);
-    if (isPromenade && !isCombat)
-        promenade(Timer);
-    else
-        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
-}
-
-
-
-
-
 
 
 
@@ -443,6 +393,319 @@ void GameManager::animRIGHT(is::IAnimatedMeshSceneNode *perso)
     perso->addAnimator(anim);
     anim->drop();
     perso->setMD2Animation(is::EMAT_RUN);
+}
+
+
+
+
+
+
+
+
+/** fonctions scene 3D **/
+
+
+
+
+// changement de scene
+void GameManager::parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
+                           scene::ITriangleSelector *selector, scene::ISceneNodeAnimator *anim, is::IAnimatedMeshSceneNode *perso,
+                           core::vector3df radius, scene::ISceneNodeAnimator *animcam, scene::ICameraSceneNode* camera)
+{
+//    if (node)
+//    {
+//        node->setVisible(false);
+//    }
+
+//    if (screenChange)
+//    {
+//    node = smgr->addOctreeSceneNode(meshVector[1]->getMesh(0), nullptr, 0, 1024);
+//    // Translation pour que nos personnages soient dans le décor
+//    node->setPosition(core::vector3df(-1350, -130, -1400));
+//    }
+
+//    else
+//    {
+//        node = smgr->addOctreeSceneNode(meshVector[0]->getMesh(0), nullptr, -1, 1024);
+//        // Translation pour que nos personnages soient dans le décor
+//        node->setPosition(core::vector3df(0,-104,0));
+//    }
+
+    selector = smgr->createOctreeTriangleSelector(node->getMesh(), node);
+    node->setTriangleSelector(selector);
+
+
+    anim = smgr->createCollisionResponseAnimator(selector,
+                                                 perso,  // Le noeud que l'on veut gérer
+                                                 radius, // "rayons" de la caméra
+                                                 ic::vector3df(0, -10, 0),  // gravité
+                                                 ic::vector3df(0, 0, 0));  // décalage du centre
+
+    perso->addAnimator(anim);
+
+
+    animcam = smgr->createCollisionResponseAnimator(selector,
+                                                 camera,
+                                                 ic::vector3df(30, 50, 30),
+                                                 ic::vector3df(0, 0, 0),  // gravité
+                                                 ic::vector3df(0, 0, 0));  // décalage du centre
+
+    camera->addAnimator(animcam);
+}
+
+
+
+
+
+// charger animation
+std::vector<iv::ITexture*> GameManager::loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver)
+{
+    std::vector<iv::ITexture*> Vector;
+    std::wstring numFrame;
+    std::wstring nomComplet;
+
+    iv::ITexture *Texture;
+
+    for(int i = 1; i<=nbFrame ; i++)
+    {
+      numFrame = std::to_wstring(i) + L".png";
+      nomComplet = nomGeneral + numFrame;
+      Texture = driver->getTexture(nomComplet.c_str());
+      Vector.push_back(Texture);
+    }
+    return Vector;
+}
+
+
+
+// lecture d une video
+void GameManager::playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device,
+                      is::ISceneManager *smgr, ig::IGUIEnvironment *gui, iv::IVideoDriver  *driver)
+{
+    int currentFrame = 0;
+    while(currentFrame<nbFrame)
+    {
+        box->setImage(frameVector[currentFrame]);
+        currentFrame++;
+        std::cout << currentFrame << std::endl;
+        smgr->drawAll();
+        gui->drawAll();
+        driver->endScene();
+
+        device->sleep(100);
+    }
+    box->remove();
+}
+
+
+// creer le menu
+void GameManager::create_menu(ig::IGUIEnvironment *gui)
+{
+  ig::IGUIContextMenu *submenu;
+
+  // une entrée principale :
+  ig::IGUIContextMenu *menu = gui->addMenu();
+  menu->addItem(L"menu", -1, true, true);
+
+  // Le contenu du menu :
+  submenu = menu->getSubMenu(0);
+  submenu->addItem(L"New game...", MENU_NEW_GAME);
+  submenu->addSeparator();
+  submenu->addItem(L"Quit", MENU_QUIT);
+  submenu->addSeparator();
+  submenu->addItem(L"commandes", MENU_COMMANDES);
+}
+
+
+// creation des differentes fenetres
+void GameManager::create_window(ig::IGUIEnvironment *gui)
+{
+  // La fenetre
+  window = gui->addWindow(ic::rect<s32>(420,25, 620,460), false, L"items");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/** gestionnaire de jeu **/
+
+// a appeler dans le sceneRenderer durant le mode combat
+void GameManager::combat(irr::ITimer *Timer)
+{
+    addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
+}
+
+
+// a appeler dans le sceneRenderer durant le mode jeu libre
+void GameManager::promenade(irr::ITimer *Timer)
+{
+    removeGridMapping();
+}
+
+
+
+void GameManager::sceneRenderer(irr::ITimer *Timer)
+{
+
+    isCombat = 1;
+    isPromenade = 0;
+
+
+//    ////variables aléatoires pour lancement combat////
+//    float probaFight = 0.0005;
+//    bool isFight = false;
+//    float randNum;
+//    bool ScreenChange = false;
+
+//    ////numero de frame pour affichage hp///////////
+//    int nbFrameHp = 60;
+//    int numCurrentFrame;
+
+//    iv::IVideoDriver  *driver = device->getVideoDriver();
+//    ig::IGUIEnvironment *gui  = device->getGUIEnvironment();
+//    is::IMeshSceneNode *node2;
+
+//    // La barre de menu
+//    create_menu(gui);
+
+//    // fenêtre des objets
+//    create_window(gui);
+//    window->setVisible(false);
+
+//    //liste des images barre de hp
+//    std::wstring nomGeneralHp(L"data/perso/hp/health");
+
+//    std::vector<iv::ITexture*> hpVector = loadGif(nbFrameHp, nomGeneralHp, driver);
+
+//    ig::IGUIImage *hpBox = gui->addImage(ic::rect<s32>(10,25,  300,40)); hpBox->setScaleImage(true);
+
+
+//    //animation debut combat
+//    std::wstring nomGeneralFight(L"data/animations/combat/combat");
+//    int nbFrameFight = 20;
+//    std::vector<iv::ITexture*> fightVector = loadGif(nbFrameHp, nomGeneralFight, driver);
+
+//    ig::IGUIImage *fightBox = gui->addImage(ic::rect<s32>(0,  0, DEFAULT_WIDTH, DEFAULT_HEIGHT)); fightBox->setScaleImage(true);
+
+
+//    /// on charge le decor ///
+//    // Ajout de l'archive qui contient entre autres un niveau complet
+//    device->getFileSystem()->addFileArchive("data/maps/mario.pk3");
+//    device->getFileSystem()->addFileArchive("data/maps/map-20kdm2.pk3");
+
+//    // On charge un bsp (un niveau) en particulier :
+//    is::IAnimatedMesh *mesh_bsp = smgr->getMesh("mario.bsp");
+//    is::IAnimatedMesh *mesh_bsp2 = smgr->getMesh("20kdm2.bsp");
+//    std::vector<is::IAnimatedMesh*> meshVector;
+//    meshVector.push_back(mesh_bsp);
+//    meshVector.push_back(mesh_bsp2);
+
+//    map3DNode = smgr->addOctreeSceneNode(meshVector[0]->getMesh(0), nullptr, -1, 1024);
+//    // Translation pour que nos personnages soient dans le décor
+//    map3DNode->setPosition(core::vector3df(0,-104,0));
+
+
+
+//    /// Chargement de notre personnage ///
+//    is::IAnimatedMesh *mesh = smgr->getMesh("data/tris/tris.md2");
+
+//    // Attachement de notre personnage dans la scène
+//    getPlayer()->node->setRotation(ic::vector3df(0, 90, 0));
+
+//    //receiver.set_node(node);
+
+//    //perso->setRotation(ic::vector3df(0, 90, 0));
+//    const core::aabbox3d<f32>& box = getPlayer()->node->getBoundingBox();
+//    core::vector3df radius = box.MaxEdge - box.getCenter();
+//    scene::ISceneNodeAnimator *anim;
+//    scene::ISceneNodeAnimator *anim2;
+
+//  /////police de caractere///////
+//    ig::IGUISkin* skin = gui->getSkin();
+//    ig::IGUIFont* font = gui->getFont("data/menu/fontlucida.png");
+//    skin->setFont(font);
+
+//    ///////////// Camera //////////////
+
+//    scene::ICameraSceneNode* camera_promenade = smgr->addCameraSceneNode(getPlayer()->node);
+//    camera_promenade->setPosition(ic::vector3df(-50, 30, 0));
+//    scene::ISceneNodeAnimator *animcam;
+//    scene::ISceneNodeAnimator *animcam2;
+
+
+//    //////////// physique //////////////
+//    // Création du triangle selector
+//    scene::ITriangleSelector *selector;
+//    scene::ITriangleSelector *selector2;
+
+//    parametreScene(ScreenChange, map3DNode, smgr, meshVector, selector, anim, getPlayer()->node, radius, animcam, camera_promenade);
+
+//    while(device->run())
+//    {
+//      driver->beginScene(true, true, iv::SColor(100,150,200,255));
+
+//  ////combat hasard////////////////////////////////////////
+//  /////////////////////////////////////////////////////////
+//      if (!isFight)
+//      {
+//          randNum = rand()/(float)RAND_MAX;
+
+//          ScreenChange = randNum < probaFight;
+//      }
+
+//      if (ScreenChange)
+//      {
+//          isFight = true;
+
+//          playVideo(fightVector, nbFrameFight, fightBox, device, smgr, gui, driver);
+
+//          //node->remove();
+
+//          node2 = smgr->addOctreeSceneNode(meshVector[1]->getMesh(0), nullptr, 0, 1024);
+//          // Translation pour que nos personnages soient dans le décor
+//          node2->setPosition(core::vector3df(-1350, -180, -1400));
+
+//          getPlayer()->node->removeAnimator(anim);
+//          camera_promenade->removeAnimator(animcam);
+
+
+//          parametreScene(ScreenChange, node2, smgr, meshVector, selector2, anim2, getPlayer()->node, radius, animcam2, camera_promenade);
+//          ScreenChange = false;
+//      }
+//  ///////////////////////////////////////////////////////////
+//  ///////////////////////////////////////////////////////////
+//      camera_promenade->setTarget(getPlayer()->node->getPosition());
+
+//      smgr->drawAll();
+
+//  ////dessin de la barre de HP////
+
+////      numCurrentFrame = (nbFrameHp - 1) * (float)hp/hpmax;
+
+//      hpBox->setImage(hpVector[15]);
+
+//      // Dessin de la GUI :
+//      gui->drawAll();
+
+//      driver->endScene();
+//    }
+
+    if (isCombat && !isPromenade)
+        combat(Timer);
+    if (isPromenade && !isCombat)
+        promenade(Timer);
+    else
+        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
+
+
 }
 
 

@@ -12,12 +12,11 @@ class GameManager
 
     //sceneManager (/!\ different du gameManager)
     irr::scene::ISceneManager *smgr;
-    //device
-    irr::IrrlichtDevice *device;
+
 
     // joueur (/!\ il y a toujours un seul joueur; meilleure gestion avec un vecteur)
     std::vector<player*> j1;
-    std::vector<Action> playerAnimToDo;
+
 
     // ennemis
     std::vector<enemy*> mechant;
@@ -29,9 +28,13 @@ class GameManager
 
 
 public:
+
+    //device : correspond exactement au device dans le main
+    irr::IrrlichtDevice *device;
+
     // constructeur
     GameManager(IrrlichtDevice *device);
-    GameManager():isCombat(1), isPromenade(0){}
+    GameManager():isCombat(1), isPromenade(0){} // penser a initialiser de la meme facon isCombat & isPromenade dans les 2 constructeurs
 
 
     /** joueur **/
@@ -54,14 +57,6 @@ public:
     gridMapping *getGridMapping();
 
 
-    /** gestionnaire de jeu **/
-    // pour savoir si on commence un combat
-    bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
-    bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
-    void combat(irr::ITimer *Timer);
-    void promenade(irr::ITimer *Timer);
-    void sceneRenderer(ITimer *Timer);
-
 
     /** Animations **/
     bool isFin = 1;
@@ -75,20 +70,43 @@ public:
     void animLEFT(is::IAnimatedMeshSceneNode *perso);
     void animRIGHT(is::IAnimatedMeshSceneNode *perso);
 
-    //    void doThis(is::IAnimatedMeshSceneNode *perso)
-    //    {
-    //        std::vector<Action> toDo = {RIGHT, RIGHT, LEFT, DOWN, LEFT};
-    //        animator(toDo[0], perso);
-    //        for (unsigned int i = 1; i < toDo.size(); i++)
-    //        {
-    //            if (device->getTimer()->getTime() - this->currentAnimationTime >= DEFAULT_DUREE_ANIMATION)
-    //                animator(toDo[i], perso);
-    //        }
-    //    }
+
+
+
+    /** fonctions scene 3D **/
+    ig::IGUIWindow *window;
+    is::IMeshSceneNode *map3DNode;
+
+
+    // pour changer la scene
+    void parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
+                               scene::ITriangleSelector *selector, scene::ISceneNodeAnimator *anim, is::IAnimatedMeshSceneNode *perso,
+                               core::vector3df radius, scene::ISceneNodeAnimator *animcam, scene::ICameraSceneNode* camera);
+
+    // charge un gif
+    std::vector<iv::ITexture*> loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver);
+
+    // lire une video
+    void playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device,
+                          is::ISceneManager *smgr, ig::IGUIEnvironment *gui, iv::IVideoDriver  *driver);
+
+    // creer le menu
+    void create_menu(ig::IGUIEnvironment *gui);
+
+    // construction des differentes fenetres
+    void create_window(ig::IGUIEnvironment *gui);
 
 
 
 
+
+    /** gestionnaire de jeu **/
+    // pour savoir si on commence un combat
+    bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
+    bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
+    void combat(irr::ITimer *Timer);
+    void promenade(irr::ITimer *Timer);
+    void sceneRenderer(ITimer *Timer);
 
 
 

@@ -143,25 +143,6 @@ void interface()
 
 
 
-    /** DEBUG **/
-
-    std::cout << std::endl;
-    std::cout << "... Debug" << std::endl;
-    std::cout << "... Fin" << std::endl;
-
-    /** FIN DEBUG **/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // next step : une fonction pour bien placer la camera de combat
@@ -193,7 +174,14 @@ void interface()
         driver->endScene();
     }
 
+
+
+
     device->drop();
+
+
+
+
 }
 
 
