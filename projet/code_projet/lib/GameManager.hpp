@@ -27,7 +27,7 @@ class GameManager
     std::vector<gridMapping*> grid;
 
     // map 3D  (/!\ il y a toujours une seule map 3D (pour l'instant celle de Mario); meilleure gestion avec un vecteur)
-    std::vector<is::IMeshSceneNode*> mapScene3D;
+    std::vector<scene3D*> mapScene3D;
 
     // cameras
     std::vector<scene::ICameraSceneNode*> cameraCombat;
@@ -117,7 +117,7 @@ public:
     /** map 3D **/
     bool addMapScene3D();
     bool removeMapScene3D();
-    scene::IMeshSceneNode *getMapScene3D();
+    scene3D *getMapScene3D();
 
 
     /** gestionnaire de jeu **/

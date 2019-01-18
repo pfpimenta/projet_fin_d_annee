@@ -654,12 +654,9 @@ bool GameManager::addMapScene3D()
 
     if(mapScene3D.size() == 0)
     {
-        is::IAnimatedMesh *mesh_bsp = smgr->getMesh("mario.bsp");
-        is::IMeshSceneNode *node;
-        node = smgr->addOctreeSceneNode(mesh_bsp->getMesh(0), nullptr, -1, 1024);
-        // Translation pour que nos personnages soient dans le décor
-        node->setPosition(core::vector3df(0,-104,0));
-        mapScene3D.push_back(node);
+        scene3D *scene = new scene3D(device, smgr->getMesh("mario.bsp"));
+
+        mapScene3D.push_back(scene);
         std::cout << "... GameManager::addMapScene3D() : MapScene3D ajoutee avec succes ! ..." << std::endl;
         return 1;
     }
@@ -672,7 +669,7 @@ bool GameManager::removeMapScene3D()
 {
     if(mapScene3D.size() == 1)
     {
-        mapScene3D[0]->remove();
+        mapScene3D[0]->node->remove();
         mapScene3D.erase(mapScene3D.begin());
         std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
         return 1;
@@ -681,7 +678,7 @@ bool GameManager::removeMapScene3D()
     return 0;
 }
 
-is::IMeshSceneNode *GameManager::getMapScene3D()
+scene3D *GameManager::getMapScene3D()
 {
     if(mapScene3D.size() == 1)
     {
@@ -730,10 +727,9 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
     addMapScene3D();
-//    getMapScene3D();
-//    removeMapScene3D();
+    getMapScene3D();
+    removeMapScene3D();
     promenade(Timer);
-
 
 
 //    ////variables aléatoires pour lancement combat////
