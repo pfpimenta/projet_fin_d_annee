@@ -663,7 +663,10 @@ void GameManager::create_window(ig::IGUIEnvironment *gui)
 void GameManager::combat(irr::ITimer *Timer)
 {
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
-
+    removeCameraJeuLibre();
+    isCombat = 1;
+    isPromenade = 0;
+    addCameraCombat();
 
 }
 
@@ -672,24 +675,19 @@ void GameManager::combat(irr::ITimer *Timer)
 void GameManager::promenade(irr::ITimer *Timer)
 {
     removeGridMapping();
+    removeCameraCombat();
+    isCombat = 0;
+    isPromenade = 1;
+    addCameraJeuLibre();
 }
 
 
 
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
+    promenade(Timer);
 
-    isCombat = 0;
-    isPromenade = 1;
 
-    addCameraCombat();
-    addCameraCombat();
-    addCameraJeuLibre();
-    removeCameraCombat();
-    addCameraJeuLibre();
-    addCameraJeuLibre();
-
-    //combat(Timer);
 
 //    ////variables aléatoires pour lancement combat////
 //    float probaFight = 0.0005;
@@ -855,13 +853,25 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
+        float epsilon = 10;
+        if ((core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
+            &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
+            &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
+
+        {
+            isCombat = 1; isPromenade = 0;
+            combat(Timer);
+        }
 
 
         /** DO NOT EDIT **/
 
         // pour que les cameras aient la bonne target
         if (getCameraCombat() != NULL)
-            getCameraCombat()->setTarget(core::vector3df(0, 0, 0));
+        {
+//            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+//            getCameraCombat()->setTarget(getCameraCombat()->getTarget() + translationCamCombat);
+        }
         if (getCameraJeuLibre() != NULL)
             getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
 
