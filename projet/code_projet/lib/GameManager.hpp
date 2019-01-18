@@ -117,7 +117,7 @@ public:
     /** map 3D **/
     bool addMapScene3D();
     bool removeMapScene3D();
-    is::IAnimatedMesh *getMapScene3D();
+    scene::IMeshSceneNode *getMapScene3D();
 
 
     /** gestionnaire de jeu **/

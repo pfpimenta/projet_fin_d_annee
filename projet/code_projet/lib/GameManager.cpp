@@ -22,6 +22,7 @@ bool GameManager::addPlayer(position p, int HP, irr::scene::IAnimatedMesh *mesh,
     if( j1.size() == 0 )
     {
         player *joueur = new player(p, HP, smgr, mesh, texture, pos3D, j1.size());
+        joueur->node->setRotation(ic::vector3df(0, 90, 0));
         j1.push_back(joueur);
         std::cout << "... GameManager::addPlayer : joueur ajoute avec succes !..." << std::endl;
         return 1;
@@ -671,6 +672,8 @@ bool GameManager::removeMapScene3D()
 {
     if(mapScene3D.size() == 1)
     {
+        mapScene3D[0]->remove();
+        mapScene3D.erase(mapScene3D.begin());
         std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
         return 1;
     }
@@ -678,9 +681,13 @@ bool GameManager::removeMapScene3D()
     return 0;
 }
 
-is::IAnimatedMesh *GameManager::getMapScene3D()
+is::IMeshSceneNode *GameManager::getMapScene3D()
 {
-
+    if(mapScene3D.size() == 1)
+    {
+        std::cout << "... GameManager::getMapScene3D() : La scene 3D a ete bien recuperee !  ..." << std::endl;
+        return mapScene3D[0];
+    }
     std::cout << "... GameManager::getMapScene3D() : La scene 3D n'est pas presente ! Vous avez recupere un pointeur NULL !  ..." << std::endl;
     return NULL;
 }
@@ -723,6 +730,8 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
     addMapScene3D();
+//    getMapScene3D();
+//    removeMapScene3D();
     promenade(Timer);
 
 
