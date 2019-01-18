@@ -23,6 +23,10 @@ bool GameManager::addPlayer(position p, int HP, irr::scene::IAnimatedMesh *mesh,
     {
         player *joueur = new player(p, HP, smgr, mesh, texture, pos3D, j1.size());
         joueur->node->setRotation(ic::vector3df(0, 90, 0));
+
+        // ajout de collision au joueur si la map 3D est chargee
+        if (getMapScene3D() != NULL )getMapScene3D()->addCollisionToPerson(joueur->node);
+
         j1.push_back(joueur);
         std::cout << "... GameManager::addPlayer : joueur ajoute avec succes !..." << std::endl;
         return 1;
@@ -106,6 +110,10 @@ bool GameManager::addEnemy(position p, int HP, irr::scene::IAnimatedMesh *mesh, 
     if( true ) // on pourra rajouter une condition sur le nombre max d'ennemis
     {
         enemy *vilain = new enemy(p, HP, smgr, mesh, texture, pos3D, mechant.size());
+
+        // ajout de collision a l'ennemi si la map 3D est chargee
+        if (getMapScene3D() != NULL )getMapScene3D()->addCollisionToPerson(vilain->node);
+
         mechant.push_back(vilain);
         enemyID.push_back(vilain->id);
         std::cout << "... GameManager::addEnemy : Ennemi ajoute avec succes !..." << std::endl;
@@ -342,6 +350,10 @@ bool GameManager::addCameraJeuLibre()
             }
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
             camera->setPosition(ic::vector3df(-50, 30, 0));
+
+            // ajout collision a la camera en mode jeu libre si la map 3D est chargee
+            if (getMapScene3D() != NULL) getMapScene3D()->addCollisionToCamera(camera, ic::vector3df(30, 50, 30));
+
             cameraJeuLibre.push_back(camera);
             isCombat = 0; isPromenade = 1;
             std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre ajoutee avec succes !  ..." << std::endl;
@@ -656,6 +668,19 @@ bool GameManager::addMapScene3D()
     {
         scene3D *scene = new scene3D(device, smgr->getMesh("mario.bsp"));
 
+        // on ajoute une collision au joueur s'il existe
+        if (getPlayer() != NULL) scene->addCollisionToPerson(getPlayer()->node);
+
+        // on ajoute une collision aux ennemis s'ils existent
+        for (unsigned int i = 0; i < mechant.size(); i++)
+        {
+            if (getEnemy(i) != NULL)
+                scene->addCollisionToPerson(getEnemy(i)->node);
+        }
+
+        // on ajoute une collision au joueur s'il existe
+        if (getCameraJeuLibre() != NULL) scene->addCollisionToCamera(getCameraJeuLibre(), ic::vector3df(30, 50, 30));
+
         mapScene3D.push_back(scene);
         std::cout << "... GameManager::addMapScene3D() : MapScene3D ajoutee avec succes ! ..." << std::endl;
         return 1;
@@ -728,7 +753,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
     addMapScene3D();
     getMapScene3D();
-    removeMapScene3D();
+    //removeMapScene3D();
     promenade(Timer);
 
 
@@ -897,13 +922,16 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
         float epsilon = 10;
-        if ((core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
-            &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
-            &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
-
+        if (getEnemy(0) != NULL && getPlayer() != NULL)
         {
-            isCombat = 1; isPromenade = 0;
-            combat(Timer);
+            if ((core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
+                    &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
+                    &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
+
+            {
+                isCombat = 1; isPromenade = 0;
+                combat(Timer);
+            }
         }
 
 

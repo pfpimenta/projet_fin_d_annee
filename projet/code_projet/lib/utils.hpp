@@ -265,13 +265,47 @@ public:
 class scene3D
 {
 public:
+
+    irr::IrrlichtDevice *device;
     is::IMeshSceneNode *node;
+    scene::ITriangleSelector *selector; // pour les collisions
 
     scene3D(irr::IrrlichtDevice *device, is::IAnimatedMesh *mesh_bsp)
+        :device(device)
     {
         node = device->getSceneManager()->addOctreeSceneNode(mesh_bsp->getMesh(0), nullptr, -1, 1024);
         // Translation pour que nos personnages soient dans le décor
         node->setPosition(core::vector3df(0,-104,0));
+
+        selector = device->getSceneManager()->createOctreeTriangleSelector(node->getMesh(), node);
+        node->setTriangleSelector(selector);
+    }
+
+
+    void addCollisionToPerson(is::IAnimatedMeshSceneNode *perso)
+    {
+        const core::aabbox3d<f32>& box = perso->getBoundingBox();
+        core::vector3df radius = box.MaxEdge - box.getCenter();
+        scene::ISceneNodeAnimator *anim;
+        anim = device->getSceneManager()->createCollisionResponseAnimator(selector,
+                                                      perso,  // Le noeud que l'on veut gérer
+                                                      radius, // "rayons" de la caméra
+                                                      ic::vector3df(0, -10, 0),  // gravité
+                                                      ic::vector3df(0, 0, 0));  // décalage du centre
+
+        perso->addAnimator(anim);
+    }
+
+    void addCollisionToCamera(scene::ICameraSceneNode *camera, ic::vector3df radius)
+    {
+        scene::ISceneNodeAnimator *animcam;
+        animcam = device->getSceneManager()->createCollisionResponseAnimator(selector,
+                                                     camera,
+                                                     radius,
+                                                     ic::vector3df(0, 0, 0),  // gravité
+                                                     ic::vector3df(0, 0, 0));  // décalage du centre
+
+        camera->addAnimator(animcam);
     }
 };
 
