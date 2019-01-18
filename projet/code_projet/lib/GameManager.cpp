@@ -912,13 +912,6 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //      driver->endScene();
 //    }
 
-//    if (isCombat && !isPromenade)
-//        combat(Timer);
-//    if (isPromenade && !isCombat)
-//        promenade(Timer);
-//    else
-//        std::cout << "GameManager::sceneRenderer() : Il y a un gros probleme ! ce cas de figure ne devrait pas etre possible" << std::endl;
-
 
 
 
@@ -954,6 +947,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         // pour que les cameras aient la bonne target
         if (getCameraCombat() != NULL)
         {
+            // trouver une target adapte a toutes les circonstances
 //            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
 //            getCameraCombat()->setTarget(getCameraCombat()->getTarget() + translationCamCombat);
         }
