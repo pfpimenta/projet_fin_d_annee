@@ -281,6 +281,7 @@ bool GameManager::addCameraCombat()
             camera->setTarget(camera->getTarget() + translationCamCombat);
             cameraCombat.push_back(camera);
             std::cout << "... GameManager::addCameraCombat : CameraCombat ajoutee avec succes !  ..." << std::endl;
+            isCombat = 1; isPromenade = 0;
             return 1;
         }
         else if (cameraJeuLibre.size() != 0)
@@ -303,6 +304,7 @@ bool GameManager::removeCameraCombat()
         cameraCombat[0]->remove();
         cameraCombat.erase(cameraCombat.begin());
         std::cout << "... GameManager::removeCameraCombat() : La CameraCombat a ete bien effacee ..." << std::endl;
+        isCombat = 0; isPromenade = 0;
         return 1;
     }
 
@@ -338,7 +340,9 @@ bool GameManager::addCameraJeuLibre()
                 return 0;
             }
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+            camera->setPosition(ic::vector3df(-50, 30, 0));
             cameraJeuLibre.push_back(camera);
+            isCombat = 0; isPromenade = 1;
             std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre ajoutee avec succes !  ..." << std::endl;
             return 1;
         }
@@ -362,6 +366,7 @@ bool GameManager::removeCameraJeuLibre()
         cameraJeuLibre[0]->remove();
         cameraJeuLibre.erase(cameraJeuLibre.begin());
         std::cout << "... GameManager::removeCameraJeuLibre() : La CameraJeuLibre a ete bien effacee ..." << std::endl;
+        isCombat = 0; isPromenade = 0;
         return 1;
     }
 
@@ -674,14 +679,17 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
 
-    isCombat = 1;
-    isPromenade = 0;
+    isCombat = 0;
+    isPromenade = 1;
 
     addCameraCombat();
     addCameraCombat();
     addCameraJeuLibre();
+    removeCameraCombat();
+    addCameraJeuLibre();
+    addCameraJeuLibre();
 
-    combat(Timer);
+    //combat(Timer);
 
 //    ////variables aléatoires pour lancement combat////
 //    float probaFight = 0.0005;
@@ -849,10 +857,19 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
+        /** DO NOT EDIT **/
+
+        // pour que les cameras aient la bonne target
+        if (getCameraCombat() != NULL)
+            getCameraCombat()->setTarget(core::vector3df(0, 0, 0));
+        if (getCameraJeuLibre() != NULL)
+            getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
 
         // faire clignoter le curseur
         if (getGridMapping() != NULL)
             getGridMapping()->makeCurseurBlink(true);
+
+        /** *********** **/
 
         device->getVideoDriver()->endScene();
     }
