@@ -694,6 +694,17 @@ bool GameManager::removeMapScene3D()
 {
     if(mapScene3D.size() == 1)
     {
+        if (getPlayer() != NULL) getPlayer()->node->removeAnimators();
+        // on ajoute une collision aux ennemis s'ils existent
+        for (unsigned int i = 0; i < mechant.size(); i++)
+        {
+            if (getEnemy(i) != NULL)
+                getEnemy(i)->node->removeAnimators();
+        }
+
+        // on ajoute une collision au joueur s'il existe
+        if (getCameraJeuLibre() != NULL) getCameraJeuLibre()->removeAnimators();
+
         mapScene3D[0]->node->remove();
         mapScene3D.erase(mapScene3D.begin());
         std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
@@ -752,8 +763,8 @@ void GameManager::promenade(irr::ITimer *Timer)
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
     addMapScene3D();
-    getMapScene3D();
-    //removeMapScene3D();
+//    getMapScene3D();
+//    removeMapScene3D();
     promenade(Timer);
 
 
@@ -930,6 +941,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
             {
                 isCombat = 1; isPromenade = 0;
+                removeMapScene3D();
                 combat(Timer);
             }
         }
