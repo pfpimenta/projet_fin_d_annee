@@ -106,7 +106,8 @@ void interface()
 
 
 
-
+    // Ajout de l'archive qui contient entre autres un niveau complet
+    device->getFileSystem()->addFileArchive("./data/maps/mario.pk3");
 
     // chargement du mesh (puisqu'il sera utilise plusieurs fois)
     irr::scene::IAnimatedMesh *mesh = smgr->getMesh("./data/tris/tris.md2");

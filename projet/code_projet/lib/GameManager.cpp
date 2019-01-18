@@ -4,7 +4,7 @@
 #include "GameManager.hpp"
 
 GameManager::GameManager(irr::IrrlichtDevice *device)
-    :device(device), isCombat(1), isPromenade(0)
+    :device(device), isCombat(0), isPromenade(1)
 {
     smgr = this->device->getSceneManager();
 }
@@ -524,10 +524,7 @@ void GameManager::animRIGHT(is::IAnimatedMeshSceneNode *perso)
 
 
 
-/** fonctions scene 3D **/
-
-
-
+/** fonctions utiles pour la scene 3D **/
 
 // changement de scene
 void GameManager::parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
@@ -650,6 +647,46 @@ void GameManager::create_window(ig::IGUIEnvironment *gui)
 
 
 
+/** map 3D **/
+bool GameManager::addMapScene3D()
+{
+
+    if(mapScene3D.size() == 0)
+    {
+        is::IAnimatedMesh *mesh_bsp = smgr->getMesh("mario.bsp");
+        is::IMeshSceneNode *node;
+        node = smgr->addOctreeSceneNode(mesh_bsp->getMesh(0), nullptr, -1, 1024);
+        // Translation pour que nos personnages soient dans le décor
+        node->setPosition(core::vector3df(0,-104,0));
+        mapScene3D.push_back(node);
+        std::cout << "... GameManager::addMapScene3D() : MapScene3D ajoutee avec succes ! ..." << std::endl;
+        return 1;
+    }
+    std::cout << "... GameManager::addMapScene3D() : MapScene3D non ajoutee ! elle est deja presente et affichee !  ..." << std::endl;
+    return 0;
+}
+
+
+bool GameManager::removeMapScene3D()
+{
+    if(mapScene3D.size() == 1)
+    {
+        std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
+        return 1;
+    }
+    std::cout << "... GameManager::removeMapScene3D() : Impossible de retirer MapScene3D. La scene 3D n'est pas presente !  ..." << std::endl;
+    return 0;
+}
+
+is::IAnimatedMesh *GameManager::getMapScene3D()
+{
+
+    std::cout << "... GameManager::getMapScene3D() : La scene 3D n'est pas presente ! Vous avez recupere un pointeur NULL !  ..." << std::endl;
+    return NULL;
+}
+
+
+
 
 
 
@@ -685,6 +722,7 @@ void GameManager::promenade(irr::ITimer *Timer)
 
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
+    addMapScene3D();
     promenade(Timer);
 
 
@@ -862,6 +900,8 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
             isCombat = 1; isPromenade = 0;
             combat(Timer);
         }
+
+
 
 
         /** DO NOT EDIT **/

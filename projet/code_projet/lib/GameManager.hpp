@@ -26,6 +26,8 @@ class GameManager
     // gridMapping (/!\ il y a toujours un seul gridMapping; meilleure gestion avec un vecteur)
     std::vector<gridMapping*> grid;
 
+    // map 3D  (/!\ il y a toujours une seule map 3D (pour l'instant celle de Mario); meilleure gestion avec un vecteur)
+    std::vector<is::IMeshSceneNode*> mapScene3D;
 
     // cameras
     std::vector<scene::ICameraSceneNode*> cameraCombat;
@@ -39,7 +41,7 @@ public:
 
     // constructeur
     GameManager(IrrlichtDevice *device);
-    GameManager():isCombat(1), isPromenade(0){} // penser a initialiser de la meme facon isCombat & isPromenade dans les 2 constructeurs
+    GameManager():isCombat(0), isPromenade(1){} // penser a initialiser de la meme facon isCombat & isPromenade dans les 2 constructeurs
 
 
     /** joueur **/
@@ -89,9 +91,8 @@ public:
 
 
 
-    /** fonctions scene 3D **/
+    /** fonctions utiles pour la scene 3D **/
     ig::IGUIWindow *window;
-    is::IMeshSceneNode *map3DNode;
 
 
     // pour changer la scene
@@ -113,7 +114,10 @@ public:
     void create_window(ig::IGUIEnvironment *gui);
 
 
-
+    /** map 3D **/
+    bool addMapScene3D();
+    bool removeMapScene3D();
+    is::IAnimatedMesh *getMapScene3D();
 
 
     /** gestionnaire de jeu **/
