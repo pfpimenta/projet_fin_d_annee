@@ -27,7 +27,7 @@ Menu de la scène 3D
 - [x] Déplacements du joueur dans la scène 3D
 
 #### Etape 3: gestion du combat
-- [ ] Basculement de la scène 3D à la scène mappée (2D) et inversement
+- [x] Basculement de la scène 3D à la scène mappée (2D) et inversement
 - [ ] Possibilité du joueur d'attaquer
 - [ ] Possibilité du joueur de recevoir des dégâts
 - [ ] Gestion du tour à tour
