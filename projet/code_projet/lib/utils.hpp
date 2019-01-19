@@ -26,6 +26,9 @@ namespace iv = irr::video;
 namespace ig = irr::gui;
 
 
+// dimensions de l'ecran
+#define DEFAULT_SCREEN_WIDTH 1080
+#define DEFAULT_SCREEN_HEIGHT 720
 
 // nombre de cases par defaut de la grid
 #define DEFAULT_WIDTH 15 // en largeur donc nb de colonnes
@@ -37,7 +40,7 @@ namespace ig = irr::gui;
 
 
 // HP par defaut du joueur
-#define DEFAULT_PLAYER_HP 10
+#define DEFAULT_PLAYER_HP 59
 
 // HP par defaut des ennemis
 #define DEFAULT_ENEMY_HP 10

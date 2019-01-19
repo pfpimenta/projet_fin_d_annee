@@ -88,7 +88,7 @@ void interface()
 
     // Création de la fenêtre et du système de rendu.
     irr::IrrlichtDevice *device = createDevice(irr::video::EDT_OPENGL,
-                                              irr::core::dimension2d<u32>(700, 600),
+                                              irr::core::dimension2d<u32>(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
                                               16, false, false, false, receiver);
 
     irr::ITimer *Timer = device->getTimer();
@@ -135,7 +135,7 @@ void interface()
                            DEFAULT_ENEMY_HP, // HP de l'ennemi
                            mesh, // mesh de l'ennemi
                            textureEnemy, // texture du joueur
-                           ic::vector3df(-DEFAULT_GRID_NODE_SIZE * 2, 0, -DEFAULT_GRID_NODE_SIZE * 5)); // positions 3D dans le monde 3D du joueur
+                           ic::vector3df(131.569, -78.2488, -898.676)); // positions 3D dans le monde 3D du joueur
 
 
     gameManager->addEnemy(position(5, 3),

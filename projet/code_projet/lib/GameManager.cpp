@@ -591,56 +591,6 @@ void GameManager::animRIGHT(is::IAnimatedMeshSceneNode *perso)
 
 /** fonctions utiles pour la scene 3D **/
 
-// changement de scene
-void GameManager::parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
-                           scene::ITriangleSelector *selector, scene::ISceneNodeAnimator *anim, is::IAnimatedMeshSceneNode *perso,
-                           core::vector3df radius, scene::ISceneNodeAnimator *animcam, scene::ICameraSceneNode* camera)
-{
-//    if (node)
-//    {
-//        node->setVisible(false);
-//    }
-
-//    if (screenChange)
-//    {
-//    node = smgr->addOctreeSceneNode(meshVector[1]->getMesh(0), nullptr, 0, 1024);
-//    // Translation pour que nos personnages soient dans le décor
-//    node->setPosition(core::vector3df(-1350, -130, -1400));
-//    }
-
-//    else
-//    {
-//        node = smgr->addOctreeSceneNode(meshVector[0]->getMesh(0), nullptr, -1, 1024);
-//        // Translation pour que nos personnages soient dans le décor
-//        node->setPosition(core::vector3df(0,-104,0));
-//    }
-
-    selector = smgr->createOctreeTriangleSelector(node->getMesh(), node);
-    node->setTriangleSelector(selector);
-
-
-    anim = smgr->createCollisionResponseAnimator(selector,
-                                                 perso,  // Le noeud que l'on veut gérer
-                                                 radius, // "rayons" de la caméra
-                                                 ic::vector3df(0, -10, 0),  // gravité
-                                                 ic::vector3df(0, 0, 0));  // décalage du centre
-
-    perso->addAnimator(anim);
-
-
-    animcam = smgr->createCollisionResponseAnimator(selector,
-                                                 camera,
-                                                 ic::vector3df(30, 50, 30),
-                                                 ic::vector3df(0, 0, 0),  // gravité
-                                                 ic::vector3df(0, 0, 0));  // décalage du centre
-
-    camera->addAnimator(animcam);
-}
-
-
-
-
-
 // charger animation
 std::vector<iv::ITexture*> GameManager::loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver)
 {
@@ -663,8 +613,7 @@ std::vector<iv::ITexture*> GameManager::loadGif(int nbFrame, std::wstring nomGen
 
 
 // lecture d une video
-void GameManager::playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device,
-                      is::ISceneManager *smgr, ig::IGUIEnvironment *gui, iv::IVideoDriver  *driver)
+void GameManager::playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device)
 {
     int currentFrame = 0;
     while(currentFrame<nbFrame)
@@ -673,9 +622,8 @@ void GameManager::playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame,
         currentFrame++;
         std::cout << currentFrame << std::endl;
         smgr->drawAll();
-        gui->drawAll();
-        driver->endScene();
-
+        device->getGUIEnvironment()->drawAll();
+        device->getVideoDriver()->endScene();
         device->sleep(100);
     }
     box->remove();
@@ -709,7 +657,7 @@ void GameManager::createMenu(ig::IGUIEnvironment *gui)
 }
 
 
-// creation des differentes fenetres
+// creation de la fenetre des items
 void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
 {
   // La fenetre des items
@@ -772,7 +720,8 @@ bool GameManager::removeMapScene3D()
         std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
         return 1;
     }
-    std::cout << "... GameManager::removeMapScene3D() : Impossible de retirer MapScene3D. La scene 3D n'est pas presente !  ..." << std::endl;
+    std::cout << "... GameManager::removeMapScene3D() : Impossible de retirer MapScene3D. La scene 3D n'est pas presente !  ..."
+              << std::endl;
     return 0;
 }
 
@@ -783,7 +732,8 @@ scene3D *GameManager::getMapScene3D()
         std::cout << "... GameManager::getMapScene3D() : La scene 3D a ete bien recuperee !  ..." << std::endl;
         return mapScene3D[0];
     }
-    std::cout << "... GameManager::getMapScene3D() : La scene 3D n'est pas presente ! Vous avez recupere un pointeur NULL !  ..." << std::endl;
+    std::cout << "... GameManager::getMapScene3D() : La scene 3D n'est pas presente ! Vous avez recupere un pointeur NULL !  ..."
+              << std::endl;
     return NULL;
 }
 
@@ -803,6 +753,13 @@ void GameManager::combat(irr::ITimer *Timer)
 {
     isCombat = 1;
     isPromenade = 0;
+
+    //animation debut combat
+    std::vector<iv::ITexture*> fightVector = loadGif(20, L"data/animations/combat/combat", device->getVideoDriver());
+    ig::IGUIImage *fightBox = device->getGUIEnvironment()->addImage(ic::rect<s32>(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT));
+    fightBox->setScaleImage(true);
+    playVideo(fightVector, 20, fightBox, device);
+
     removeMapScene3D();
     removeCameraJeuLibre();
     addCameraCombat();
@@ -829,7 +786,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
 
     /** variables utiles pour plus tard **/
-    //iv::IVideoDriver  *driver = device->getVideoDriver();
+    iv::IVideoDriver  *driver = device->getVideoDriver();
     ig::IGUIEnvironment *gui  = device->getGUIEnvironment();
 
     /** police de caractere **/
@@ -841,128 +798,20 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     createMenu(gui);
     createItemWindow(gui);
 
-
-
-
-
-//    ////variables aléatoires pour lancement combat////
-//    float probaFight = 0.0005;
-//    bool isFight = false;
-//    float randNum;
-//    bool ScreenChange = false;
-
-//    ////numero de frame pour affichage hp///////////
-//    int nbFrameHp = 60;
-//    int numCurrentFrame;
-
-
-
-//    is::IMeshSceneNode *node2;
-
-
-
-
-//    //liste des images barre de hp
-//    std::wstring nomGeneralHp(L"data/perso/hp/health");
-
-//    std::vector<iv::ITexture*> hpVector = loadGif(nbFrameHp, nomGeneralHp, driver);
-
-//    ig::IGUIImage *hpBox = gui->addImage(ic::rect<s32>(10,25,  300,40)); hpBox->setScaleImage(true);
-
-
-//    //animation debut combat
-//    std::wstring nomGeneralFight(L"data/animations/combat/combat");
-//    int nbFrameFight = 20;
-//    std::vector<iv::ITexture*> fightVector = loadGif(nbFrameHp, nomGeneralFight, driver);
-
-//    ig::IGUIImage *fightBox = gui->addImage(ic::rect<s32>(0,  0, DEFAULT_WIDTH, DEFAULT_HEIGHT)); fightBox->setScaleImage(true);
-
-
-///    addMapScene3D();
-
-///    addPlayer();
-
-
-
-//    scene::ISceneNodeAnimator *anim2;
-
-
-
-//    ///////////// Camera //////////////
-
-//    scene::ICameraSceneNode* camera_promenade = smgr->addCameraSceneNode(getPlayer()->node);
-//    camera_promenade->setPosition(ic::vector3df(-50, 30, 0));
-
-//    irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-//    camera->setPosition(ic::vector3df(-50, 30, 0));
-    //camera->setTarget(camera->getTarget() + translationCamCombat);
-
-//    scene::ISceneNodeAnimator *animcam;
-//    scene::ISceneNodeAnimator *animcam2;
-
-
-//    //////////// physique //////////////
-//    // Création du triangle selector
-//    scene::ITriangleSelector *selector;
-//    scene::ITriangleSelector *selector2;
-
-//    parametreScene(ScreenChange, map3DNode, smgr, meshVector, selector, anim, getPlayer()->node, radius, animcam, camera_promenade);
-
-//    while(device->run())
-//    {
-//      driver->beginScene(true, true, iv::SColor(100,150,200,255));
-
-//  ////combat hasard////////////////////////////////////////
-//  /////////////////////////////////////////////////////////
-//      if (!isFight)
-//      {
-//          randNum = rand()/(float)RAND_MAX;
-
-//          ScreenChange = randNum < probaFight;
-//      }
-
-//      if (ScreenChange)
-//      {
-//          isFight = true;
-
-//          playVideo(fightVector, nbFrameFight, fightBox, device, smgr, gui, driver);
-
-//          //node->remove();
-
-//          node2 = smgr->addOctreeSceneNode(meshVector[1]->getMesh(0), nullptr, 0, 1024);
-//          // Translation pour que nos personnages soient dans le décor
-//          node2->setPosition(core::vector3df(-1350, -180, -1400));
-
-//          getPlayer()->node->removeAnimator(anim);
-//          camera_promenade->removeAnimator(animcam);
-
-
-//          parametreScene(ScreenChange, node2, smgr, meshVector, selector2, anim2, getPlayer()->node, radius, animcam2, camera_promenade);
-//          ScreenChange = false;
-//      }
-//  ///////////////////////////////////////////////////////////
-//  ///////////////////////////////////////////////////////////
-//      camera_promenade->setTarget(getPlayer()->node->getPosition());
-
-//      smgr->drawAll();
-
-//  ////dessin de la barre de HP////
-
-////      numCurrentFrame = (nbFrameHp - 1) * (float)hp/hpmax;
-
-//      hpBox->setImage(hpVector[15]);
-
-//      // Dessin de la GUI :
-//      gui->drawAll();
-
-//      driver->endScene();
-//    }
+    /** initialisation de la barre de vie du joueur **/
+    ig::IGUIImage *hpBox = gui->addImage(ic::rect<s32>(10,25,  0.28 * DEFAULT_SCREEN_WIDTH,40)); hpBox->setScaleImage(true);
+    std::vector<iv::ITexture*> hpVector = loadGif(/*nbFrameHp*/60, /*path*/ L"data/perso/hp/health", driver);
+    if (getPlayer() != NULL)
+        hpBox->setImage(hpVector[getPlayer()->HP]);
+    else
+        hpBox->setImage(hpVector[59]);
 
 
 
 
 
-    // initialisation de la partie : ajout de la scene 3D
+
+    /** initialisation de la partie et ajout de la scene 3D **/
     addMapScene3D();
     promenade(Timer);
 
@@ -976,36 +825,44 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
-        // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[0]
+        // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
+        // le joueur perd la moitie de sa vie lorsqu'il valide sa position a la case [2, 5] de la gridMapping
         // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
         float epsilon = 10;
 
-        if (getEnemy(0) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+        for (unsigned int k = 0; k < mechant.size(); k++)
         {
-
-            // mode jeu libre
-            if ( !isCombat && isPromenade )
+            if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
             {
-                if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
-                        &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
-                        &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
+
+                // durant le mode jeu libre
+                if ( !isCombat && isPromenade )
+                {
+                    if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= epsilon
+                            &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= epsilon
+                            &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= epsilon  )
 
                     {
                         isCombat = 1; isPromenade = 0;
                         combat(Timer);
                     }
-            }
-
-            // mode combat
-            if ( isCombat && !isPromenade )
-            {
-                if(getPlayer()->p == position(0, 3))
-                {
-                    isCombat = 0; isPromenade = 1;
-                    promenade(Timer);
                 }
-            }
 
+                // durant le mode combat
+                if ( isCombat && !isPromenade )
+                {
+                    if(getPlayer()->p == position(0, 3))
+                    {
+                        isCombat = 0; isPromenade = 1;
+                        promenade(Timer);
+                    }
+                    if(getPlayer()->p == position(2, 5))
+                    {
+                        getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
+                    }
+                }
+
+            }
         }
 
 
@@ -1017,16 +874,21 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         if (getCameraCombat() != NULL)
         {
             // trouver une target adapte a toutes les circonstances
-//            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+//            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z
+//                                                             - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
 //            getCameraCombat()->setTarget(getCameraCombat()->getTarget() + translationCamCombat);
         }
         if (getCameraJeuLibre() != NULL)
             getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
 
+
         // faire clignoter le curseur
         if (getGridMapping() != NULL)
             getGridMapping()->makeCurseurBlink(true);
 
+        // actualise la barre de vie en fonction du nombre de HP restant du joueur
+        if (getPlayer() != NULL)
+            hpBox->setImage(hpVector[getPlayer()->HP]);
 
         device->getVideoDriver()->endScene();
 

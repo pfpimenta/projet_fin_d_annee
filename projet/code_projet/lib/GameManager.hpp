@@ -95,24 +95,10 @@ public:
 
     /** fonctions utiles pour la scene 3D **/
     ig::IGUIWindow *itemWindow;
-
-    // pour changer la scene
-    void parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
-                               scene::ITriangleSelector *selector, scene::ISceneNodeAnimator *anim, is::IAnimatedMeshSceneNode *perso,
-                               core::vector3df radius, scene::ISceneNodeAnimator *animcam, scene::ICameraSceneNode* camera);
-
-    // charge un gif
-    std::vector<iv::ITexture*> loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver);
-
-    // lire une video
-    void playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device,
-                          is::ISceneManager *smgr, ig::IGUIEnvironment *gui, iv::IVideoDriver  *driver);
-
-    // creer le menu
-    void createMenu(ig::IGUIEnvironment *gui);
-
-    // construction des differentes fenetres
-    void createItemWindow(ig::IGUIEnvironment *gui);
+    std::vector<iv::ITexture*> loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver); // charge un gif
+    void playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device); // lire une video
+    void createMenu(ig::IGUIEnvironment *gui); // creer le menu
+    void createItemWindow(ig::IGUIEnvironment *gui); // construction de la fenetre des items
 
 
     /** map 3D **/

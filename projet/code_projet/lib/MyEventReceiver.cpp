@@ -121,7 +121,6 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 
         bool voieLibre = gmngr->getGridMapping()->mouvementGridPlayer(act);
         gmngr->animPlayer(voieLibre, act);
-//        gmngr->animEnemy(0, voieLibre,  act);
 
 
 
@@ -272,6 +271,7 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
 \*------------------------------------------------------------------------*/
 bool MyEventReceiver::mouse_promenade(const irr::SEvent &event)
 {
+  if (!gmngr->getPlayer()->node) return false;
   switch(event.MouseInput.Event)
   {
     case irr::EMIE_LMOUSE_PRESSED_DOWN:
@@ -304,8 +304,6 @@ bool MyEventReceiver::mouse_promenade(const irr::SEvent &event)
 \*------------------------------------------------------------------------*/
 bool MyEventReceiver::gui_manage(const irr::SEvent &event)
 {
-  //if (!map3DNode) return false;
-
   ig::IGUIContextMenu *menu;
   irr::s32 item;
   irr::s32 id;
@@ -344,15 +342,5 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
 
   }
   return false;
-}
-
-
-
-/**************************************************************************\
- * MyEventReceiver::set_map3DNode                                         *
-\**************************************************************************/
-void MyEventReceiver::set_map3DNode(irr::scene::ISceneNode *n)
-{
-  //map3DNode = n;
 }
 

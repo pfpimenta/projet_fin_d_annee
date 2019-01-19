@@ -43,7 +43,6 @@ struct MyEventReceiver : irr::IEventReceiver
     /** gestion jeu libre **/
     bool keyboard_promenade(const irr::SEvent &event);
     bool mouse_promenade(const irr::SEvent &event);
-    void set_map3DNode(irr::scene::ISceneNode *n);
     bool gui_manage(const irr::SEvent &event);
 
 };
