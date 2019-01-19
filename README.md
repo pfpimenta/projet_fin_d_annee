@@ -99,15 +99,59 @@ En cours de développement ...
 ##### Mode Combat :
 <div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements.png" width="280" height="130"></div>
 </br>
-En mode combat (lorsque la grille 3D est visible sur le sol), les touches (**Z, S, Q, D**) permettent de se déplacer respectivement en haut, en bas, à gauche et à droite. Lorsqu'une case est colorée en Bleu, il s'agit de la position actuelle du joueur. Tant que celui-ci n'a pas validé sa nouvelle position avec la touche **M**, la position réelle du joueur reste inchangée. Pour ramener le curseur (et donc le joueur) à sa position réelle, il suffit d'appuyer sur la touche **A**.
-La touche **SPACE** permet d'attaquer.
 
+* **Clavier** :
+
+  **Z** ⇒ déplacement vers le haut
+  </br>
+  **Q** ⇒ déplacement vers la gauche
+  </br>
+  **S** ⇒ déplacement vers le bas
+  </br>
+  **D** ⇒ déplacement vers la droite
+  </br>
+  **SPACE** ⇒ choisir d'attaquer
+  </br>
+  **A** ⇒ Reset : retour à la position réelle du joueur et annulation des choix à effectuer avant de passer la main à l'ennemi.
+  </br>
+  **M** ⇒ Valider l'action du joueur (valider le déplacement ou l'attaque du joueur) et passer la main à l'ennemi.
+
+
+* **souris** :
+
+  **Clic gauche maintenu et souris déplacée** => rotation de la caméra
+  </br>
+  **Molette** => Zoom et dezoom
+  </br>
+  **Clic droit** => Caméra à sa position de départ.
 
 
 </br> </br>
 
 ##### Mode Jeu libre :
-A compléter ...
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/modeJeuLibre.png" width="280" height="130"></div>
+</br>
+
+* **Clavier** :
+
+  **Z** ⇒ déplacement vers l’avant
+  </br>
+  **Q** ⇒ rotation vers la gauche (optionnelle car possibilité de tourner avec la souris)
+  </br>
+  **S** ⇒ déplacement vers l’arrière
+  </br>
+  **D** ⇒ rotation vers la droite (optionnelle car possibilité de tourner avec la souris)
+  </br>
+  **A** ⇒ A chaque appui sur la touche A, la vitesse du personnage est modifiée : Elle peut valoir :  3, 6, 9, 12, 15 ou 18. Par défaut, la vitesse (speed) vaut 3.
+  </br>
+  **SPACE** ⇒ saut du personnage
+
+* **souris** :
+
+  **Clic gauche maintenu et souris déplacée** => rotation de la caméra (il n’est malheureusement pas possible de regarder en haut ou en bas).
+
+</br> </br>
+
 #### Rapport de bugs:
 
 Bugs non fixés à résoudre, etc... (A compléter ...)
