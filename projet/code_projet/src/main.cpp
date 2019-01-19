@@ -88,7 +88,7 @@ void interface()
 
     // Création de la fenêtre et du système de rendu.
     irr::IrrlichtDevice *device = createDevice(irr::video::EDT_OPENGL,
-                                              irr::core::dimension2d<u32>(1920, 1080),
+                                              irr::core::dimension2d<u32>(700, 600),
                                               16, false, false, false, receiver);
 
     irr::ITimer *Timer = device->getTimer();
