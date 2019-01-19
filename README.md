@@ -130,7 +130,7 @@ En cours de développement ...
 
 ##### Mode Jeu libre :
 
-<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/modeJeuLibre.png" width="280" height="130"></div>
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/modeJeuLibre.png" width="280" height="265"></div>
 </br>
 
 * **Clavier** :

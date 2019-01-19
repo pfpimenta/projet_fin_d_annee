@@ -70,11 +70,12 @@ Le sprint a été un succès. Au début, nous avons eu beaucoup de problèmes av
 
 **Date de fin :** Dimanche 20 Janvier 2019
 
-- [ ] Succès
+- [x] Succès
 - [ ] Échec
 
 ### Remarques :
 
+La fusion de tous les codes a été plus rapide que prévue (terminée le samedi 19 janvier). Comme pour la précédente fusion (sprint 2) le plus dur aura été de comprendre la logique derrière chaque algorithme.
 
 
 
