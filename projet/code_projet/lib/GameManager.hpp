@@ -80,18 +80,8 @@ public:
     bool isFin = 1;
     int currentAnimationTime;
 
-    void animPlayer(bool voieLibre, Action act)
-    {
-        switch (act) {
-        case VALIDATE:
-            playAnimation(voieLibre,  VALIDATE, getPlayer()->node);
-            getPlayer()->p.setPosition(getGridMapping()->curseur);
-            break;
-        default:
-            playAnimation(voieLibre,  act, getPlayer()->node);
-            break;
-        }
-    }
+    void animEnemy(int id, bool voieLibre, Action act);
+    void animPlayer(bool voieLibre, Action act);
     void playAnimation(bool voieLibre, Action act, is::IAnimatedMeshSceneNode *perso);
     void animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso);
     void animATTACK(is::IAnimatedMeshSceneNode *perso);

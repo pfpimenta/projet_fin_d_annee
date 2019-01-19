@@ -121,7 +121,7 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 
         bool voieLibre = gmngr->getGridMapping()->mouvementGridPlayer(act);
         gmngr->animPlayer(voieLibre, act);
-        //        gmngr->playAnimation(voieLibre, act, gmngr->getPlayer()->node);
+//        gmngr->animEnemy(0, voieLibre,  act);
 
 
 
@@ -133,10 +133,27 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 /*------------------------------------------------------------------------*\
  * EventReceiver::mouse_combat                                            *
 \*------------------------------------------------------------------------*/
+
+// WANTED :
+// * Faire tourner la camera tout en conservant la target. Et revenir a la position par defaut
+//   quand on lache le clic gauche
+//
+// * zoomer et dezoomer avec la molette
+//
+// * revenir a la position par defaut avec clic droit
+
 bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
 {
     switch(event.MouseInput.Event)
     {
+      case irr::EMIE_RMOUSE_PRESSED_DOWN:
+        if(gmngr->getCameraCombat() != NULL && gmngr->getPlayer() != NULL)
+        {
+            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
+            irr::core::vector3df translationCamCombat(0, 0, (gmngr->getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+            gmngr->getCameraCombat()->setPosition(camCombatPosition + translationCamCombat);
+        }
+        break;
       case irr::EMIE_LMOUSE_PRESSED_DOWN:
         button_pressed = true;
         old_x = event.MouseInput.X;
@@ -148,11 +165,24 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
       case irr::EMIE_MOUSE_MOVED:
         if (button_pressed)
         {
-          irr::core::vector3df rotation = gmngr->getPlayer()->node->getRotation();
-          rotation.Y -= (event.MouseInput.X - old_x);
-          old_x = event.MouseInput.X;
-          old_y = event.MouseInput.Y;
-          gmngr->getPlayer()->node->setRotation(rotation);
+            if(gmngr->getCameraCombat() != NULL)
+            {
+                irr::core::vector3df position = gmngr->getCameraCombat()->getPosition();
+                position.X += event.MouseInput.X - old_x;
+                position.Z -= event.MouseInput.X - old_x;
+                position.Y += (event.MouseInput.Y - old_y);
+                old_x = event.MouseInput.X;
+                old_y = event.MouseInput.Y;
+                gmngr->getCameraCombat()->setPosition(position);
+            }
+        }
+        break;
+      case irr::EMIE_MOUSE_WHEEL:
+        if(gmngr->getCameraCombat() != NULL)
+        {
+            gmngr->getCameraCombat()->setPosition(core::vector3df(gmngr->getCameraCombat()->getPosition().X + 10 * event.MouseInput.Wheel,
+                                                                  gmngr->getCameraCombat()->getPosition().Y,
+                                                                  gmngr->getCameraCombat()->getPosition().Z));
         }
         break;
       default:

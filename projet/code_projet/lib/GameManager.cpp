@@ -292,6 +292,10 @@ bool GameManager::addCameraCombat()
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
             irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
             irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+
+            // TODO
+            // trouver la translation de camera adaptee pour chaque position du joueur
+
             camera->setPosition(camCombatPosition + translationCamCombat);
             camera->setTarget(camera->getTarget() + translationCamCombat);
             cameraCombat.push_back(camera);
@@ -412,14 +416,49 @@ scene::ICameraSceneNode *GameManager::getCameraJeuLibre()
 
 /** Animations **/
 
+void GameManager::animEnemy(int id, bool voieLibre, Action act)
+{
+    switch (act) {
+    case VALIDATE: // passer la main au joueur
+        break;
+    case RESET: // reset
+        break;
+
+    default: // dans la voie libre il faut verifier que la position 2D ou se rend l'ennemi est differente de celle du joueur
+        if (getEnemy(id) != NULL) playAnimation(voieLibre,  act, getEnemy(id)->node);
+        break;
+    }
+}
+
+void GameManager::animPlayer(bool voieLibre, Action act)
+{
+    switch (act) {
+    case VALIDATE:
+        playAnimation(voieLibre,  VALIDATE, getPlayer()->node);
+        getPlayer()->p.setPosition(getGridMapping()->curseur);
+        break;
+
+    case RESET: // reset
+        getPlayer()->node->setPosition((core::vector3df(0, 25, 0)
+                            + getGridMapping()->myGrid->getGridNode(0)->getPosition()
+                            + core::vector3df(-getGridMapping()->j1.pos.ligne * DEFAULT_GRID_NODE_SIZE,
+                                              0,
+                                              -getGridMapping()->j1.pos.colonne * DEFAULT_GRID_NODE_SIZE)));
+
+        break;
+    default:
+        playAnimation(voieLibre,  act, getPlayer()->node);
+        break;
+    }
+}
+
+
 void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMeshSceneNode *perso)
 {
     switch (act) {
     case VALIDATE:
-        //animator( 1 /*int nombreCasesHorizontales*/, -4 /*int nombreCasesVerticales*/, perso);
         break;
     case RESET: // reset
-        perso->setPosition((core::vector3df(0, 25, 0) + getGridMapping()->myGrid->getGridNode(0)->getPosition() + core::vector3df(-getGridMapping()->j1.pos.ligne * DEFAULT_GRID_NODE_SIZE, 0, -getGridMapping()->j1.pos.colonne * DEFAULT_GRID_NODE_SIZE)));
         break;
 
 
@@ -445,7 +484,7 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
         //animLEFT(getPlayer()->node);
         break;
     case ATTACK: // attack
-        animATTACK(getPlayer()->node);
+        animATTACK(perso);
         break;
 
 
@@ -463,7 +502,9 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
 void GameManager::animator(int nombreCasesHorizontales, int nombreCasesVerticales, is::IAnimatedMeshSceneNode *perso)
 {
     ic::vector3df depart = perso->getPosition();
-    ic::vector3df arrivee = depart + ic::vector3df(nombreCasesVerticales * DEFAULT_GRID_NODE_SIZE, 0, - nombreCasesHorizontales * DEFAULT_GRID_NODE_SIZE);
+    ic::vector3df arrivee = depart + ic::vector3df(nombreCasesVerticales * DEFAULT_GRID_NODE_SIZE,
+                                                   0,
+                                                   - nombreCasesHorizontales * DEFAULT_GRID_NODE_SIZE);
     perso->setPosition(arrivee);
     perso->setRotation(ic::vector3df(0, atan2(nombreCasesHorizontales, nombreCasesVerticales) * 180 / M_PI, 0));
 }

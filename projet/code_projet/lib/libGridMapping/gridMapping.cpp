@@ -169,9 +169,9 @@ bool gridMapping::mouvementGridPlayer(Action act)
 
     case DEBUG:
         //enemyDied(0);
-        pos_debug = position(alea(1, DEFAULT_HEIGHT - 1), alea(1, DEFAULT_WIDTH - 1));
-        setEnemyCursor(0, pos_debug);
-        std::cout << pos_debug.ligne << " " << pos_debug.colonne << std::endl;
+//        pos_debug = position(alea(1, DEFAULT_HEIGHT - 1), alea(1, DEFAULT_WIDTH - 1));
+//        setEnemyCursor(0, pos_debug);
+//        std::cout << pos_debug.ligne << " " << pos_debug.colonne << std::endl;
         break;
 
 
