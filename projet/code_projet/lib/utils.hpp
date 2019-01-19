@@ -78,6 +78,12 @@ public:
             return true;
         return false;
     }
+
+    void setPosition(const position &p)
+    {
+        ligne = p.ligne;
+        colonne = p.colonne;
+    }
 };
 
 

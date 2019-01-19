@@ -120,7 +120,8 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 
 
         bool voieLibre = gmngr->getGridMapping()->mouvementGridPlayer(act);
-        gmngr->playAnimation(voieLibre, act, gmngr->getPlayer()->node);
+        gmngr->animPlayer(voieLibre, act);
+        //        gmngr->playAnimation(voieLibre, act, gmngr->getPlayer()->node);
 
 
 

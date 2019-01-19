@@ -24,6 +24,8 @@ bool GameManager::addPlayer(position p, int HP, irr::scene::IAnimatedMesh *mesh,
         player *joueur = new player(p, HP, smgr, mesh, texture, pos3D, j1.size());
         joueur->node->setRotation(ic::vector3df(0, 90, 0));
 
+        if( getGridMapping() != NULL) joueur->p.setPosition(getGridMapping()->curseur);
+
         // ajout de collision au joueur si la map 3D est chargee
         if (getMapScene3D() != NULL )getMapScene3D()->addCollisionToPerson(joueur->node);
 
@@ -222,6 +224,9 @@ bool GameManager::addGridMapping(int width, int height, ITimer *Timer)
         {
             gridMapping *g = new gridMapping(getPlayer()->p, width, height, smgr, Timer);
             g->myGrid->translation(getPlayer()->node->getPosition() - core::vector3df(5, 25, 5));
+
+            if( getPlayer() != NULL) getPlayer()->p.setPosition(g->j1.pos);
+
             grid.push_back(g);
             std::cout << "... GameManager::addGridMapping : GridMapping ajoute avec succes ! Il est egalement affiche ..." << std::endl;
             isCombat = 1; isPromenade = 0;
@@ -242,6 +247,7 @@ bool GameManager::removeGridMapping()
 {
     if( grid.size() == 1 )
     {
+        if( getPlayer() != NULL) getPlayer()->p.setPosition(position(0, 0));
         for (unsigned int k = 0; k < grid[0]->myGrid->mesh.size(); k++)
             grid[0]->myGrid->mesh[k]->remove();
         grid.erase(grid.begin());
@@ -739,11 +745,13 @@ scene3D *GameManager::getMapScene3D()
 // a appeler dans le sceneRenderer durant le mode combat
 void GameManager::combat(irr::ITimer *Timer)
 {
-    addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
-    removeCameraJeuLibre();
     isCombat = 1;
     isPromenade = 0;
+    removeMapScene3D();
+    removeCameraJeuLibre();
     addCameraCombat();
+    addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
+
 
 }
 
@@ -751,23 +759,18 @@ void GameManager::combat(irr::ITimer *Timer)
 // a appeler dans le sceneRenderer durant le mode jeu libre
 void GameManager::promenade(irr::ITimer *Timer)
 {
-    removeGridMapping();
-    removeCameraCombat();
     isCombat = 0;
     isPromenade = 1;
+    removeGridMapping();
+    removeCameraCombat();
     addCameraJeuLibre();
+    addMapScene3D();
 }
 
 
 
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
-    addMapScene3D();
-//    getMapScene3D();
-//    removeMapScene3D();
-    promenade(Timer);
-
-
 //    ////variables aléatoires pour lancement combat////
 //    float probaFight = 0.0005;
 //    bool isFight = false;
@@ -916,6 +919,11 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
+    // initialisation de la partie : ajout de la scene 3D
+    addMapScene3D();
+    promenade(Timer);
+
+
     while(device->run())
     {
 
@@ -925,18 +933,36 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
+        // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[0]
+        // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
         float epsilon = 10;
-        if (getEnemy(0) != NULL && getPlayer() != NULL)
-        {
-            if ((core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
-                    &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
-                    &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
 
+        if (getEnemy(0) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+        {
+
+            // mode jeu libre
+            if ( !isCombat && isPromenade )
             {
-                isCombat = 1; isPromenade = 0;
-                removeMapScene3D();
-                combat(Timer);
+                if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(0)->node->getPosition().X)) <= epsilon
+                        &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(0)->node->getPosition().Y)) <= epsilon
+                        &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(0)->node->getPosition().Z)) <= epsilon  )
+
+                    {
+                        isCombat = 1; isPromenade = 0;
+                        combat(Timer);
+                    }
             }
+
+            // mode combat
+            if ( isCombat && !isPromenade )
+            {
+                if(getPlayer()->p == position(0, 3))
+                {
+                    isCombat = 0; isPromenade = 1;
+                    promenade(Timer);
+                }
+            }
+
         }
 
 
@@ -958,9 +984,11 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         if (getGridMapping() != NULL)
             getGridMapping()->makeCurseurBlink(true);
 
-        /** *********** **/
 
         device->getVideoDriver()->endScene();
+
+        /** *********** **/
+
     }
 
 }
