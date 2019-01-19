@@ -21,7 +21,6 @@ struct MyEventReceiver : irr::IEventReceiver
 
     /** gestion scene 3D **/
     bool isOpened = true;
-    irr::scene::ISceneNode *map3DNode; // = gmngr->map3DNode; // pour la map 3D
 
 
     // le gameManager pour pouvoir utiliser directement les touches du clavier pour declencher

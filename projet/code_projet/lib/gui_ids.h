@@ -7,7 +7,8 @@ enum
 {
   MENU_NEW_GAME,
   MENU_QUIT,
-  MENU_COMMANDES
+  MENU_COMMANDES,
+  ABOUT
 };
 
 #endif

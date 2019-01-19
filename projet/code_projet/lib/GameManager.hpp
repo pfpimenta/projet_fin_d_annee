@@ -94,8 +94,7 @@ public:
 
 
     /** fonctions utiles pour la scene 3D **/
-    ig::IGUIWindow *window;
-
+    ig::IGUIWindow *itemWindow;
 
     // pour changer la scene
     void parametreScene(bool screenChange, is::IMeshSceneNode *node, is::ISceneManager *smgr, std::vector<is::IAnimatedMesh*> meshVector,
@@ -110,10 +109,10 @@ public:
                           is::ISceneManager *smgr, ig::IGUIEnvironment *gui, iv::IVideoDriver  *driver);
 
     // creer le menu
-    void create_menu(ig::IGUIEnvironment *gui);
+    void createMenu(ig::IGUIEnvironment *gui);
 
     // construction des differentes fenetres
-    void create_window(ig::IGUIEnvironment *gui);
+    void createItemWindow(ig::IGUIEnvironment *gui);
 
 
     /** map 3D **/

@@ -174,7 +174,8 @@ bool GameManager::isEnemyAlive(int id)
             if (!mechant[index]->isAlive())
             {
                 std::cout << "... GameManager::isEnemyAlive : l'ennemi[" << id << "] n'est pas vivant mais est toujours affiche" << std::endl
-                          << "      la fonction GameManager::removeEnemy(id) permet de le retirer proprement de la scene..." << std::endl;                return 1;
+                          << "      la fonction GameManager::removeEnemy(id) permet de le retirer proprement de la scene..." << std::endl;
+                return 1;
             }
         }
         else if (it >= enemyID.end())
@@ -290,7 +291,11 @@ bool GameManager::addCameraCombat()
         if (cameraJeuLibre.size() == 0)
         {
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
+            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,
+                                                   std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5
+                                                   /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/,
+                                                   0);
+
             irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
 
             // TODO
@@ -678,29 +683,38 @@ void GameManager::playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame,
 
 
 // creer le menu
-void GameManager::create_menu(ig::IGUIEnvironment *gui)
+void GameManager::createMenu(ig::IGUIEnvironment *gui)
 {
   ig::IGUIContextMenu *submenu;
 
   // une entrée principale :
   ig::IGUIContextMenu *menu = gui->addMenu();
-  menu->addItem(L"menu", -1, true, true);
+  menu->addItem(L"Menu", -1, true, true);
+
+  menu->addItem(L"A propos", -1, true, true);
+
+  submenu = menu->getSubMenu(1);
+  submenu->addItem(L"A propos", ABOUT);
 
   // Le contenu du menu :
   submenu = menu->getSubMenu(0);
   submenu->addItem(L"New game...", MENU_NEW_GAME);
   submenu->addSeparator();
-  submenu->addItem(L"Quit", MENU_QUIT);
+  submenu->addItem(L"Commandes", MENU_COMMANDES);
   submenu->addSeparator();
-  submenu->addItem(L"commandes", MENU_COMMANDES);
+  submenu->addItem(L"Quit", MENU_QUIT);
+
+
+
 }
 
 
 // creation des differentes fenetres
-void GameManager::create_window(ig::IGUIEnvironment *gui)
+void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
 {
-  // La fenetre
-  window = gui->addWindow(ic::rect<s32>(420,25, 620,460), false, L"items");
+  // La fenetre des items
+  itemWindow = gui->addWindow(ic::rect<s32>(420,25, 620,460), false, L"items");
+  itemWindow->setVisible(false);
 }
 
 
@@ -754,6 +768,7 @@ bool GameManager::removeMapScene3D()
 
         mapScene3D[0]->node->remove();
         mapScene3D.erase(mapScene3D.begin());
+        itemWindow->setVisible(false);
         std::cout << "... GameManager::removeMapScene3D() : MapScene3D retiree avec succes ! ..." << std::endl;
         return 1;
     }
@@ -812,6 +827,24 @@ void GameManager::promenade(irr::ITimer *Timer)
 
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
+
+    /** variables utiles pour plus tard **/
+    //iv::IVideoDriver  *driver = device->getVideoDriver();
+    ig::IGUIEnvironment *gui  = device->getGUIEnvironment();
+
+    /** police de caractere **/
+    ig::IGUISkin* skin = gui->getSkin();
+    ig::IGUIFont* font = gui->getFont("data/menu/fontlucida.png");
+    skin->setFont(font);
+
+    /** initialisation du menu et de la fenetre des items **/
+    createMenu(gui);
+    createItemWindow(gui);
+
+
+
+
+
 //    ////variables aléatoires pour lancement combat////
 //    float probaFight = 0.0005;
 //    bool isFight = false;
@@ -822,16 +855,12 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //    int nbFrameHp = 60;
 //    int numCurrentFrame;
 
-//    iv::IVideoDriver  *driver = device->getVideoDriver();
-//    ig::IGUIEnvironment *gui  = device->getGUIEnvironment();
+
+
 //    is::IMeshSceneNode *node2;
 
-//    // La barre de menu
-//    create_menu(gui);
 
-//    // fenêtre des objets
-//    create_window(gui);
-//    window->setVisible(false);
+
 
 //    //liste des images barre de hp
 //    std::wstring nomGeneralHp(L"data/perso/hp/health");
@@ -849,42 +878,15 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 //    ig::IGUIImage *fightBox = gui->addImage(ic::rect<s32>(0,  0, DEFAULT_WIDTH, DEFAULT_HEIGHT)); fightBox->setScaleImage(true);
 
 
-//    /// on charge le decor ///
-//    // Ajout de l'archive qui contient entre autres un niveau complet
-//    device->getFileSystem()->addFileArchive("data/maps/mario.pk3");
-//    device->getFileSystem()->addFileArchive("data/maps/map-20kdm2.pk3");
+///    addMapScene3D();
 
-//    // On charge un bsp (un niveau) en particulier :
-//    is::IAnimatedMesh *mesh_bsp = smgr->getMesh("mario.bsp");
-//    is::IAnimatedMesh *mesh_bsp2 = smgr->getMesh("20kdm2.bsp");
-//    std::vector<is::IAnimatedMesh*> meshVector;
-//    meshVector.push_back(mesh_bsp);
-//    meshVector.push_back(mesh_bsp2);
-
-//    map3DNode = smgr->addOctreeSceneNode(meshVector[0]->getMesh(0), nullptr, -1, 1024);
-//    // Translation pour que nos personnages soient dans le décor
-//    map3DNode->setPosition(core::vector3df(0,-104,0));
+///    addPlayer();
 
 
 
-//    /// Chargement de notre personnage ///
-//    is::IAnimatedMesh *mesh = smgr->getMesh("data/tris/tris.md2");
-
-//    // Attachement de notre personnage dans la scène
-//    getPlayer()->node->setRotation(ic::vector3df(0, 90, 0));
-
-//    //receiver.set_node(node);
-
-//    //perso->setRotation(ic::vector3df(0, 90, 0));
-//    const core::aabbox3d<f32>& box = getPlayer()->node->getBoundingBox();
-//    core::vector3df radius = box.MaxEdge - box.getCenter();
-//    scene::ISceneNodeAnimator *anim;
 //    scene::ISceneNodeAnimator *anim2;
 
-//  /////police de caractere///////
-//    ig::IGUISkin* skin = gui->getSkin();
-//    ig::IGUIFont* font = gui->getFont("data/menu/fontlucida.png");
-//    skin->setFont(font);
+
 
 //    ///////////// Camera //////////////
 
@@ -964,13 +966,13 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     addMapScene3D();
     promenade(Timer);
 
-
     while(device->run())
     {
 
 
         device->getVideoDriver()->beginScene(true, true, irr::video::SColor(255, 0, 0, 0)); // fond noir
         smgr->drawAll();
+        gui->drawAll();
 
 
 
@@ -1028,9 +1030,11 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
         device->getVideoDriver()->endScene();
 
+
         /** *********** **/
 
     }
+
 
 }
 

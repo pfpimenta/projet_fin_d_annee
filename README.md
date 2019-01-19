@@ -129,6 +129,7 @@ En cours de développement ...
 </br> </br>
 
 ##### Mode Jeu libre :
+
 <div style="text-align:center"><img src="./projet/code_projet/data/screenshots/modeJeuLibre.png" width="280" height="130"></div>
 </br>
 
@@ -141,6 +142,8 @@ En cours de développement ...
   **S** ⇒ déplacement vers l’arrière
   </br>
   **D** ⇒ rotation vers la droite (optionnelle car possibilité de tourner avec la souris)
+  </br>
+  **I** ⇒ Afficher ou cacher la fenêtre des items.
   </br>
   **A** ⇒ A chaque appui sur la touche A, la vitesse du personnage est modifiée : Elle peut valoir :  3, 6, 9, 12, 15 ou 18. Par défaut, la vitesse (speed) vaut 3.
   </br>

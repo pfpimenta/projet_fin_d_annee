@@ -216,30 +216,30 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
             {
               case irr::KEY_ESCAPE:
                 exit(0);
-              case irr::KEY_KEY_Z: // Avance
+              case irr::KEY_KEY_Z:
                 position.X += 1 * cos(rotation.Y * M_PI / 180.0) * speed;
                 position.Z += -1 * sin(rotation.Y * M_PI / 180.0) * speed;
                 isMoving += 1;
                 break;
-              case irr::KEY_KEY_S: // Recule
+              case irr::KEY_KEY_S:
                 position.X += -1 * cos(rotation.Y * M_PI / 180.0) * speed;
                 position.Z += 1 * sin(rotation.Y * M_PI / 180.0) * speed;
                 isMoving += 1;
                 break;
-              case irr::KEY_KEY_D: // Tourne à droite
+              case irr::KEY_KEY_D:
                 rotation.Y += 10;
                 isMoving += 1;
                 break;
-              case irr::KEY_KEY_Q: // Tourne à gauche
+              case irr::KEY_KEY_Q:
                 rotation.Y -= 10;
                 isMoving += 1;
                 break;
-              case irr::KEY_KEY_A: // Tourne à gauche
+              case irr::KEY_KEY_A:
                 speed = (float)(((int)speed )%18) + 3;
                 std::cout << "speed = " << speed << std::endl;
                 break;
-            case irr::KEY_KEY_I: // Tourne à gauche
-                gmngr->window->setVisible(isOpened);
+            case irr::KEY_KEY_I:
+                gmngr->itemWindow->setVisible(isOpened);
                 isOpened = !isOpened;
                 break;
               default:
@@ -304,7 +304,7 @@ bool MyEventReceiver::mouse_promenade(const irr::SEvent &event)
 \*------------------------------------------------------------------------*/
 bool MyEventReceiver::gui_manage(const irr::SEvent &event)
 {
-  if (!map3DNode) return false;
+  //if (!map3DNode) return false;
 
   ig::IGUIContextMenu *menu;
   irr::s32 item;
@@ -328,7 +328,13 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                 exit(0);
             case MENU_COMMANDES:
                 gmngr->device->getGUIEnvironment()->addMessageBox(L"Commandes", L"En exploration, ....");
-                break;
+            break;
+            case ABOUT:
+                gmngr->device->getGUIEnvironment()->addMessageBox(L"A propos", L"Projet de Majeure réalisé par :"
+                                                                               " \n FOLETTO PIMENTA Pédro,"
+                                                                               " \n KUASSIVI Cédric,"
+                                                                               " \n TOSTI Dylan");
+            break;
             default:;
         }
 
@@ -347,6 +353,6 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
 \**************************************************************************/
 void MyEventReceiver::set_map3DNode(irr::scene::ISceneNode *n)
 {
-  map3DNode = n;
+  //map3DNode = n;
 }
 
