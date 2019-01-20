@@ -11,6 +11,9 @@
 #include <cassert>
 #include <vector>
 
+#define DEFAULT_MAX_EPISODES 10000
+#define DEFAULT_STEP_PER_EPISODE 1000
+
 
 class Trainer
 {

@@ -70,8 +70,8 @@ void Trainer::train(){
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
   // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = 1000;
-  int max_steps_per_episode = 2500;
+  int max_episodes = DEFAULT_MAX_EPISODES;
+  int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
 
   int num_learners;
   int pos_x; // pos initialle d'un learner
@@ -85,7 +85,7 @@ void Trainer::train(){
   float hp_pers = 100.0f;
 
   int state, lastState;
-  Action action;
+  QTableAction action;
   float reward = 0.0f;
 
   // table qu'on va entrainer
@@ -167,7 +167,7 @@ void Trainer::train(){
 // avance un tour du jeu
 void Trainer::step(){
   int num_learners = this->learners.size();
-  Action a;
+  QTableAction a;
   int pos_x, pos_y;
   float attack_damage;
   int i_closest_enemy, dist_x_pers, dist_y_pers;
@@ -182,7 +182,6 @@ void Trainer::step(){
     dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[i]->getPosY();
     hp_pers = this->learners[i_closest_enemy]->getHP();
     // choisir l'action
-    //a = this->learners[i]->chooseAction(); // DEBUG enlever
     a = this->learners[i]->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
 
     pos_x = this->learners[i]->getPosX();
@@ -190,27 +189,27 @@ void Trainer::step(){
 
     // faire l'action
     switch(a){
-      case UP:
+      case QUP:
         if(this->isSomeoneAtPosition(pos_x-1, pos_y) == false){
           this->learners[i]->moveUp();
         }
         break;
-      case DOWN:
+      case QDOWN:
         if(this->isSomeoneAtPosition(pos_x+1, pos_y) == false){
           this->learners[i]->moveDown();
         }
         break;
-      case LEFT:
+      case QLEFT:
         if(this->isSomeoneAtPosition(pos_x, pos_y-1)== false){
           this->learners[i]->moveLeft();
         }
         break;
-      case RIGHT:
+      case QRIGHT:
         if(this->isSomeoneAtPosition(pos_x, pos_y+1)== false){
           this->learners[i]->moveRight();
         }
         break;
-      case ATTACK:
+      case QATTACK:
         attack_damage = this->learners[i]->getAttackForce();
         this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
         if(this->verifyDeadLearners()){

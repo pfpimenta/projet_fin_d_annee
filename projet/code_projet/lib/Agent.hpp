@@ -25,7 +25,7 @@ class Agent
 			Agent(); // constructeur
 			Agent(int x, int y); // constructeur
 			void takeDamage(float damage); // take damage
-			Action chooseAction();
+			QTableAction chooseAction();
 			void moveUp();
 			void moveDown();
 			void moveLeft();

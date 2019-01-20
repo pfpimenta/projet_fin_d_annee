@@ -226,46 +226,46 @@ public:
 
 
 
-class enemy : public person
-{
-public:
-    // constructeur sans model 3D
-    enemy(position p, int HP, int id)
-        :person(p, HP, id)
-    {}
-
-
-    // constructeur avec model 3D
-    enemy(position p, int HP, irr::scene::ISceneManager *smgr, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture* texture, ic::vector3df pos3D, int id)
-        :person(p, HP, smgr, mesh, texture, pos3D, id)
-    {}
-
-    virtual std::string personAction(Action act)
-    {
-        switch (act)
-        {
-            case UP:
-                std::cout << "ENEMY UP" << std::endl;
-                break;
-            case DOWN:
-                std::cout << "ENEMY DOWN" << std::endl;
-                break;
-            case LEFT:
-                std::cout << "ENEMY LEFT" << std::endl;
-                break;
-            case RIGHT:
-                std::cout << "ENEMY RIGHT" << std::endl;
-                break;
-            case ATTACK:
-                std::cout << "ENEMY ATTACK" << std::endl;
-                break;
-            default:
-                std::cout << "ENEMY Nothing to do" << std::endl;
-                break;
-        }
-        return ("Done");
-    }
-};
+// class enemy : public person
+// {
+// public:
+//     // constructeur sans model 3D
+//     enemy(position p, int HP, int id)
+//         :person(p, HP, id)
+//     {}
+//
+//
+//     // constructeur avec model 3D
+//     enemy(position p, int HP, irr::scene::ISceneManager *smgr, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture* texture, ic::vector3df pos3D, int id)
+//         :person(p, HP, smgr, mesh, texture, pos3D, id)
+//     {}
+//
+//     virtual std::string personAction(Action act)
+//     {
+//         switch (act)
+//         {
+//             case UP:
+//                 std::cout << "ENEMY UP" << std::endl;
+//                 break;
+//             case DOWN:
+//                 std::cout << "ENEMY DOWN" << std::endl;
+//                 break;
+//             case LEFT:
+//                 std::cout << "ENEMY LEFT" << std::endl;
+//                 break;
+//             case RIGHT:
+//                 std::cout << "ENEMY RIGHT" << std::endl;
+//                 break;
+//             case ATTACK:
+//                 std::cout << "ENEMY ATTACK" << std::endl;
+//                 break;
+//             default:
+//                 std::cout << "ENEMY Nothing to do" << std::endl;
+//                 break;
+//         }
+//         return ("Done");
+//     }
+// };
 
 
 
@@ -321,5 +321,3 @@ public:
 
 
 #endif
-
-

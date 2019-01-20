@@ -28,12 +28,12 @@ void Agent::takeDamage(float damage){
 }
 
 // choose action
-Action Agent::chooseAction(){
-  Action action;
+QTableAction Agent::chooseAction(){
+  QTableAction action;
 
   // action aleatoire (test)
   int random_variable = std::rand()%5;
-  action = (Action) random_variable;
+  action = (QTableAction) random_variable;
 
   // TODO : action avec la Q table
   // ou input du joueur

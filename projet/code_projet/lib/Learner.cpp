@@ -20,7 +20,7 @@ Learner::Learner(int x, int y){
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
   Q_table q_table = Q_table(); // nombre d'actions et states par default
   this->qTable = &q_table; // nombre d'actions et states par default
-  this->lastAction = UP; // TODO enlever cette ligne
+  this->lastAction = QUP; // TODO enlever cette ligne
 
   // asserts
    assert(this->getHP() > 0); //hp doit etre positif
@@ -51,11 +51,11 @@ Learner::Learner(int x, int y, Q_table* q_table){
 
 
 // choose action
-Action Learner::chooseAction(){
-  Action action;
+QTableAction Learner::chooseAction(){
+  QTableAction action;
   // action aleatoire (test)
   int random_variable = std::rand()%5;
-  action = (Action) random_variable;
+  action = (QTableAction) random_variable;
   this->lastAction = action;
   //std::cout << "DEBUG update lastAction: " << this->lastAction << std::endl;
   return action;
@@ -63,13 +63,13 @@ Action Learner::chooseAction(){
 
 
 // choose action (overcharge)
-Action Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
-  Action action;
+QTableAction Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
+  QTableAction action;
   // action aleatoire (test)
   //int random_variable = std::rand()%5;
   //action = (Action) random_variable;
   int state = getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
-  action = (Action) this->qTable->takeAction(state);
+  action = (QTableAction) this->qTable->takeAction(state);
   //std::cout << "DEBUG action "<< (int)action <<'\n';
 
   this->lastAction = action;
@@ -152,9 +152,9 @@ void Learner::setLastState(int state){
   this->lastState = state;
 }
 
-Action Learner::getLastAction(){
+QTableAction Learner::getLastAction(){
   return this->lastAction;
 }
-void Learner::setLastAction(Action action){
+void Learner::setLastAction(QTableAction action){
   this->lastAction = action;
 }

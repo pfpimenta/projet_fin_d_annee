@@ -5,6 +5,7 @@
 
 
 #include "utils.hpp"
+#include "enemy.hpp"
 #include "libGridMapping/gridMapping.hpp"
 
 class GameManager
