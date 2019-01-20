@@ -148,9 +148,18 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
       case irr::EMIE_RMOUSE_PRESSED_DOWN:
         if(gmngr->getCameraCombat() != NULL && gmngr->getPlayer() != NULL)
         {
-            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,  std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5 /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/, 0);
-            irr::core::vector3df translationCamCombat(0, 0, (gmngr->getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
-            gmngr->getCameraCombat()->setPosition(camCombatPosition + translationCamCombat);
+            if (gmngr->getGridMapping() != NULL)
+            {
+                irr::core::vector3df camCombatPosition(0,
+                                                       std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
+                                                       0);
+
+                irr::core::vector3df translationCamCombat(gmngr->getGridMapping()->myGrid->getGridNode(0)->getPosition().X - 40 * DEFAULT_HEIGHT,
+                                                          0,
+                                                          (gmngr->getGridMapping()->myGrid->getGridNode(0)->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+
+                gmngr->getCameraCombat()->setPosition(camCombatPosition + translationCamCombat);
+            }
         }
         break;
       case irr::EMIE_LMOUSE_PRESSED_DOWN:
@@ -167,8 +176,7 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
             if(gmngr->getCameraCombat() != NULL)
             {
                 irr::core::vector3df position = gmngr->getCameraCombat()->getPosition();
-                position.X += event.MouseInput.X - old_x;
-                position.Z -= event.MouseInput.X - old_x;
+                position.Z += event.MouseInput.X - old_x;
                 position.Y += (event.MouseInput.Y - old_y);
                 old_x = event.MouseInput.X;
                 old_y = event.MouseInput.Y;

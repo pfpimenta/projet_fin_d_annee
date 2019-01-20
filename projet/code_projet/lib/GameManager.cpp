@@ -291,18 +291,26 @@ bool GameManager::addCameraCombat()
         if (cameraJeuLibre.size() == 0)
         {
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-            irr::core::vector3df camCombatPosition(- 200/7 * DEFAULT_HEIGHT,
-                                                   std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE / 1.5
-                                                   /*+ gameManager->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y*/,
-                                                   0);
 
-            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+            if(getGridMapping() != NULL)
+            {
+                irr::core::vector3df camCombatPosition(0,
+                                                       std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
+                                                       0);
 
-            // TODO
-            // trouver la translation de camera adaptee pour chaque position du joueur
+                irr::core::vector3df translationCamCombat(getGridMapping()->myGrid->getGridNode(0)->getPosition().X - 40 * DEFAULT_HEIGHT,
+                                                          0,
+                                                          (getGridMapping()->myGrid->getGridNode(0)->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
 
-            camera->setPosition(camCombatPosition + translationCamCombat);
-            camera->setTarget(camera->getTarget() + translationCamCombat);
+                camera->setPosition(camCombatPosition + translationCamCombat);
+
+                irr::core::vector3df target(getGridMapping()->myGrid->getGridNode(0)->getPosition().X + DEFAULT_GRID_NODE_SIZE * DEFAULT_HEIGHT/2,
+                                          0,
+                                          (getGridMapping()->myGrid->getGridNode(0)->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
+
+                camera->setTarget(target);
+            }
+
             cameraCombat.push_back(camera);
             std::cout << "... GameManager::addCameraCombat : CameraCombat ajoutee avec succes !  ..." << std::endl;
             isCombat = 1; isPromenade = 0;
@@ -365,7 +373,6 @@ bool GameManager::addCameraJeuLibre()
             }
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
             camera->setPosition(ic::vector3df(-50, 30, 0));
-
             // ajout collision a la camera en mode jeu libre si la map 3D est chargee
             if (getMapScene3D() != NULL) getMapScene3D()->addCollisionToCamera(camera, ic::vector3df(30, 50, 30));
 
@@ -762,8 +769,8 @@ void GameManager::combat(irr::ITimer *Timer)
 
     removeMapScene3D();
     removeCameraJeuLibre();
-    addCameraCombat();
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
+    addCameraCombat();
 
 
 }
@@ -776,8 +783,8 @@ void GameManager::promenade(irr::ITimer *Timer)
     isPromenade = 1;
     removeGridMapping();
     removeCameraCombat();
-    addCameraJeuLibre();
     addMapScene3D();
+    addCameraJeuLibre();
 }
 
 
@@ -811,8 +818,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 
-    /** initialisation de la partie et ajout de la scene 3D **/
-    addMapScene3D();
+    /** initialisation de la partie **/
     promenade(Timer);
 
     while(device->run())
@@ -871,16 +877,8 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         /** DO NOT EDIT **/
 
         // pour que les cameras aient la bonne target
-        if (getCameraCombat() != NULL)
-        {
-            // trouver une target adapte a toutes les circonstances
-//            irr::core::vector3df translationCamCombat(0, 0, (getPlayer()->node->getPosition().Z
-//                                                             - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
-//            getCameraCombat()->setTarget(getCameraCombat()->getTarget() + translationCamCombat);
-        }
         if (getCameraJeuLibre() != NULL)
             getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
-
 
         // faire clignoter le curseur
         if (getGridMapping() != NULL)
