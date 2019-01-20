@@ -816,9 +816,10 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     else
         hpBox->setImage(hpVector[59]);
 
-
-
-
+    // pour la prise de decision des ennemis / q table
+    int dist_x_pers, dist_y_pers;
+    float hp_pers;
+    QTableAction a;
 
 
     /** initialisation de la partie **/
@@ -860,6 +861,17 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
                 // durant le mode combat
                 if ( isCombat && !isPromenade )
                 {
+                    // get informations pour choisir l'action
+                    dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
+                    dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
+                    hp_pers = this->getPlayer()->HP;
+
+                    // choisir l'action // TODO : erreur de segmentation :
+                    //a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+
+
+                    std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+
                     if(getPlayer()->p == position(0, 3))
                     {
                         isCombat = 0; isPromenade = 1;
@@ -873,8 +885,6 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
             }
         }
-
-
 
 
         /** DO NOT EDIT **/

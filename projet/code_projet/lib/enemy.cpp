@@ -70,3 +70,13 @@ void enemy::move(QTableAction action)
 						exit(1);
     }
 }
+
+
+QTableAction enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
+	QTableAction action;
+  int state = getState(dist_x_pers, dist_y_pers, this->HP, hp_pers);
+  action = (QTableAction) this->qTable->takeAction(state);
+	//std::cout << "DEBUG action "<< (int)action <<'\n';
+  this->lastAction = action;
+  return action;
+}

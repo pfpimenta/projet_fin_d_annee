@@ -100,11 +100,17 @@ void Q_table::update_table(int action, int etat_courrant, int etat_suivant, floa
 
 QTableAction Q_table::takeAction(int state){
 		// retourne le meilleur etat
+		std::cout << "DEBUG Q_table::takeAction0 ::::"<<this->taux_exploration <<'\n';
+
     float rand_num = static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
     float max_action_score;
 		int action;
+		std::cout << "DEBUG Q_table::takeAction1 ::::"<<this->taux_exploration <<'\n';
+
     if(rand_num > this->taux_exploration){
         // choisir la meilleure action
+				std::cout << "DEBUG Q_table::takeAction2 " <<'\n';
+
 				max_action_score = this->q_table[state][0];
 				action = 0;
 				//std::cout << "DEBUG takeAction (state "<<state<<"): ";

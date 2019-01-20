@@ -5,7 +5,7 @@
 
 // returns the state given the feature information
 int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
-// retourne l'etat
+    // retourne l'etat
     int state = 0;
 
 		std::vector<int> cumul_num_states;
