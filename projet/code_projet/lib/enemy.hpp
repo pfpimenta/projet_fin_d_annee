@@ -5,11 +5,12 @@
 
 
 #include "utils.hpp"
+#include "Q_table.hpp"
 
 
 class enemy : public person
 {
-    //Q_table* qTable;
+    Q_table* qTable;
     int lastState;
     Action lastAction;
     bool estMort; // true s'il est mort
@@ -20,6 +21,7 @@ class enemy : public person
 		enemy(position p, int HP, irr::scene::ISceneManager *smgr, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture* texture, ic::vector3df pos3D, int id);
 		//virtual
 		std::string personAction(Action act);
+		void move(QTableAction action);
 
 };
 #endif

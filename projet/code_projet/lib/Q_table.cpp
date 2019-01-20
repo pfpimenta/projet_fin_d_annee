@@ -148,16 +148,24 @@ void Q_table::saveTable(std::string tableName){
 void Q_table::loadTable(std::string tableName){
 	tableName = tableName + ".txt";
 	int bufferLenght = 8*this->num_states*this->num_actions + 1;
-	std::string string;
+	std::string s;
+	std::string delimiter = ",";
+	std::string token;
 	//char* tableValue = new char[7];
 	char *buffer = new char[bufferLenght];
 
 	std::ifstream in(tableName);
 	in.read(buffer, bufferLenght);
-	std::cout << "DEBUG loaded table buffer: "<<buffer << '\n';
+	//std::cout << "DEBUG loaded table buffer: "<<buffer << '\n';
 
+	s.assign(buffer, bufferLenght);
 	for(int i = 0; i < this->num_states; i++){
 		for(int j = 0; j < this->num_actions; j++){
+			token = s.substr(0, s.find(delimiter)); // token is "scott"
+			s.erase(0, s.find(delimiter) + delimiter.length());
+			//std::cout << "DEBUG parsing : " << token << '\n';
+			this->q_table[i][j] = std::atof(token.c_str());;
 		}
 	}
+	this->printTable(); //DEBUG
 }

@@ -85,7 +85,7 @@ player *GameManager::getPlayer()
 {
     if (j1.size() == 1)
     {
-        std::cout << "... GameManager::getPlayer() : Le joueur a ete bien recupere ..." << std::endl;
+        //std::cout << "... GameManager::getPlayer() : Le joueur a ete bien recupere ..." << std::endl;
         return j1[0];
     }
     std::cout << "... GameManager::getPlayer() : Aucun joueur present ! Vous avez recupere un pointeur NULL ! ..." << std::endl;
@@ -199,7 +199,7 @@ enemy *GameManager::getEnemy(int id)
         if (it < enemyID.end())
         {
             auto index = std::distance(enemyID.begin(), it);
-            std::cout << "... GameManager::getEnemy() : l'ennemi[" << id << "] a ete bien recupere ..." << std::endl;
+            //std::cout << "... GameManager::getEnemy() : l'ennemi[" << id << "] a ete bien recupere ..." << std::endl;
             return mechant[index];
         }
         else if (it >= enemyID.end())
@@ -772,7 +772,10 @@ void GameManager::combat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
-
+    // Q table for the ennemis
+    int num_states = getNumStates();
+    this->qTable = new Q_table(num_states, NUM_ACTIONS);
+    this->qTable->loadTable("test_table");
 }
 
 
@@ -897,6 +900,3 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
 
 
 }
-
-
-

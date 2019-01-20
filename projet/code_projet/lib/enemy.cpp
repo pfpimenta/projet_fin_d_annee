@@ -44,3 +44,29 @@ std::string enemy::personAction(Action act)
     }
     return ("Done");
 }
+
+void enemy::move(QTableAction action)
+{
+    switch (action)
+    {
+        case QUP:
+						this->p.ligne +=1;
+            break;
+        case QDOWN:
+						this->p.ligne -=1;
+            break;
+        case QLEFT:
+						this->p.colonne -=1;
+            break;
+        case QRIGHT:
+						this->p.colonne -=1;
+            break;
+        case QATTACK:
+            std::cout << "ERROR enemy::move( ATTACK) ne marche pas" << std::endl;
+						exit(1);
+            break;
+        default:
+						std::cout << "ERROR enemy::move("<<(int)action<<") ne marche pas" << std::endl;
+						exit(1);
+    }
+}

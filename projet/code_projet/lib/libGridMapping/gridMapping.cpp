@@ -193,11 +193,11 @@ bool gridMapping::isObstacle(position p, const obstacle &obs)
     {
         if (p == obs.pos[i])
         {
-            std::cout << "Obstacle détecté !" << std::endl;
+            //std::cout << "DEBUG Obstacle détecté !" << std::endl;
             return true;
         }
     }
-    std::cout << "Aucun obstacle détecté" << std::endl;
+    //std::cout << "DEBUG Aucun obstacle détecté" << std::endl;
     return false;
 }
 

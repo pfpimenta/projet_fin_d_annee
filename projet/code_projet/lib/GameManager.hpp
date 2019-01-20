@@ -6,6 +6,7 @@
 
 #include "utils.hpp"
 #include "enemy.hpp"
+#include "State.hpp"
 #include "libGridMapping/gridMapping.hpp"
 
 class GameManager
@@ -34,6 +35,8 @@ class GameManager
     std::vector<scene::ICameraSceneNode*> cameraCombat;
     std::vector<scene::ICameraSceneNode*> cameraJeuLibre;
 
+    // Q table for the ennemis
+    Q_table* qTable;
 
 public:
 
