@@ -14,8 +14,8 @@ int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
 			cumul_num_states[i] = cumul_num_states[i-1] * getNumStatesOfFeature(i);
 		}
 
-    //std::cout << "DEBUG state dx: "<<dist_x_pers<<" dy: " <<dist_y_pers;
-    //std::cout << " HPs: "<<hp_soi<<" HPp: " <<hp_pers<< '\n';
+    // std::cout << "DEBUG state dx: "<<dist_x_pers<<" dy: " <<dist_y_pers;
+    // std::cout << " HPs: "<<hp_soi<<" HPp: " <<hp_pers<< '\n';
 
     // dist_x_pers
     if(dist_x_pers <= -2){

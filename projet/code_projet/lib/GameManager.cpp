@@ -776,6 +776,14 @@ void GameManager::combat(irr::ITimer *Timer)
     int num_states = getNumStates();
     this->qTable = new Q_table(num_states, NUM_ACTIONS);
     this->qTable->loadTable("test_table");
+    // mettre la q table dans tous les ennemis
+    for (unsigned int k = 0; k < mechant.size(); k++)
+    {
+        if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+        {
+          this->getEnemy(k)->setQTable(this->qTable);
+        }
+    }
 }
 
 
@@ -866,11 +874,11 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
                     dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
                     hp_pers = this->getPlayer()->HP;
 
-                    // choisir l'action // TODO : erreur de segmentation :
-                    //a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+                    // choisir l'action de l'ennemi
+                    a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
 
 
-                    std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+                    //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
 
                     if(getPlayer()->p == position(0, 3))
                     {

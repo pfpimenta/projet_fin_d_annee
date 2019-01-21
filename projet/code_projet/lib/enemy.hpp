@@ -24,7 +24,7 @@ class enemy : public person
 		std::string personAction(Action act);
 		void move(QTableAction action);
 		QTableAction chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
-
+		void setQTable(Q_table* q_table);
 
 
 };

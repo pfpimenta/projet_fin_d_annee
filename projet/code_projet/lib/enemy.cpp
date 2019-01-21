@@ -80,3 +80,7 @@ QTableAction enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers
   this->lastAction = action;
   return action;
 }
+
+void enemy::setQTable(Q_table* q_table){
+	this->qTable = q_table;
+}
