@@ -38,6 +38,10 @@ class GameManager
     // Q table for the ennemis
     Q_table* qTable;
 
+    // pour la hitbox
+    float epsilon = 10;
+
+
 public:
 
     //device : correspond exactement au device dans le main
@@ -115,8 +119,11 @@ public:
     // pour savoir si on commence un combat
     bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
-    void combat(irr::ITimer *Timer);
-    void promenade(irr::ITimer *Timer);
+    void startCombat(irr::ITimer *Timer);
+    void startPromenade(irr::ITimer *Timer);
+    void loopPromenade(irr::ITimer *Timer);
+    void loopCombat(irr::ITimer *Timer);
+    void loopJeuLibre(irr::ITimer *Timer);
     void sceneRenderer(ITimer *Timer);
 
 
