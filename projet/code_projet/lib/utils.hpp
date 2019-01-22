@@ -82,6 +82,12 @@ public:
         return false;
     }
 
+    /** somme de 2 positions **/
+    position operator+(const position &p)
+    {
+        return position(ligne + p.ligne, colonne + p.colonne);
+    }
+
     void setPosition(const position &p)
     {
         ligne = p.ligne;
