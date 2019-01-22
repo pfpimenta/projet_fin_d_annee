@@ -44,10 +44,11 @@ Menu de la scène 3D
 - [x] Entraînement de la Q_table
 
 #### Etape 2: Animations
-- [ ] Animations 3D des enemis en fonction des actions choisies
+- [x] Animations 3D des enemis en fonction des actions choisies
 
 #### Etape 3: Action en combat
 - [x] Application en temps réel de la Q_table entraînée aux enemis afin de leur faire choisir les actions adaptées à la situation
+- [ ] Possibilité de l'ennemi d'attaquer
 
 
 </br></br>

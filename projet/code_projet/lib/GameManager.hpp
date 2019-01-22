@@ -35,7 +35,7 @@ class GameManager
     Q_table* qTable;
 
     // pour la hitbox
-    float epsilon = 20;
+    float epsilon = 50;
 
 
 
@@ -121,7 +121,7 @@ public:
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
     // flags pour le combat tour par tour
     bool playerTurn, ennemysTurn, endPlayerTurn;
-    bool isSomeoneAtPosition(int x, int y);
+    bool isSomeoneAtPosition(int ligne, int colonne);
     void executerAction(int enemyIndex, QTableAction a);
     void startCombat(irr::ITimer *Timer);
     void startPromenade(irr::ITimer *Timer);

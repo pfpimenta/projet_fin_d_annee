@@ -117,10 +117,9 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
             act = NOTHING;
 
 
-        std::cout << "touche" << std::endl;
-
         bool voieLibre = gmngr->getGridMapping()->mouvementGridPlayer(act);
         gmngr->animPlayer(voieLibre, act);
+
 
 
     return false;
