@@ -40,7 +40,7 @@ namespace ig = irr::gui;
 
 
 // HP par defaut du joueur
-#define DEFAULT_PLAYER_HP 59
+#define DEFAULT_PLAYER_HP 3
 
 // HP par defaut des ennemis
 #define DEFAULT_ENEMY_HP 4

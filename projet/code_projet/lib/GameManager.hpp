@@ -116,6 +116,9 @@ public:
     bool removeMapScene3D();
     scene3D *getMapScene3D();
 
+    /** game over screen **/
+    void addGameOverScreen();
+
 
     /** gestionnaire de jeu **/
     // pour savoir si on commence un combat

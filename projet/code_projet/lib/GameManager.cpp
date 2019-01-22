@@ -779,7 +779,9 @@ scene3D *GameManager::getMapScene3D()
 
 
 
-
+/** game over screen **/
+void GameManager::addGameOverScreen()
+{}
 
 
 
@@ -900,7 +902,15 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
 
               if(getEnemy(enemyIndex)->p.isNear(getPlayer()->p))
               {
-                  getPlayer()->HP -= 2;
+                  int damage = 2;
+                  if (getPlayer()->HP >=  damage)
+                  {
+                      getPlayer()->HP -= damage;
+                  }
+                  else
+                  {
+                      getPlayer()->HP = 0;
+                  }
               }
 
               //          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
@@ -1056,18 +1066,40 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   if(endCombat.size() == mechant.size())
   {
 
-//      for (auto &k : enemyID)
-//      {
-//          if (getEnemy(k) != NULL)
-//          {
-//              getEnemy(k)->node->remove();
-//          }
-//      }
+      for (auto &k : enemyID)
+      {
+          if (getEnemy(k) != NULL)
+          {
+              getEnemy(k)->node->remove();
+          }
+      }
 
       isCombat = 0; isPromenade = 1;
       startPromenade(Timer);
   }
 
+
+
+  // on affiche un game over si le joueur meurt
+  if(getPlayer() != NULL)
+  {
+      if(getPlayer()->HP <= 0)
+      {
+          removeGridMapping();
+          removeCameraCombat();
+          removeMapScene3D();
+          removeCameraJeuLibre();
+
+          for (auto &k : enemyID)
+          {
+              if (getEnemy(k) != NULL)
+              {
+                  getEnemy(k)->node->remove();
+              }
+          }
+          addGameOverScreen();
+      }
+  }
 
   // DEBUG :
   if(getPlayer()->p == position(0, 3))
