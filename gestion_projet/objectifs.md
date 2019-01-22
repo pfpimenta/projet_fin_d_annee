@@ -28,7 +28,7 @@ Menu de la scène 3D
 
 #### Etape 3: gestion du combat
 - [x] Basculement de la scène 3D à la scène mappée (2D) et inversement
-- [ ] Possibilité du joueur d'attaquer
+- [x] Possibilité du joueur d'attaquer
 - [x] Possibilité du joueur de recevoir des dégâts
 - [x] Gestion du tour à tour
 
@@ -48,7 +48,7 @@ Menu de la scène 3D
 
 #### Etape 3: Action en combat
 - [x] Application en temps réel de la Q_table entraînée aux enemis afin de leur faire choisir les actions adaptées à la situation
-- [ ] Possibilité de l'ennemi d'attaquer
+- [x] Possibilité de l'ennemi d'attaquer
 
 
 </br></br>
