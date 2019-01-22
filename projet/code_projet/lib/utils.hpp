@@ -27,8 +27,8 @@ namespace ig = irr::gui;
 
 
 // dimensions de l'ecran
-#define DEFAULT_SCREEN_WIDTH 1920
-#define DEFAULT_SCREEN_HEIGHT 1080
+#define DEFAULT_SCREEN_WIDTH 1080
+#define DEFAULT_SCREEN_HEIGHT 720
 
 // nombre de cases par defaut de la grid
 #define DEFAULT_WIDTH 15 // en largeur donc nb de colonnes

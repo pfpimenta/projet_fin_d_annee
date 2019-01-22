@@ -66,47 +66,45 @@ bool MyEventReceiver::OnEvent(const irr::SEvent &event)
 \*------------------------------------------------------------------------*/
 bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 {
-
-
-    if (event.EventType == EET_KEY_INPUT_EVENT && gmngr->playerTurn && !gmngr->ennemysTurn) // event de type clavier
+        if (event.EventType == EET_KEY_INPUT_EVENT ) // event de type clavier
         {
             if(event.KeyInput.PressedDown) // touche appuyee
             {
                 switch (event.KeyInput.Key)
                 {
-                    case KEY_ESCAPE: // echap
-                      exit(0);
+                case KEY_ESCAPE: // echap
+                    exit(0);
 
 
-                    case KEY_KEY_Z: // haut
-                      act = UP;
-                      break;
-                    case KEY_KEY_S: // bas
-                      act = DOWN;
-                      break;
-                    case KEY_KEY_D: // droite
-                      act = RIGHT;
-                      break;
-                    case KEY_KEY_Q: // gauche
-                      act = LEFT;
-                      break;
-                    case KEY_SPACE: // attack
-                      act = ATTACK;
-                      break;
+                case KEY_KEY_Z: // haut
+                    act = UP;
+                    break;
+                case KEY_KEY_S: // bas
+                    act = DOWN;
+                    break;
+                case KEY_KEY_D: // droite
+                    act = RIGHT;
+                    break;
+                case KEY_KEY_Q: // gauche
+                    act = LEFT;
+                    break;
+                case KEY_SPACE: // attack
+                    act = ATTACK;
+                    break;
 
-                    case KEY_KEY_M: // validate
-                      act = VALIDATE;
-                      gmngr->endPlayerTurn = true;
-                      break;
-                    case KEY_KEY_A: // reset
-                      act = RESET;
-                      break;
+                case KEY_KEY_M: // validate
+                    act = VALIDATE;
+                    gmngr->endPlayerTurn = true;
+                    break;
+                case KEY_KEY_A: // reset
+                    act = RESET;
+                    break;
 
 
-                    case KEY_KEY_W: // pour tester les nouvelles features
-                      act = DEBUG;
-                      break;
-                    default:;
+                case KEY_KEY_W: // pour tester les nouvelles features
+                    act = DEBUG;
+                    break;
+                default:;
                 }
             }
             else if(!event.KeyInput.PressedDown) // touche relachee
@@ -119,10 +117,10 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
             act = NOTHING;
 
 
+        std::cout << "touche" << std::endl;
 
         bool voieLibre = gmngr->getGridMapping()->mouvementGridPlayer(act);
         gmngr->animPlayer(voieLibre, act);
-
 
 
     return false;

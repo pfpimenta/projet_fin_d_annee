@@ -41,9 +41,6 @@ class GameManager
 
 
 public:
-
-    // flags pour le combat tour par tour
-    bool playerTurn, ennemysTurn, endPlayerTurn;
     //device : correspond exactement au device dans le main
     irr::IrrlichtDevice *device;
 
@@ -119,6 +116,10 @@ public:
     // pour savoir si on commence un combat
     bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
+    // flags pour le combat tour par tour
+    bool playerTurn, ennemysTurn, endPlayerTurn;
+    bool isSomeoneAtPosition(int x, int y);
+    void executerAction(int enemyIndex, QTableAction a);
     void startCombat(irr::ITimer *Timer);
     void startPromenade(irr::ITimer *Timer);
     void loopPromenade(irr::ITimer *Timer);

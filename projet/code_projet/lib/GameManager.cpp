@@ -755,6 +755,64 @@ scene3D *GameManager::getMapScene3D()
 
 /** gestionnaire de jeu **/
 
+
+bool GameManager::isSomeoneAtPosition(int x, int y){
+    // retourne un char qui represente ce qui est dans cette position dans la grid
+    for (unsigned int k = 0; k < mechant.size(); k++)
+    {
+        if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+        {
+                if(x == getEnemy(k)->p.colonne && y == getEnemy(k)->p.ligne){
+                    // il y a un ennemi dans cette position
+                    return true;
+                }
+        }
+    }
+    return false;
+}
+
+
+void GameManager::executerAction(int enemyIndex, QTableAction a){
+  float attack_damage;
+  int pos_x = this->getEnemy(enemyIndex)->p.colonne; // colonne == x
+  int pos_y = this->getEnemy(enemyIndex)->p.ligne; // ligne == y
+  // faire l'action
+  switch(a){
+    case QUP:
+          if(this->isSomeoneAtPosition(pos_x-1, pos_y) == false){
+            animator(0, -1, this->getEnemy(enemyIndex)->node);
+          }
+          break;
+    case QDOWN:
+          if(this->isSomeoneAtPosition(pos_x+1, pos_y) == false){
+              animator(0, 1, this->getEnemy(enemyIndex)->node);
+          }
+          break;
+    case QLEFT:
+          if(this->isSomeoneAtPosition(pos_x, pos_y-1)== false){
+              animator(-1, 0, this->getEnemy(enemyIndex)->node);
+          }
+          break;
+    case QRIGHT:
+          if(this->isSomeoneAtPosition(pos_x, pos_y+1)== false){
+              animator(1, 0, this->getEnemy(enemyIndex)->node);
+          }
+          break;
+    case QATTACK:
+          attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
+//          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
+//          if(this->verifyDeadLearners()){
+//            // qqn est mort par cet attaque
+//            this->learners[learnerIndex]->killedSomeone();
+//          }
+          break;
+    default:
+          std::cout << "ERROR enemy::move("<<(int)a <<") ne marche pas" << std::endl;
+          exit(1);
+          break;
+  }
+}
+
 // a appeler dans le sceneRenderer durant le mode combat
 void GameManager::startCombat(irr::ITimer *Timer)
 {
@@ -843,21 +901,35 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   // tour des Ennemi : choisir une action
   if(this->ennemysTurn)
   {
+      std::cout << "enemys turn" << std::endl;
+
+      device->sleep(1000);
+
       for (unsigned int k = 0; k < mechant.size(); k++)
       {
           if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
           {
               // get informations pour choisir l'action
-              dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
-              dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
+              dist_x_pers = this->getPlayer()->p.ligne - this->getEnemy(k)->p.ligne;
+              dist_y_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
               hp_pers = this->getPlayer()->HP;
+
+              std::cout << "DEBUG dist_x_pers : "<<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
 
               // choisir l'action de l'ennemi
               a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
 
-              //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+              std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+
+              // executer l'action:
+              this->executerAction(k, a);
             }
         }
+      // fin du tour des ennemis
+      playerTurn = true;
+      ennemysTurn = false;
+      // pour reset la position du curseur
+      getGridMapping()->mouvementGridPlayer(RESET); // ne marche pas
     }
     // tour du player : attendre une action du player
     if(this->playerTurn)

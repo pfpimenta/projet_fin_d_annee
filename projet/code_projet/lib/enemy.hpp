@@ -11,11 +11,12 @@
 
 class enemy : public person
 {
-    Q_table* qTable;
-    int lastState;
-    QTableAction lastAction;
-    bool estMort; // true s'il est mort
-    bool aTue; // true s'il a tue qqn dans ce step
+        Q_table* qTable;
+        int lastState;
+        QTableAction lastAction;
+        bool estMort; // true s'il est mort
+        bool aTue; // true s'il a tue qqn dans ce step
+        float attack_force; // force du attaque
 	public:
 		//enemy();
 		enemy(position p, int HP, int id);
@@ -24,6 +25,7 @@ class enemy : public person
 		std::string personAction(Action act);
 		void move(QTableAction action);
 		QTableAction chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
+        float getAttackForce();
 		void setQTable(Q_table* q_table);
 
 

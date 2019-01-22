@@ -11,7 +11,9 @@
 // constructeur
 enemy::enemy(position p, int HP, int id)
 :person(p, HP, id)
-{}
+{
+     this->attack_force = 15.5;
+}
 
 
 // constructeur avec model 3D
@@ -81,6 +83,12 @@ QTableAction enemy::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers
   return action;
 }
 
+
+
+
+float enemy::getAttackForce(){
+  return this->attack_force ;
+}
 void enemy::setQTable(Q_table* q_table){
 	this->qTable = q_table;
 }

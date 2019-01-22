@@ -183,10 +183,8 @@ void Trainer::train(){
   // print q-table
   //qtable->printTable();
   //qtable->printTableBestActions();
-  //qtable->saveTable("test_table");
+  qtable->saveTable("test_table");
   //qtable->loadTable("test_table");
-
-
   this->test(qtable); // DEBUG
 }
 
