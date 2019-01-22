@@ -30,7 +30,7 @@ Menu de la scène 3D
 - [x] Basculement de la scène 3D à la scène mappée (2D) et inversement
 - [ ] Possibilité du joueur d'attaquer
 - [x] Possibilité du joueur de recevoir des dégâts
-- [ ] Gestion du tour à tour
+- [x] Gestion du tour à tour
 
 
 
@@ -47,7 +47,7 @@ Menu de la scène 3D
 - [ ] Animations 3D des enemis en fonction des actions choisies
 
 #### Etape 3: Action en combat
-- [ ] Application en temps réel de la Q_table entraînée aux enemis afin de leur faire choisir les actions adaptées à la situation
+- [x] Application en temps réel de la Q_table entraînée aux enemis afin de leur faire choisir les actions adaptées à la situation
 
 
 </br></br>
