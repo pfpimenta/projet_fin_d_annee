@@ -93,6 +93,16 @@ public:
         ligne = p.ligne;
         colonne = p.colonne;
     }
+
+
+    // renvoie true si p est soit juste en haut, en bas, a gauche OU a droite de this
+    bool isNear(const position &p)
+    {
+        return (position(ligne, colonne) == position(p.ligne + 1, p.colonne)
+                || position(ligne, colonne) == position(p.ligne - 1, p.colonne)
+                || position(ligne, colonne) == position(p.ligne, p.colonne + 1)
+                || position(ligne, colonne) == position(p.ligne, p.colonne - 1));
+    }
 };
 
 

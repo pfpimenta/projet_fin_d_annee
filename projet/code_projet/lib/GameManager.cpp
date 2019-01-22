@@ -448,6 +448,7 @@ void GameManager::animPlayer(bool voieLibre, Action act)
     case VALIDATE:
         playAnimation(voieLibre,  VALIDATE, getPlayer()->node);
         getPlayer()->p.setPosition(getGridMapping()->curseur);
+        getGridMapping()->j1.pos = getPlayer()->p;
         break;
 
     case RESET: // reset
@@ -457,6 +458,22 @@ void GameManager::animPlayer(bool voieLibre, Action act)
                                               0,
                                               -getGridMapping()->j1.pos.colonne * DEFAULT_GRID_NODE_SIZE)));
 
+        break;
+
+
+    case ATTACK:
+        for(unsigned int k = 0; k < mechant.size(); k++)
+        {
+            if(getEnemy(k) != NULL)
+            {
+                if(getPlayer()->p.isNear(getEnemy(k)->p))
+                {
+                    getEnemy(k)->HP -= 2;
+                }
+            }
+            animPlayer(0, RESET);
+            endPlayerTurn = true;
+        }
         break;
     default:
         playAnimation(voieLibre,  act, getPlayer()->node);
@@ -496,6 +513,7 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
         //animLEFT(getPlayer()->node);
         break;
     case ATTACK: // attack
+
         animATTACK(perso);
         break;
 
@@ -797,7 +815,7 @@ bool GameManager::isSomeoneAtPosition(int ligne, int colonne){
 
 
 void GameManager::executerAction(int enemyIndex, QTableAction a){
-  float attack_damage;
+  //float attack_damage;
 //  int pos_x = this->getEnemy(enemyIndex)->p.colonne; // colonne == x
 //  int pos_y = this->getEnemy(enemyIndex)->p.ligne; // ligne == y
 
@@ -806,54 +824,63 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
   // faire l'action
   switch(a){
     case QUP:
+      gridPosition = gridPosition + position(-1, 0);
+      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+      {
+          animator(0, 1, this->getEnemy(enemyIndex)->node);
+          this->getEnemy(enemyIndex)->p = gridPosition;
+          std::cout << "enemy up" << std::endl;
+      }
           if(!isSomeoneAtPosition(gridPosition.ligne - 1, gridPosition.colonne)){
-              gridPosition = gridPosition + position(-1, 0);
-              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-              {
-                  animator(0, 1, this->getEnemy(enemyIndex)->node);
-                  this->getEnemy(enemyIndex)->p = gridPosition;
-                  std::cout << "enemy up" << std::endl;
-              }
+
           }
           break;
     case QDOWN:
+      gridPosition = gridPosition + position(1, 0);
+      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+      {
+          animator(0, -1, this->getEnemy(enemyIndex)->node);
+          this->getEnemy(enemyIndex)->p = gridPosition;
+          std::cout << "enemy down" << std::endl;
+      }
           if(!isSomeoneAtPosition(gridPosition.ligne + 1, gridPosition.colonne)){
-              gridPosition = gridPosition + position(1, 0);
-              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-              {
-                  animator(0, -1, this->getEnemy(enemyIndex)->node);
-                  this->getEnemy(enemyIndex)->p = gridPosition;
-                  std::cout << "enemy down" << std::endl;
-              }
+
           }
           break;
     case QLEFT:
+      gridPosition = gridPosition + position(0, -1);
+      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+      {
+          animator(-1, 0, this->getEnemy(enemyIndex)->node);
+          this->getEnemy(enemyIndex)->p = gridPosition;
+          std::cout << "enemy left" << std::endl;
+      }
           if(!isSomeoneAtPosition(gridPosition.ligne, gridPosition.colonne - 1)){
-              gridPosition = gridPosition + position(0, -1);
-              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-              {
-                  animator(-1, 0, this->getEnemy(enemyIndex)->node);
-                  this->getEnemy(enemyIndex)->p = gridPosition;
-                  std::cout << "enemy left" << std::endl;
-              }
+
           }
           break;
     case QRIGHT:
+      gridPosition = gridPosition + position(0, 1);
+      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+      {
+          animator(1, 0, this->getEnemy(enemyIndex)->node);
+          this->getEnemy(enemyIndex)->p = gridPosition;
+          std::cout << "enemy right" << std::endl;
+      }
           if(!isSomeoneAtPosition(gridPosition.ligne, gridPosition.colonne + 1)){
-              gridPosition = gridPosition + position(0, 1);
-              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-              {
-                  animator(1, 0, this->getEnemy(enemyIndex)->node);
-                  this->getEnemy(enemyIndex)->p = gridPosition;
-                  std::cout << "enemy right" << std::endl;
-              }
+
           }
           break;
     case QATTACK:
           currentAnimationTime = device->getTimer()->getTime();
-          attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
+          //attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
           getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
           std::cout << "enemy attack" << std::endl;
+
+          if(getEnemy(enemyIndex)->p.isNear(getPlayer()->p))
+          {
+              getPlayer()->HP -= 2;
+          }
 
 //          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
 //          if(this->verifyDeadLearners()){
@@ -893,15 +920,21 @@ void GameManager::startCombat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
+    // ajout d'ennemis
+    std::vector<position> enemyPos;
+    enemyPos.push_back(position(2, 5));
+    enemyPos.push_back(position(4, 8));
 
-    position enemy0Pos(2, 5);
-    this->addEnemy(enemy0Pos,
-                           DEFAULT_ENEMY_HP, // HP de l'ennemi
-                           mesh, // mesh de l'ennemi
-                           textureEnemy, // texture du joueur
-                           getPlayer()->node->getPosition()
-                           + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemy0Pos.ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemy0Pos.colonne)); // positions 3D dans le monde 3D du joueur
-    getGridMapping()->addEnemy(enemy0Pos);
+    for (unsigned int k = 0; k < enemyPos.size(); k++)
+    {
+        this->addEnemy(enemyPos[k],
+                       DEFAULT_ENEMY_HP, // HP de l'ennemi
+                       mesh, // mesh de l'ennemi
+                       textureEnemy, // texture du joueur
+                       getPlayer()->node->getPosition()
+                       + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemyPos[k].ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemyPos[k].colonne)); // positions 3D dans le monde 3D du joueur
+        getGridMapping()->addEnemy(enemyPos[k]);
+    }
 
 
     // load  Q table pour les ennemis
@@ -1005,7 +1038,7 @@ void GameManager::loopCombat(irr::ITimer *Timer){
               dist_y_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
               hp_pers = this->getPlayer()->HP;
 
-              std::cout << "DEBUG dist_x_pers : "<<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
+              std::cout << "DEBUG dist_x_pers : " <<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
 
               // choisir l'action de l'ennemi
               a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
@@ -1013,7 +1046,7 @@ void GameManager::loopCombat(irr::ITimer *Timer){
               std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
 
               // executer l'action:
-              this->executerAction(k, a);
+              this->executerAction(k, QATTACK);
               if (device->getTimer()->getTime() - currentAnimationTime >= 50)
               {
                   getEnemy(k)->node->setMD2Animation(is::EMAT_STAND);
@@ -1096,6 +1129,9 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         if ( isCombat && !isPromenade )
         {
           this->loopCombat(Timer);
+          if(getEnemy(0) != NULL) std::cout << "HP ennemi[0] : " << getEnemy(0)->HP << std::endl;
+          if(getEnemy(1) != NULL) std::cout << "HP ennemi[1] : " << getEnemy(1)->HP << std::endl;
+
         }
 
         /** DO NOT EDIT **/
