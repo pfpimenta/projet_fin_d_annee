@@ -20,7 +20,7 @@
 
 
 // taille par defaut du carre elementaire de la grid
-#define DEFAULT_GRID_NODE_SIZE 20
+#define DEFAULT_GRID_NODE_SIZE 30
 
 // decallage par defaut du carre elementaire par rapport au centre de la fenetre
 // on en a besoin au moment de creer les nodes personnalises

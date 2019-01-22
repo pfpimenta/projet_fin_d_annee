@@ -224,7 +224,7 @@ bool GameManager::addGridMapping(int width, int height, ITimer *Timer)
         if (j1.size() == 1)
         {
             gridMapping *g = new gridMapping(getPlayer()->p, width, height, smgr, Timer);
-            g->myGrid->translation(getPlayer()->node->getPosition() - core::vector3df(5, 25, 5));
+            g->myGrid->translation(getPlayer()->node->getPosition() - core::vector3df(0, 25, -DEFAULT_GRID_NODE_SIZE/8));
 
             if( getPlayer() != NULL) getPlayer()->p.setPosition(g->j1.pos);
 
@@ -292,10 +292,10 @@ bool GameManager::addCameraCombat()
         {
             irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(0, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
 
-            if(getGridMapping() != NULL)
+            if(getGridMapping() != NULL && getPlayer() != NULL)
             {
                 irr::core::vector3df camCombatPosition(0,
-                                                       std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
+                                                       -getPlayer()->node->getPosition().Y + std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.25,
                                                        0);
 
                 irr::core::vector3df translationCamCombat(getGridMapping()->myGrid->getGridNode(0)->getPosition().X - 40 * DEFAULT_HEIGHT,
