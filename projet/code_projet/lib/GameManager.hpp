@@ -37,12 +37,13 @@ class GameManager
     // pour la hitbox
     float epsilon = 10;
 
-    // flags pour le combat tour par tour
-    bool playerTurn, ennemysTurn;
+
 
 
 public:
 
+    // flags pour le combat tour par tour
+    bool playerTurn, ennemysTurn, endPlayerTurn;
     //device : correspond exactement au device dans le main
     irr::IrrlichtDevice *device;
 

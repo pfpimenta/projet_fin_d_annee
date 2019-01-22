@@ -68,7 +68,7 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 {
 
 
-    if (event.EventType == EET_KEY_INPUT_EVENT) // event de type clavier
+    if (event.EventType == EET_KEY_INPUT_EVENT && gmngr->playerTurn && !gmngr->ennemysTurn) // event de type clavier
         {
             if(event.KeyInput.PressedDown) // touche appuyee
             {
@@ -96,6 +96,7 @@ bool MyEventReceiver::keyboard_combat(const irr::SEvent &event)
 
                     case KEY_KEY_M: // validate
                       act = VALIDATE;
+                      gmngr->endPlayerTurn = true;
                       break;
                     case KEY_KEY_A: // reset
                       act = RESET;

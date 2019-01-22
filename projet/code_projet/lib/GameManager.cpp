@@ -760,6 +760,10 @@ void GameManager::startCombat(irr::ITimer *Timer)
 {
     isCombat = 1;
     isPromenade = 0;
+    playerTurn = true;
+    ennemysTurn = false;
+    endPlayerTurn = false;
+
 
     //animation debut combat
     std::vector<iv::ITexture*> fightVector = loadGif(20, L"data/animations/combat/combat", device->getVideoDriver());
@@ -786,7 +790,6 @@ void GameManager::startCombat(irr::ITimer *Timer)
     }
 }
 
-
 // a appeler dans le sceneRenderer durant le mode jeu libre
 void GameManager::startPromenade(irr::ITimer *Timer)
 {
@@ -797,7 +800,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     addMapScene3D();
     addCameraJeuLibre();
 }
-
 
 void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
@@ -825,29 +827,48 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   float hp_pers;
   QTableAction a;
   // est appellee en loop dans le mode jeu libre
-  for (unsigned int k = 0; k < mechant.size(); k++)
+
+  // DEBUG :
+  if(getPlayer()->p == position(0, 3))
   {
-      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+      isCombat = 0; isPromenade = 1;
+      startPromenade(Timer);
+  }
+  if(getPlayer()->p == position(2, 5))
+  {
+      getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
+  }
+
+
+  // tour des Ennemi : choisir une action
+  if(this->ennemysTurn)
+  {
+      for (unsigned int k = 0; k < mechant.size(); k++)
       {
-          // get informations pour choisir l'action
-          dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
-          dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
-          hp_pers = this->getPlayer()->HP;
-
-          // choisir l'action de l'ennemi
-          a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
-
-          //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
-
-          if(getPlayer()->p == position(0, 3))
+          if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
           {
-              isCombat = 0; isPromenade = 1;
-              startPromenade(Timer);
-          }
-          if(getPlayer()->p == position(2, 5))
-          {
-              getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
-          }
+              // get informations pour choisir l'action
+              dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
+              dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
+              hp_pers = this->getPlayer()->HP;
+
+              // choisir l'action de l'ennemi
+              a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+
+              //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+            }
+        }
+    }
+    // tour du player : attendre une action du player
+    if(this->playerTurn)
+    {
+        // ?? TODO
+        if(endPlayerTurn)
+        {
+            // fin du tour du player
+            playerTurn = false;
+            ennemysTurn = true;
+            endPlayerTurn = false;
         }
     }
 }
