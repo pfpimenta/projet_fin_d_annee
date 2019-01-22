@@ -18,7 +18,6 @@
 class Trainer
 {
       std::vector<Learner*> learners;
-    	// objets ? pierre etc
     	int width;
     	int height;
       // returns a character according to what is in the point (pos_x, pos_y) :
@@ -28,16 +27,19 @@ class Trainer
       void step();
       void doDamageAroundPoint(int x, int y, float attack_damage);
       bool verifyDeadLearners();
+      void executerAction(int learnerIndex, QTableAction a);
+      QTableAction deciderAction(int learnerIndex);
 	public:
-      //la grille dans laquelle se passe l'action
       Trainer(); // constructeur
       Trainer(int w, int h);
-      // print the grid at the current moment
+      // print the grid at the current moment :
       void printGrid();
-      // print the current HPs of all personnages
+      // print the current HPs of all personnages :
       void printHPs();
-      // commence l'entrainement
+      // commence l'entrainement :
       void train();
+      // pour tester la q-table :
+      void test(Q_table* q_table);
       int getWidth();
       int getHeight();
 };

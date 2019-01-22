@@ -756,7 +756,7 @@ scene3D *GameManager::getMapScene3D()
 /** gestionnaire de jeu **/
 
 // a appeler dans le sceneRenderer durant le mode combat
-void GameManager::combat(irr::ITimer *Timer)
+void GameManager::startCombat(irr::ITimer *Timer)
 {
     isCombat = 1;
     isPromenade = 0;
@@ -772,7 +772,7 @@ void GameManager::combat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
-    // Q table for the ennemis
+    // load  Q table pour les ennemis
     int num_states = getNumStates();
     this->qTable = new Q_table(num_states, NUM_ACTIONS);
     this->qTable->loadTable("test_table");
@@ -788,7 +788,7 @@ void GameManager::combat(irr::ITimer *Timer)
 
 
 // a appeler dans le sceneRenderer durant le mode jeu libre
-void GameManager::promenade(irr::ITimer *Timer)
+void GameManager::startPromenade(irr::ITimer *Timer)
 {
     isCombat = 0;
     isPromenade = 1;
@@ -799,6 +799,58 @@ void GameManager::promenade(irr::ITimer *Timer)
 }
 
 
+void GameManager::loopPromenade(irr::ITimer *Timer){
+  // est appellee en loop dans le mode jeu libre
+  for (unsigned int k = 0; k < mechant.size(); k++)
+  {
+      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+      {
+          if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= this->epsilon
+                  &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= this->epsilon
+                  &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= this->epsilon  )
+
+          {
+              isCombat = 1; isPromenade = 0;
+              startCombat(Timer);
+          }
+      }
+  }
+}
+
+void GameManager::loopCombat(irr::ITimer *Timer){
+  // est appellee en loop dans le mode combat
+
+  // pour la prise de decision des ennemis / q table
+  int dist_x_pers, dist_y_pers;
+  float hp_pers;
+  QTableAction a;
+  // est appellee en loop dans le mode jeu libre
+  for (unsigned int k = 0; k < mechant.size(); k++)
+  {
+      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+      {
+          // get informations pour choisir l'action
+          dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
+          dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
+          hp_pers = this->getPlayer()->HP;
+
+          // choisir l'action de l'ennemi
+          a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+
+          //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+
+          if(getPlayer()->p == position(0, 3))
+          {
+              isCombat = 0; isPromenade = 1;
+              startPromenade(Timer);
+          }
+          if(getPlayer()->p == position(2, 5))
+          {
+              getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
+          }
+        }
+    }
+}
 
 void GameManager::sceneRenderer(irr::ITimer *Timer)
 {
@@ -824,14 +876,10 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     else
         hpBox->setImage(hpVector[59]);
 
-    // pour la prise de decision des ennemis / q table
-    int dist_x_pers, dist_y_pers;
-    float hp_pers;
-    QTableAction a;
 
 
     /** initialisation de la partie **/
-    promenade(Timer);
+    startPromenade(Timer);
 
     while(device->run())
     {
@@ -846,54 +894,18 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
         // le joueur perd la moitie de sa vie lorsqu'il valide sa position a la case [2, 5] de la gridMapping
         // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
-        float epsilon = 10;
+        this->epsilon = 10;
 
-        for (unsigned int k = 0; k < mechant.size(); k++)
+        // durant le mode jeu libre
+        if ( !isCombat && isPromenade )
         {
-            if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
-            {
-
-                // durant le mode jeu libre
-                if ( !isCombat && isPromenade )
-                {
-                    if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= epsilon
-                            &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= epsilon
-                            &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= epsilon  )
-
-                    {
-                        isCombat = 1; isPromenade = 0;
-                        combat(Timer);
-                    }
-                }
-
-                // durant le mode combat
-                if ( isCombat && !isPromenade )
-                {
-                    // get informations pour choisir l'action
-                    dist_x_pers = this->getPlayer()->node->getPosition().X - this->getEnemy(k)->node->getPosition().X;
-                    dist_y_pers = this->getPlayer()->node->getPosition().Y - this->getEnemy(k)->node->getPosition().Y;
-                    hp_pers = this->getPlayer()->HP;
-
-                    // choisir l'action de l'ennemi
-                    a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
-
-
-                    //std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
-
-                    if(getPlayer()->p == position(0, 3))
-                    {
-                        isCombat = 0; isPromenade = 1;
-                        promenade(Timer);
-                    }
-                    if(getPlayer()->p == position(2, 5))
-                    {
-                        getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
-                    }
-                }
-
-            }
+          this->loopPromenade(Timer);
         }
-
+        // durant le mode combat
+        if ( isCombat && !isPromenade )
+        {
+          this->loopCombat(Timer);
+        }
 
         /** DO NOT EDIT **/
 

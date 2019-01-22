@@ -11,19 +11,15 @@
 
 class GameManager
 {
-
     //sceneManager (/!\ different du gameManager)
     irr::scene::ISceneManager *smgr;
-
 
     // joueur (/!\ il y a toujours un seul joueur; meilleure gestion avec un vecteur)
     std::vector<player*> j1;
 
-
     // ennemis
     std::vector<enemy*> mechant;
     std::vector<int> enemyID; // pour bien gerer les ennemis ajoutes
-
 
     // gridMapping (/!\ il y a toujours un seul gridMapping; meilleure gestion avec un vecteur)
     std::vector<gridMapping*> grid;
@@ -35,8 +31,15 @@ class GameManager
     std::vector<scene::ICameraSceneNode*> cameraCombat;
     std::vector<scene::ICameraSceneNode*> cameraJeuLibre;
 
-    // Q table for the ennemis
+    // Q table pour les ennemis
     Q_table* qTable;
+
+    // pour la hitbox
+    float epsilon = 10;
+
+    // flags pour le combat tour par tour
+    bool playerTurn, ennemysTurn;
+
 
 public:
 
@@ -115,8 +118,11 @@ public:
     // pour savoir si on commence un combat
     bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
-    void combat(irr::ITimer *Timer);
-    void promenade(irr::ITimer *Timer);
+    void startCombat(irr::ITimer *Timer);
+    void startPromenade(irr::ITimer *Timer);
+    void loopPromenade(irr::ITimer *Timer);
+    void loopCombat(irr::ITimer *Timer);
+    void loopJeuLibre(irr::ITimer *Timer);
     void sceneRenderer(ITimer *Timer);
 
 
