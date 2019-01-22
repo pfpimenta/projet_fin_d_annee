@@ -20,6 +20,7 @@ bool Trainer::isSomeoneAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
   for(int i = 0; i < (int) learners.size(); i++){
     if(x == learners[i]->getPosX() && y == learners[i]->getPosY()){
+      //std::cout << "DEBUG isSomeoneAtPosition : returning true" << '\n';
       return true;
     }
   }
@@ -70,21 +71,13 @@ void Trainer::doDamageAroundPoint(int x, int y, float attack_damage){
   int nombre_personnages = this->learners.size();
   for(int i = 0; i < nombre_personnages; i++){
     // verifie pour les 8 carres autour du attaquant
-    if(this->learners[i]->getPosX() == x + 1 && this->learners[i]->getPosY() == y + 1){
-      this->learners[i]->takeDamage(attack_damage);
-    }else if(this->learners[i]->getPosX() == x + 1 && this->learners[i]->getPosY() == y){
-      this->learners[i]->takeDamage(attack_damage);
-    }else if(this->learners[i]->getPosX() == x + 1 && this->learners[i]->getPosY() == y - 1){
+    if(this->learners[i]->getPosX() == x + 1 && this->learners[i]->getPosY() == y){
       this->learners[i]->takeDamage(attack_damage);
     }else if(this->learners[i]->getPosX() == x  && this->learners[i]->getPosY() == y + 1){
       this->learners[i]->takeDamage(attack_damage);
     }else if(this->learners[i]->getPosX() == x  && this->learners[i]->getPosY() == y - 1){
       this->learners[i]->takeDamage(attack_damage);
-    }else if(this->learners[i]->getPosX() == x - 1 && this->learners[i]->getPosY() == y + 1){
-      this->learners[i]->takeDamage(attack_damage);
     }else if(this->learners[i]->getPosX() == x - 1 && this->learners[i]->getPosY() == y){
-      this->learners[i]->takeDamage(attack_damage);
-    }else if(this->learners[i]->getPosX() == x - 1 && this->learners[i]->getPosY() == y - 1){
       this->learners[i]->takeDamage(attack_damage);
     }
   }
