@@ -27,6 +27,7 @@ class Learner :  public Agent
 			bool estMort; // true s'il est mort
 			bool aTue; // true s'il a tue qqn dans ce step
 	public:
+			bool isTrained; // pour le test
 			Learner(); // constructeur
 			Learner(int x, int y); // constructeur avec position
 			Learner(int x, int y, Q_table* q_table); // constructeur avec position et Qtable

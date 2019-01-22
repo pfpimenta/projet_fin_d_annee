@@ -31,7 +31,8 @@ char Trainer::charAtPosition(int x, int y){
   int num_learners = this->learners.size();
   for(int i = 0; i < num_learners; i++){
     if(x == this->learners[i]->getPosX() && y == this->learners[i]->getPosY()){
-      return 'x';
+      if(this->learners[i]->isTrained) return 'Q'; // avec Q-table
+      else return 'x'; // sans Q-table
     }
   }
   return '-';
@@ -57,7 +58,10 @@ void Trainer::printHPs(){
   int num_learners = this->learners.size();
   for(int i = 0; i < num_learners; i++){
     hp = this->learners[i]->getHP();
-    std::cout << " -> " << hp << std::endl;
+    if(this->learners[i]->isTrained)
+        std::cout << " -> " << hp <<" (trained)"<<std::endl;
+    else
+        std::cout << " -> " << hp <<" (random)"<<std::endl;
   }
 }
 
@@ -181,7 +185,7 @@ void Trainer::train(){
   std::cout << "...training complete" << std::endl;
 
   // print q-table
-  //qtable->printTable();
+  qtable->printTable();
   //qtable->printTableBestActions();
   qtable->saveTable("test_table");
   //qtable->loadTable("test_table");
@@ -288,6 +292,7 @@ void Trainer::test(Q_table* q_table){
   pos_x = std::rand()%this->width;
   pos_y = std::rand()%this->height;
   Learner* mec_entrainne = new Learner(pos_x, pos_y, qtable);
+  mec_entrainne->isTrained = true;
   mec_entrainne->setBoundaries(this->width, this->height);
   this->learners.push_back(mec_entrainne);
   //  mec 2 :
