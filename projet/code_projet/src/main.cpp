@@ -132,11 +132,11 @@ void interface()
 
     // ajouts d'ennemis
 
-    gameManager->addEnemy(position(2, 5),
-                           DEFAULT_ENEMY_HP, // HP de l'ennemi
-                           mesh, // mesh de l'ennemi
-                           textureEnemy, // texture du joueur
-                           ic::vector3df(131.569, -78.2488, -898.676)); // positions 3D dans le monde 3D du joueur
+    //    gameManager->addEnemy(position(2, 5),
+    //                           DEFAULT_ENEMY_HP, // HP de l'ennemi
+    //                           mesh, // mesh de l'ennemi
+    //                           textureEnemy, // texture du joueur
+    //                           ic::vector3df(131.569, -78.2488, -898.676)); // positions 3D dans le monde 3D du joueur
 
 
 //    gameManager->addEnemy(position(5, 3),

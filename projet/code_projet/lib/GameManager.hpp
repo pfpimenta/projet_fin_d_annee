@@ -35,7 +35,7 @@ class GameManager
     Q_table* qTable;
 
     // pour la hitbox
-    float epsilon = 10;
+    float epsilon = 20;
 
 
 

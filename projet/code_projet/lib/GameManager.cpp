@@ -870,20 +870,40 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 
 void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
-  for (unsigned int k = 0; k < mechant.size(); k++)
-  {
-      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
-      {
-          if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= this->epsilon
-                  &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= this->epsilon
-                  &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= this->epsilon  )
 
-          {
-              isCombat = 1; isPromenade = 0;
-              startCombat(Timer);
-          }
-      }
-  }
+
+    ic::vector3df unePosition(131.569, -78.2488, -898.676);
+
+    if (getPlayer() != NULL) // pour eviter les erreurs de segmentations
+    {
+        if (    (core::abs_(getPlayer()->node->getPosition().X - unePosition.X)) <= this->epsilon
+                &&   (core::abs_(getPlayer()->node->getPosition().Y - unePosition.Y)) <= this->epsilon
+                &&   (core::abs_(getPlayer()->node->getPosition().Z - unePosition.Z)) <= this->epsilon  )
+
+        {
+            isCombat = 1; isPromenade = 0;
+            startCombat(Timer);
+        }
+    }
+
+
+
+//  for (unsigned int k = 0; k < mechant.size(); k++)
+//  {
+//      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
+//      {
+//          if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= this->epsilon
+//                  &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= this->epsilon
+//                  &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= this->epsilon  )
+
+//          {
+//              isCombat = 1; isPromenade = 0;
+//              startCombat(Timer);
+//          }
+//      }
+//  }
+
+
 }
 
 void GameManager::loopCombat(irr::ITimer *Timer){
