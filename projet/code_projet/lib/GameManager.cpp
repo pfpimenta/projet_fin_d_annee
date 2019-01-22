@@ -1193,6 +1193,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         if ( isCombat && !isPromenade )
         {
           this->loopCombat(Timer);
+          if(getPlayer() != NULL) std::cout << "HP Joueur : " << getPlayer()->HP << std::endl;
           if(getEnemy(0) != NULL) std::cout << "HP ennemi[0] : " << getEnemy(0)->HP << std::endl;
           if(getEnemy(1) != NULL) std::cout << "HP ennemi[1] : " << getEnemy(1)->HP << std::endl;
 
