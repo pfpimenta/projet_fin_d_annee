@@ -44,6 +44,9 @@ public:
     //device : correspond exactement au device dans le main
     irr::IrrlichtDevice *device;
 
+    irr::scene::IAnimatedMesh *mesh; //mesh 3D des persos
+    irr::video::ITexture* textureEnemy;
+
     // constructeur
     GameManager(IrrlichtDevice *device);
     GameManager():isCombat(0), isPromenade(1){} // penser a initialiser de la meme facon isCombat & isPromenade dans les 2 constructeurs

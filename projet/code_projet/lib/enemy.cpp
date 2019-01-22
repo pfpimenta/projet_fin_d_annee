@@ -4,7 +4,9 @@
 
 
 // constructeur
-//enemy::enemy(){}
+//enemy::enemy(){
+//    this->attack_force = 15.5;
+//}
 
 
 // constructeur sans model 3D
@@ -19,7 +21,9 @@ enemy::enemy(position p, int HP, int id)
 // constructeur avec model 3D
 enemy::enemy(position p, int HP, irr::scene::ISceneManager *smgr, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture* texture, ic::vector3df pos3D, int id)
     :person(p, HP, smgr, mesh, texture, pos3D, id)
-{}
+{
+     this->attack_force = 15.5;
+}
 
 std::string enemy::personAction(Action act)
 {
@@ -49,6 +53,7 @@ std::string enemy::personAction(Action act)
 
 void enemy::move(QTableAction action)
 {
+    // pas de collision !!!  ne pas utiliser
     switch (action)
     {
         case QUP:

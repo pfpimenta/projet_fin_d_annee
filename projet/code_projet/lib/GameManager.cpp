@@ -834,6 +834,15 @@ void GameManager::startCombat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
+
+    this->addEnemy(position(2, 5),
+                           DEFAULT_ENEMY_HP, // HP de l'ennemi
+                           mesh, // mesh de l'ennemi
+                           textureEnemy, // texture du joueur
+                           getPlayer()->node->getPosition()
+                           + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * 2, 0, -DEFAULT_GRID_NODE_SIZE * 5)); // positions 3D dans le monde 3D du joueur
+
+
     // load  Q table pour les ennemis
     int num_states = getNumStates();
     this->qTable = new Q_table(num_states, NUM_ACTIONS);

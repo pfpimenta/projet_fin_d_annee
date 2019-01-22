@@ -116,7 +116,8 @@ void interface()
     irr::video::ITexture* textureJoueur = driver->getTexture("./data/tris/blue_texture.pcx");
     irr::video::ITexture* textureEnemy = driver->getTexture("./data/tris/red_texture.pcx");
 
-
+    gameManager->mesh = mesh;
+    gameManager->textureEnemy = textureEnemy;
 
 
 
@@ -138,11 +139,11 @@ void interface()
                            ic::vector3df(131.569, -78.2488, -898.676)); // positions 3D dans le monde 3D du joueur
 
 
-    gameManager->addEnemy(position(5, 3),
-                           DEFAULT_ENEMY_HP, // HP de l'ennemi
-                           mesh, // mesh de l'ennemi
-                           textureEnemy, // texture du joueur
-                           ic::vector3df(-DEFAULT_GRID_NODE_SIZE * 5, 0, -DEFAULT_GRID_NODE_SIZE * 3)); // positions 3D dans le monde 3D du joueur
+//    gameManager->addEnemy(position(5, 3),
+//                           DEFAULT_ENEMY_HP, // HP de l'ennemi
+//                           mesh, // mesh de l'ennemi
+//                           textureEnemy, // texture du joueur
+//                           ic::vector3df(-DEFAULT_GRID_NODE_SIZE * 5, 0, -DEFAULT_GRID_NODE_SIZE * 3)); // positions 3D dans le monde 3D du joueur
 
 
 

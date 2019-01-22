@@ -99,7 +99,6 @@ void Agent::setAttackForce(float attackForce){
 float Agent::getAttackForce(){
   return this->attack_force ;
 }
-
 // pos_x
 void Agent::setPosX(int x){
   this->pos_x = x;
