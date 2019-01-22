@@ -812,6 +812,7 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
               {
                   animator(0, 1, this->getEnemy(enemyIndex)->node);
                   this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy up" << std::endl;
               }
           }
           break;
@@ -822,6 +823,7 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
               {
                   animator(0, -1, this->getEnemy(enemyIndex)->node);
                   this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy down" << std::endl;
               }
           }
           break;
@@ -832,6 +834,7 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
               {
                   animator(-1, 0, this->getEnemy(enemyIndex)->node);
                   this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy left" << std::endl;
               }
           }
           break;
@@ -842,17 +845,26 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
               {
                   animator(1, 0, this->getEnemy(enemyIndex)->node);
                   this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy right" << std::endl;
               }
           }
           break;
     case QATTACK:
+          currentAnimationTime = device->getTimer()->getTime();
           attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
+          getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
+          std::cout << "enemy attack" << std::endl;
+
 //          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
 //          if(this->verifyDeadLearners()){
 //            // qqn est mort par cet attaque
 //            this->learners[learnerIndex]->killedSomeone();
 //          }
           break;
+
+
+
+
     default:
           std::cout << "ERROR enemy::move("<<(int)a <<") ne marche pas" << std::endl;
           exit(1);
@@ -1002,6 +1014,11 @@ void GameManager::loopCombat(irr::ITimer *Timer){
 
               // executer l'action:
               this->executerAction(k, a);
+              if (device->getTimer()->getTime() - currentAnimationTime >= 50)
+              {
+                  getEnemy(k)->node->setMD2Animation(is::EMAT_STAND);
+                  getPlayer()->node->setMD2Animation(is::EMAT_STAND);
+              }
             }
         }
       // fin du tour des ennemis
