@@ -26,6 +26,30 @@ bool Trainer::isSomeoneAtPosition(int x, int y){
   return false;
 }
 
+char Trainer::charAtPosition(int x, int y){
+  // retourne un char qui represente ce qui est dans cette position dans la grid
+  int num_learners = this->learners.size();
+  for(int i = 0; i < num_learners; i++){
+    if(x == this->learners[i]->getPosX() && y == this->learners[i]->getPosY()){
+      return 'x';
+    }
+  }
+  return '-';
+}
+
+
+// affichage du grid
+void Trainer::printGrid(){
+	char gridPointChar = ' ';
+	std::cout << "...printing grid:" << std::endl;
+	for(int i = 0; i < this->width; i++){
+		for(int j = 0; j < this->height; j++){
+			gridPointChar = this->charAtPosition(i, j);
+			std::cout << gridPointChar << ' ';
+		}
+		std::cout << std::endl;
+	}
+}
 // affichage des HPs de chaque personnage
 void Trainer::printHPs(){
   float hp;
@@ -116,7 +140,6 @@ void Trainer::train(){
 
     // executer la simulation pour l'aprentissage:
     for( step_count = 0; step_count < max_steps_per_episode && num_learners !=1; step_count ++){
-      //this->step(); // do one step
       this->step(); // do one step
 
       num_learners = learners.size();
@@ -168,60 +191,62 @@ void Trainer::train(){
 void Trainer::step(){
   int num_learners = this->learners.size();
   QTableAction a;
-  int pos_x, pos_y;
-  float attack_damage;
-  int i_closest_enemy, dist_x_pers, dist_y_pers;
-  float hp_pers;
-
   // execution des actions des personnages
   for(int i = 0; i < num_learners; i++){
-
-    // get informations pour choisir l'action
-    i_closest_enemy = this->learners[i]->findClosestEnemy(this->learners);
-    dist_x_pers = this->learners[i_closest_enemy]->getPosX() - this->learners[i]->getPosX();
-    dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[i]->getPosY();
-    hp_pers = this->learners[i_closest_enemy]->getHP();
     // choisir l'action
-    a = this->learners[i]->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
-
-    pos_x = this->learners[i]->getPosX();
-    pos_y = this->learners[i]->getPosY();
-
-    // faire l'action
-    switch(a){
-      case QUP:
-        if(this->isSomeoneAtPosition(pos_x-1, pos_y) == false){
-          this->learners[i]->moveUp();
-        }
-        break;
-      case QDOWN:
-        if(this->isSomeoneAtPosition(pos_x+1, pos_y) == false){
-          this->learners[i]->moveDown();
-        }
-        break;
-      case QLEFT:
-        if(this->isSomeoneAtPosition(pos_x, pos_y-1)== false){
-          this->learners[i]->moveLeft();
-        }
-        break;
-      case QRIGHT:
-        if(this->isSomeoneAtPosition(pos_x, pos_y+1)== false){
-          this->learners[i]->moveRight();
-        }
-        break;
-      case QATTACK:
-        attack_damage = this->learners[i]->getAttackForce();
-        this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
-        if(this->verifyDeadLearners()){
-          // qqn est mort par cet attaque
-          this->learners[i]->killedSomeone();
-        }
-        break;
-      default:
-        break;
-    }
+    a = this->deciderAction(i);
+    this->executerAction(i, a);
   }
+}
 
+void Trainer::executerAction(int learnerIndex, QTableAction a){
+  float attack_damage;
+  int pos_x = this->learners[learnerIndex]->getPosX();
+  int pos_y = this->learners[learnerIndex]->getPosY();
+  // faire l'action
+  switch(a){
+    case QUP:
+      if(this->isSomeoneAtPosition(pos_x-1, pos_y) == false){
+        this->learners[learnerIndex]->moveUp();
+      }
+      break;
+    case QDOWN:
+      if(this->isSomeoneAtPosition(pos_x+1, pos_y) == false){
+        this->learners[learnerIndex]->moveDown();
+      }
+      break;
+    case QLEFT:
+      if(this->isSomeoneAtPosition(pos_x, pos_y-1)== false){
+        this->learners[learnerIndex]->moveLeft();
+      }
+      break;
+    case QRIGHT:
+      if(this->isSomeoneAtPosition(pos_x, pos_y+1)== false){
+        this->learners[learnerIndex]->moveRight();
+      }
+      break;
+    case QATTACK:
+      attack_damage = this->learners[learnerIndex]->getAttackForce();
+      this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
+      if(this->verifyDeadLearners()){
+        // qqn est mort par cet attaque
+        this->learners[learnerIndex]->killedSomeone();
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+// choix et execution de l'action du learner[learnerIndex]
+QTableAction Trainer::deciderAction(int learnerIndex){
+  int i_closest_enemy = this->learners[learnerIndex]->findClosestEnemy(this->learners);
+  int dist_x_pers = this->learners[i_closest_enemy]->getPosX() - this->learners[learnerIndex]->getPosX();
+  int dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[learnerIndex]->getPosY();
+  float hp_pers = this->learners[i_closest_enemy]->getHP();
+  // choisir l'action
+  QTableAction a = this->learners[learnerIndex]->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+  return a;
 }
 
 // mettre les booleans a jour des mecs qui sont morts
@@ -238,6 +263,59 @@ bool Trainer::verifyDeadLearners(){
   }
   return aLearnerDied;
 }
+
+// fonction pour entrainer les Q-tables
+void Trainer::test(Q_table* q_table){
+  //
+  int num_learners;
+  int pos_x; // pos initialle d'un learner
+  int pos_y;
+  // pour la q table qu'on va tester
+  QTableAction action;
+  int num_states = getNumStates();
+  Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
+
+  // generer 2 learners:
+  // 1 avec Q table
+  // et 1 autre avec des actions au hasard
+  num_learners = 2;
+  // clear personnages / learners
+  this->learners.clear();
+
+  //  mec 1 :
+  // positions aleatoires uniques pour chaque mec
+  pos_x = std::rand()%this->width;
+  pos_y = std::rand()%this->height;
+  Learner* mec_entrainne = new Learner(pos_x, pos_y, qtable);
+  mec_entrainne->setBoundaries(this->width, this->height);
+  this->learners.push_back(mec_entrainne);
+  //  mec 2 :
+  // positions aleatoires uniques pour chaque mec
+  do{
+    pos_x = std::rand()%this->width;
+    pos_y = std::rand()%this->height;
+  }while(this->isSomeoneAtPosition(pos_x, pos_y));
+  Learner* mec_random = new Learner(pos_x, pos_y);
+  mec_random->setBoundaries(this->width, this->height);
+  this->learners.push_back(mec_random);
+
+  // loop du combat:
+  while(num_learners !=1){
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
+    this->printGrid();
+    this->printHPs();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
+    // action du mec 1 ( q table )
+    action = this->deciderAction(0);
+    this->executerAction(0, action);
+    // action du mec 2 ( au hasard )
+    action = this->learners[1]->chooseRandomAction();
+    this->executerAction(1, action);
+    num_learners = learners.size();
+  }
+
+}
+
 
 // getters et setters :
 int Trainer::getWidth(){

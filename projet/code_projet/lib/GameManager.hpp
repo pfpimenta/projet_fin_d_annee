@@ -11,19 +11,15 @@
 
 class GameManager
 {
-
     //sceneManager (/!\ different du gameManager)
     irr::scene::ISceneManager *smgr;
-
 
     // joueur (/!\ il y a toujours un seul joueur; meilleure gestion avec un vecteur)
     std::vector<player*> j1;
 
-
     // ennemis
     std::vector<enemy*> mechant;
     std::vector<int> enemyID; // pour bien gerer les ennemis ajoutes
-
 
     // gridMapping (/!\ il y a toujours un seul gridMapping; meilleure gestion avec un vecteur)
     std::vector<gridMapping*> grid;
@@ -35,11 +31,14 @@ class GameManager
     std::vector<scene::ICameraSceneNode*> cameraCombat;
     std::vector<scene::ICameraSceneNode*> cameraJeuLibre;
 
-    // Q table for the ennemis
+    // Q table pour les ennemis
     Q_table* qTable;
 
     // pour la hitbox
     float epsilon = 10;
+
+    // flags pour le combat tour par tour
+    bool playerTurn, ennemysTurn;
 
 
 public:

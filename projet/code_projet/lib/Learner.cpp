@@ -51,7 +51,7 @@ Learner::Learner(int x, int y, Q_table* q_table){
 
 
 // choose action
-QTableAction Learner::chooseAction(){
+QTableAction Learner::chooseRandomAction(){
   QTableAction action;
   // action aleatoire (test)
   int random_variable = std::rand()%5;

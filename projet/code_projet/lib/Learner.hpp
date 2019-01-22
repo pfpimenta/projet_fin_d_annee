@@ -31,7 +31,7 @@ class Learner :  public Agent
 			Learner(int x, int y); // constructeur avec position
 			Learner(int x, int y, Q_table* q_table); // constructeur avec position et Qtable
 			QTableAction chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers);
-			QTableAction chooseAction();
+			QTableAction chooseRandomAction();
 			// return index of the closest mec to this mec
 			int findClosestEnemy(std::vector<Learner*> learners);
 			void die(); // pour bool isDead = true
