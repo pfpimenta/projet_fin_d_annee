@@ -137,9 +137,14 @@ bool GameManager::removeEnemy(int id)
         if (it < enemyID.end())
         {
             auto index = std::distance(enemyID.begin(), it);
-            enemyID.erase(it);
-            mechant[index]->node->remove();
-            mechant.erase(mechant.begin() + index);
+            //enemyID.erase(it);
+            mechant[index]->node->setRotation(core::vector3df(90, 0, 90));
+            if (getPlayer() != NULL) mechant[index]->node->setPosition(core::vector3df(mechant[index]->node->getPosition().X,
+                                                                                       getPlayer()->node->getPosition().Y - 25,
+                                                                                       mechant[index]->node->getPosition().Z));
+
+            //mechant[index]->node->remove();
+            //mechant.erase(mechant.begin() + index);
             std::cout << "... GameManager::removeEnemy() : l'ennemi[" << id << "] retire avec succes ..." << std::endl;
             return 1;
         }
@@ -462,8 +467,10 @@ void GameManager::animPlayer(bool voieLibre, Action act)
 
 
     case ATTACK:
-        for(unsigned int k = 0; k < mechant.size(); k++)
+        //for(unsigned int k = 0; k < mechant.size(); k++)
+        for (auto &k : enemyID)
         {
+            getPlayer()->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
             if(getEnemy(k) != NULL)
             {
                 if(getPlayer()->p.isNear(getEnemy(k)->p))
@@ -493,38 +500,43 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
 
 
     case UP: // haut
-        if (voieLibre)
+        if (voieLibre){
+            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
             animator(0, 1, perso);
-        //animUP(getPlayer()->node);
+        }
         break;
     case DOWN: // bas
         if (voieLibre)
+        {
+            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
             animator(0, -1, perso);
-        //animDOWN(getPlayer()->node);
+        }
         break;
     case RIGHT: // droite
         if (voieLibre)
+        {
+            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
             animator(1, 0, perso);
-        //animRIGHT(getPlayer()->node);
+        }
         break;
     case LEFT: // gauche
         if (voieLibre)
+        {
+            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
             animator(-1, 0, perso);
-        //animLEFT(getPlayer()->node);
+        }
         break;
     case ATTACK: // attack
-
+        getPlayer()->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
         animATTACK(perso);
         break;
 
 
     case NOTHING:
-        if (device->getTimer()->getTime() - currentAnimationTime >= DEFAULT_DUREE_ANIMATION )
-            perso->setMD2Animation(is::EMAT_STAND);
+        perso->setMD2Animation(is::EMAT_STAND);
         break;
     default:
-        if (device->getTimer()->getTime() - currentAnimationTime >= DEFAULT_DUREE_ANIMATION )
-            perso->setMD2Animation(is::EMAT_STAND);
+        perso->setMD2Animation(is::EMAT_STAND);
         break;
     }
 }
@@ -706,7 +718,8 @@ bool GameManager::addMapScene3D()
         if (getPlayer() != NULL) scene->addCollisionToPerson(getPlayer()->node);
 
         // on ajoute une collision aux ennemis s'ils existent
-        for (unsigned int i = 0; i < mechant.size(); i++)
+//        for (unsigned int i = 0; i < mechant.size(); i++)
+        for (auto &i : enemyID)
         {
             if (getEnemy(i) != NULL)
                 scene->addCollisionToPerson(getEnemy(i)->node);
@@ -730,7 +743,8 @@ bool GameManager::removeMapScene3D()
     {
         if (getPlayer() != NULL) getPlayer()->node->removeAnimators();
         // on ajoute une collision aux ennemis s'ils existent
-        for (unsigned int i = 0; i < mechant.size(); i++)
+//        for (unsigned int i = 0; i < mechant.size(); i++)
+        for (auto &i : enemyID)
         {
             if (getEnemy(i) != NULL)
                 getEnemy(i)->node->removeAnimators();
@@ -777,7 +791,8 @@ scene3D *GameManager::getMapScene3D()
 bool GameManager::isSomeoneAtPosition(int ligne, int colonne){
 
 
-    for (unsigned int k = 0; k < mechant.size(); k++)
+//    for (unsigned int k = 0; k < mechant.size(); k++)
+    for (auto &k : enemyID)
     {
         if (getEnemy(k) != NULL)
         {
@@ -818,75 +833,82 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
   //float attack_damage;
 //  int pos_x = this->getEnemy(enemyIndex)->p.colonne; // colonne == x
 //  int pos_y = this->getEnemy(enemyIndex)->p.ligne; // ligne == y
+  position gridPosition(0, 0);
 
-  position gridPosition = this->getEnemy(enemyIndex)->p;
+  if(getEnemy(enemyIndex) != NULL)  gridPosition = this->getEnemy(enemyIndex)->p;
 
   // faire l'action
   switch(a){
     case QUP:
-      gridPosition = gridPosition + position(-1, 0);
-      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-      {
-          animator(0, 1, this->getEnemy(enemyIndex)->node);
-          this->getEnemy(enemyIndex)->p = gridPosition;
-          std::cout << "enemy up" << std::endl;
-      }
-          if(!isSomeoneAtPosition(gridPosition.ligne - 1, gridPosition.colonne)){
-
+          gridPosition = gridPosition + position(-1, 0);
+          if(getEnemy(enemyIndex) != NULL)
+          {
+              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+              {
+                  getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
+                  animator(0, 1, this->getEnemy(enemyIndex)->node);
+                  this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy up" << std::endl;
+              }
           }
           break;
     case QDOWN:
-      gridPosition = gridPosition + position(1, 0);
-      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-      {
-          animator(0, -1, this->getEnemy(enemyIndex)->node);
-          this->getEnemy(enemyIndex)->p = gridPosition;
-          std::cout << "enemy down" << std::endl;
-      }
-          if(!isSomeoneAtPosition(gridPosition.ligne + 1, gridPosition.colonne)){
-
+          gridPosition = gridPosition + position(1, 0);
+          if(getEnemy(enemyIndex) != NULL)
+          {
+              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+              {
+                  getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
+                  animator(0, -1, this->getEnemy(enemyIndex)->node);
+                  this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy down" << std::endl;
+              }
           }
           break;
     case QLEFT:
-      gridPosition = gridPosition + position(0, -1);
-      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-      {
-          animator(-1, 0, this->getEnemy(enemyIndex)->node);
-          this->getEnemy(enemyIndex)->p = gridPosition;
-          std::cout << "enemy left" << std::endl;
-      }
-          if(!isSomeoneAtPosition(gridPosition.ligne, gridPosition.colonne - 1)){
-
+          gridPosition = gridPosition + position(0, -1);
+          if(getEnemy(enemyIndex) != NULL)
+          {
+              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+              {
+                  getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
+                  animator(-1, 0, this->getEnemy(enemyIndex)->node);
+                  this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy left" << std::endl;
+              }
           }
           break;
     case QRIGHT:
-      gridPosition = gridPosition + position(0, 1);
-      if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-      {
-          animator(1, 0, this->getEnemy(enemyIndex)->node);
-          this->getEnemy(enemyIndex)->p = gridPosition;
-          std::cout << "enemy right" << std::endl;
-      }
-          if(!isSomeoneAtPosition(gridPosition.ligne, gridPosition.colonne + 1)){
-
+          gridPosition = gridPosition + position(0, 1);
+          if(getEnemy(enemyIndex) != NULL)
+          {
+              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+              {
+                  getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
+                  animator(1, 0, this->getEnemy(enemyIndex)->node);
+                  this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy right" << std::endl;
+              }
           }
           break;
     case QATTACK:
-          currentAnimationTime = device->getTimer()->getTime();
-          //attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
-          getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
-          std::cout << "enemy attack" << std::endl;
-
-          if(getEnemy(enemyIndex)->p.isNear(getPlayer()->p))
+          if(getEnemy(enemyIndex) != NULL)
           {
-              getPlayer()->HP -= 2;
-          }
+              //attack_damage = this->getEnemy(enemyIndex)->getAttackForce();
+              getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_CROUCH_ATTACK);
+              std::cout << "enemy attack" << std::endl;
 
-//          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
-//          if(this->verifyDeadLearners()){
-//            // qqn est mort par cet attaque
-//            this->learners[learnerIndex]->killedSomeone();
-//          }
+              if(getEnemy(enemyIndex)->p.isNear(getPlayer()->p))
+              {
+                  getPlayer()->HP -= 2;
+              }
+
+              //          this->doDamageAroundPoint(pos_x, pos_y, attack_damage);
+              //          if(this->verifyDeadLearners()){
+              //            // qqn est mort par cet attaque
+              //            this->learners[learnerIndex]->killedSomeone();
+              //          }
+          }
           break;
 
 
@@ -942,7 +964,8 @@ void GameManager::startCombat(irr::ITimer *Timer)
     this->qTable = new Q_table(num_states, NUM_ACTIONS);
     this->qTable->loadTable("test_table");
     // mettre la q table dans tous les ennemis
-    for (unsigned int k = 0; k < mechant.size(); k++)
+    //for (unsigned int k = 0; k < mechant.size(); k++)
+    for (auto &k : enemyID)
     {
         if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
         {
@@ -983,7 +1006,8 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
 
 
 
-//  for (unsigned int k = 0; k < mechant.size(); k++)
+////  for (unsigned int k = 0; k < mechant.size(); k++)
+//    for (auto &k : enemyID)
 //  {
 //      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
 //      {
@@ -1008,7 +1032,42 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   int dist_x_pers, dist_y_pers;
   float hp_pers;
   QTableAction a;
-  // est appellee en loop dans le mode jeu libre
+
+
+
+  // on vire l'ennemi s'il meurt
+  //for (unsigned int k = 0; k < mechant.size(); k++)
+  for (auto &k : enemyID)
+  {
+      if (getEnemy(k) != NULL)
+      {
+          if(getEnemy(k)->HP <= 0)
+          {
+              //getGridMapping()->removeObstacle(getEnemy(k)->p);
+              //getGridMapping()->enemyDied(k);
+              removeEnemy(k);
+              //endCombat.push_back(0); // vide au debut. Le combat fini quand ce vecteur a la meme taille que mechant
+          }
+
+      }
+  }
+
+  // on sort du mode combat s'il n'y a plus d'ennemis
+  if(endCombat.size() == mechant.size())
+  {
+
+//      for (auto &k : enemyID)
+//      {
+//          if (getEnemy(k) != NULL)
+//          {
+//              getEnemy(k)->node->remove();
+//          }
+//      }
+
+      isCombat = 0; isPromenade = 1;
+      startPromenade(Timer);
+  }
+
 
   // DEBUG :
   if(getPlayer()->p == position(0, 3))
@@ -1016,10 +1075,7 @@ void GameManager::loopCombat(irr::ITimer *Timer){
       isCombat = 0; isPromenade = 1;
       startPromenade(Timer);
   }
-  if(getPlayer()->p == position(2, 5))
-  {
-      getPlayer()->HP = DEFAULT_PLAYER_HP / 2;
-  }
+
 
 
   // tour des Ennemi : choisir une action
@@ -1029,31 +1085,39 @@ void GameManager::loopCombat(irr::ITimer *Timer){
 
       device->sleep(1000);
 
-      for (unsigned int k = 0; k < mechant.size(); k++)
+      //for (unsigned int k = 0; k < mechant.size(); k++)
+      for (auto &k : enemyID)
       {
+
           if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
           {
-              // get informations pour choisir l'action
-              dist_x_pers = this->getPlayer()->p.ligne - this->getEnemy(k)->p.ligne;
-              dist_y_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
-              hp_pers = this->getPlayer()->HP;
+              if (getEnemy(k)->HP > 0)
+              {
+                  // get informations pour choisir l'action
+                  dist_x_pers = this->getPlayer()->p.ligne - this->getEnemy(k)->p.ligne;
+                  dist_y_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
+                  hp_pers = this->getPlayer()->HP;
 
-              std::cout << "DEBUG dist_x_pers : " <<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
+                  std::cout << "DEBUG dist_x_pers : " <<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
 
-              // choisir l'action de l'ennemi
-              a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
+                  // choisir l'action de l'ennemi
+                  a = this->getEnemy(k)->chooseAction(dist_x_pers, dist_y_pers, hp_pers);
 
-              std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
+                  std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
 
-              // executer l'action:
-              this->executerAction(k, QATTACK);
-              if (device->getTimer()->getTime() - currentAnimationTime >= 50)
+                  // executer l'action:
+                  this->executerAction(k, QATTACK);
+                  //              if (device->getTimer()->getTime() - currentAnimationTimeEnemy >= 50)
+                  //              {
+                  //                  getEnemy(k)->node->setMD2Animation(is::EMAT_STAND);
+                  //              }
+              }
+              else
               {
                   getEnemy(k)->node->setMD2Animation(is::EMAT_STAND);
-                  getPlayer()->node->setMD2Animation(is::EMAT_STAND);
               }
-            }
-        }
+          }
+      }
       // fin du tour des ennemis
       playerTurn = true;
       ennemysTurn = false;

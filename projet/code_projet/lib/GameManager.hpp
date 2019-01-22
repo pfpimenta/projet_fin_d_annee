@@ -20,6 +20,7 @@ class GameManager
     // ennemis
     std::vector<enemy*> mechant;
     std::vector<int> enemyID; // pour bien gerer les ennemis ajoutes
+    std::vector<int> endCombat; // vide au debut. Le combat fini quand ce vecteur a la meme taille que mechant
 
     // gridMapping (/!\ il y a toujours un seul gridMapping; meilleure gestion avec un vecteur)
     std::vector<gridMapping*> grid;
@@ -87,6 +88,7 @@ public:
     /** Animations **/
     bool isFin = 1;
     int currentAnimationTime;
+    int currentAnimationTimeEnemy;
 
     void animEnemy(int id, bool voieLibre, Action act);
     void animPlayer(bool voieLibre, Action act);
