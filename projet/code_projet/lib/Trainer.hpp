@@ -12,7 +12,7 @@
 #include <vector>
 
 #define DEFAULT_MAX_EPISODES 10000
-#define DEFAULT_STEP_PER_EPISODE 1000
+#define DEFAULT_STEP_PER_EPISODE 10000
 
 
 class Trainer
@@ -29,6 +29,7 @@ class Trainer
       bool verifyDeadLearners();
       void executerAction(int learnerIndex, QTableAction a);
       QTableAction deciderAction(int learnerIndex);
+      void resetLearners(Q_table* qtable);
 	public:
       Trainer(); // constructeur
       Trainer(int w, int h);

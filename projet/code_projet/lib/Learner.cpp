@@ -20,6 +20,7 @@ Learner::Learner(int x, int y){
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
   Q_table q_table = Q_table(); // nombre d'actions et states par default
   this->qTable = &q_table; // nombre d'actions et states par default
+  this->isTrained = false;
   this->lastAction = QUP; // TODO enlever cette ligne
 
   // asserts
@@ -38,6 +39,7 @@ Learner::Learner(int x, int y, Q_table* q_table){
   this->setHP(HP_MAX);
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
   this->qTable = q_table;
+  this->isTrained = false;
   //this->lastAction = UP;
 
   //std::cout<<"DEBUG learner at x, y :"<<pos_x<<" , "<<pos_y<<'\n';
