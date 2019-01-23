@@ -21,6 +21,7 @@ class Trainer
     	int width;
     	int height;
       int num_learners;
+      Q_table* qtable;
       // returns a character according to what is in the point (pos_x, pos_y) :
       char charAtPosition(int x, int y);
       // returns true if there's a learner at (x,y), and false otherwise
@@ -42,6 +43,7 @@ class Trainer
       void printHPs();
       // commence l'entrainement :
       void train();
+      void train_v2(); // version 2
       // pour tester la q-table :
       void test(Q_table* q_table);
       int getWidth();

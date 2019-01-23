@@ -14,8 +14,8 @@
 #define NUM_STATES 100 // changer
 #define NUM_ACTIONS 5 // changer
 #define TAUX_EXPLORATION 0.1 // changer
-#define LEARNING_RATE 0.05 // changer
-#define DISCOUNT_VALUE 0.95 // changer
+#define LEARNING_RATE 0.01 // changer
+#define DISCOUNT_VALUE 0.92 // changer
 
 enum QTableAction {QUP, QDOWN, QLEFT, QRIGHT, QATTACK};
 
@@ -34,6 +34,7 @@ class Q_table
 			Q_table(); // constructeur
 			Q_table(int n_states, int n_actions); // constructeur avec taille variable
 			QTableAction takeAction(int state); // retourne la meilleure action dans un etat donne
+			QTableAction takeActionTraining(int state); // retourne la meilleure action dans un etat donne + exploration
 			void printTable(); // affiche la Q table
 			void printTableBestActions(); // afficher la "meilleure" action pour chaque etat
 			void update_table(int action, int lastState, int currentState, float recompense); // actualise le tableau Q

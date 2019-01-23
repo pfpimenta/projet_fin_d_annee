@@ -100,8 +100,29 @@ void Q_table::update_table(int action, int lastState, int currentState, float re
 
 QTableAction Q_table::takeAction(int state){
 		// retourne le meilleur etat
+		// utilisee dans des tests ou dans le jeu
+    float max_action_score;
+		int action;
 
-    float rand_num = static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
+    // choisir la meilleure action
+		max_action_score = this->q_table[state][0];
+		action = 0;
+		//std::cout << "DEBUG takeAction (state "<<state<<"): ";
+    for(int j = 1; j < this->num_actions; j++){
+			//std::cout << this->q_table[state][j] << ", "; //DEBUG
+			if(this->q_table[state][j] > max_action_score){
+        max_action_score = this->q_table[state][j];
+				action = j;
+			}
+    }
+		//std::cout<< '\n'; // DEBUG
+		return (QTableAction) action;
+}
+
+QTableAction Q_table::takeActionTraining(int state){
+		// retourne le meilleur etat, et parfois explore
+		// utilisee pendant le training
+		float rand_num = static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
     float max_action_score;
 		int action;
 
@@ -109,7 +130,7 @@ QTableAction Q_table::takeAction(int state){
         // choisir la meilleure action
 				max_action_score = this->q_table[state][0];
 				action = 0;
-				//std::cout << "DEBUG takeAction (state "<<state<<"): ";
+				//std::cout << "DEBUG takeActionTraining (state "<<state<<"): ";
         for(int j = 1; j < this->num_actions; j++){
 					//std::cout << this->q_table[state][j] << ", "; //DEBUG
 					if(this->q_table[state][j] > max_action_score){
