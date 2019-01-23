@@ -244,12 +244,16 @@ void Trainer::train(){
   }
   std::cout << "...training complete" << std::endl;
 
-  // print q-table
-  qtable->printTable();
-  qtable->printTableBestActions();
-  //qtable->saveTable("test_table");
-  //qtable->loadTable("test_table");
-  this->test(qtable); // DEBUG
+  // print q-table :
+  //qtable->printTable();
+  //qtable->printTableBestActions();
+
+  // save q-table :
+  qtable->saveTable("test_table");
+  //qtable->loadTable("test_table"); // DEBUG
+  
+  // test q-table :
+  //this->test(qtable); // DEBUG
 }
 
 // avance un tour du jeu
