@@ -264,7 +264,7 @@ public:
     {
         node = device->getSceneManager()->addOctreeSceneNode(mesh_bsp->getMesh(0), nullptr, -1, 1024);
         // Translation pour que nos personnages soient dans le décor
-        node->setPosition(core::vector3df(0,-104,0));
+        node->setPosition(core::vector3df(200, -200, 250));
 
         selector = device->getSceneManager()->createOctreeTriangleSelector(node->getMesh(), node);
         node->setTriangleSelector(selector);

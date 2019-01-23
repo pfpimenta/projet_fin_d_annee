@@ -727,10 +727,13 @@ bool GameManager::addMapScene3D()
 
     if(mapScene3D.size() == 0)
     {
-        scene3D *scene = new scene3D(device, smgr->getMesh("mario.bsp"));
+        scene3D *scene = new scene3D(device, smgr->getMesh("cf.bsp"));
 
         // on ajoute une collision au joueur s'il existe
-        if (getPlayer() != NULL) scene->addCollisionToPerson(getPlayer()->node);
+        if (getPlayer() != NULL)
+        {
+            scene->addCollisionToPerson(getPlayer()->node);
+        }
 
         // on ajoute une collision aux ennemis s'ils existent
 //        for (unsigned int i = 0; i < mechant.size(); i++)
@@ -1275,7 +1278,7 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
         // le joueur perd la moitie de sa vie lorsqu'il valide sa position a la case [2, 5] de la gridMapping
         // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
-        this->epsilon = 10;
+        //this->epsilon = 10;
 
         // durant le mode jeu libre
         if ( !isCombat && isPromenade )

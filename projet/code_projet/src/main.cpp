@@ -107,7 +107,7 @@ void interface()
 
 
     // Ajout de l'archive qui contient entre autres un niveau complet
-    device->getFileSystem()->addFileArchive("./data/maps/mario.pk3");
+    device->getFileSystem()->addFileArchive("./data/maps/cf.pk3");
 
     // chargement du mesh (puisqu'il sera utilise plusieurs fois)
     irr::scene::IAnimatedMesh *mesh = smgr->getMesh("./data/tris/tris.md2");
@@ -127,6 +127,7 @@ void interface()
                            mesh, // mesh du joueur
                            textureJoueur, // texture du joueur
                            ic::vector3df(0, 0, 0)); // positions 3D dans le monde 3D du joueur
+    gameManager->getPlayer()->node->setPosition(ic::vector3df(1290.93, 388.025, -1334.74));
 
 
 
