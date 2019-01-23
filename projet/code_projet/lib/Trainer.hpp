@@ -11,7 +11,7 @@
 #include <cassert>
 #include <vector>
 
-#define DEFAULT_MAX_EPISODES 10000
+#define DEFAULT_MAX_EPISODES 100000
 #define DEFAULT_STEP_PER_EPISODE 10000
 
 
