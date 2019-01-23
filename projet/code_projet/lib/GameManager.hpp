@@ -16,11 +16,11 @@ class GameManager
 
     // joueur (/!\ il y a toujours un seul joueur; meilleure gestion avec un vecteur)
     std::vector<player*> j1;
+    core::vector3df tempPlayer3DPosition;
 
     // ennemis
     std::vector<enemy*> mechant;
     std::vector<int> enemyID; // pour bien gerer les ennemis ajoutes
-    std::vector<int> endCombat; // vide au debut. Le combat fini quand ce vecteur a la meme taille que mechant
 
     // gridMapping (/!\ il y a toujours un seul gridMapping; meilleure gestion avec un vecteur)
     std::vector<gridMapping*> grid;
@@ -126,6 +126,7 @@ public:
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
     // flags pour le combat tour par tour
     bool playerTurn, ennemysTurn, endPlayerTurn;
+    std::vector<bool> allEnemyDead; // pour savoir quand sortir du mode combat
     bool isSomeoneAtPosition(int ligne, int colonne);
     void executerAction(int enemyIndex, QTableAction a);
     void startCombat(irr::ITimer *Timer);

@@ -7,6 +7,8 @@ GameManager::GameManager(irr::IrrlichtDevice *device)
     :device(device), isCombat(0), isPromenade(1)
 {
     smgr = this->device->getSceneManager();
+
+    if (getPlayer() != NULL)tempPlayer3DPosition = getPlayer()->node->getPosition();
 }
 
 
@@ -137,14 +139,20 @@ bool GameManager::removeEnemy(int id)
         if (it < enemyID.end())
         {
             auto index = std::distance(enemyID.begin(), it);
-            //enemyID.erase(it);
+
+
+            enemyID.erase(it);
+
+
             mechant[index]->node->setRotation(core::vector3df(90, 0, 90));
             if (getPlayer() != NULL) mechant[index]->node->setPosition(core::vector3df(mechant[index]->node->getPosition().X,
                                                                                        getPlayer()->node->getPosition().Y - 25,
                                                                                        mechant[index]->node->getPosition().Z));
 
-            //mechant[index]->node->remove();
-            //mechant.erase(mechant.begin() + index);
+            mechant[index]->node->remove();
+            mechant.erase(mechant.begin() + index);
+
+
             std::cout << "... GameManager::removeEnemy() : l'ennemi[" << id << "] retire avec succes ..." << std::endl;
             return 1;
         }
@@ -475,7 +483,15 @@ void GameManager::animPlayer(bool voieLibre, Action act)
             {
                 if(getPlayer()->p.isNear(getEnemy(k)->p))
                 {
-                    getEnemy(k)->HP -= 2;
+                    int damage = 2;
+                    if (getEnemy(k)->HP >=  damage)
+                    {
+                        getEnemy(k)->HP -= damage;
+                    }
+                    else
+                    {
+                        getEnemy(k)->HP = 0;
+                    }
                 }
             }
             animPlayer(0, RESET);
@@ -944,6 +960,7 @@ void GameManager::startCombat(irr::ITimer *Timer)
     ennemysTurn = false;
     endPlayerTurn = false;
 
+    tempPlayer3DPosition = getPlayer()->node->getPosition();
 
     //animation debut combat
     std::vector<iv::ITexture*> fightVector = loadGif(20, L"data/animations/combat/combat", device->getVideoDriver());
@@ -973,6 +990,16 @@ void GameManager::startCombat(irr::ITimer *Timer)
     }
 
 
+    for (unsigned int k = 0; k < mechant.size(); k++ )
+    {
+        allEnemyDead.push_back(0);
+//        if(getEnemy(k) != NULL)
+//        {
+//            if (getEnemy(k)->HP > 0)
+//                allEnemyDead.push_back(false);
+//        }
+    }
+
     // load  Q table pour les ennemis
     int num_states = getNumStates();
     this->qTable = new Q_table(num_states, NUM_ACTIONS);
@@ -994,6 +1021,10 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 {
     isCombat = 0;
     isPromenade = 1;
+
+    // pour reprendre la partie ou on s'est arrete
+    //if(getPlayer() != NULL) getPlayer()->node->setPosition(tempPlayer3DPosition);
+
     removeGridMapping();
     removeCameraCombat();
     addMapScene3D();
@@ -1048,7 +1079,6 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   QTableAction a;
 
 
-
   // on vire l'ennemi s'il meurt
   //for (unsigned int k = 0; k < mechant.size(); k++)
   for (auto &k : enemyID)
@@ -1057,24 +1087,37 @@ void GameManager::loopCombat(irr::ITimer *Timer){
       {
           if(getEnemy(k)->HP <= 0)
           {
-              //getGridMapping()->removeObstacle(getEnemy(k)->p);
-              //getGridMapping()->enemyDied(k);
-              removeEnemy(k);
-              //endCombat.push_back(0); // vide au debut. Le combat fini quand ce vecteur a la meme taille que mechant
+
+              getEnemy(k)->node->setRotation(core::vector3df(90, 0, 90));
+              if (getPlayer() != NULL) getEnemy(k)->node->setPosition(core::vector3df(getEnemy(k)->node->getPosition().X,
+                                                                                         getPlayer()->node->getPosition().Y - 25,
+                                                                                         getEnemy(k)->node->getPosition().Z));
+
+
+              allEnemyDead[k] = 1;
+              //removeEnemy(k);
           }
 
       }
   }
 
+
+  bool finCombat = false;
+  int ctrl = std::accumulate(allEnemyDead.begin(), allEnemyDead.end(), 0);
+  if (ctrl == (int)allEnemyDead.size())
+  {
+      finCombat = true;
+  }
+
   // on sort du mode combat s'il n'y a plus d'ennemis
-  if(endCombat.size() == mechant.size())
+  if(finCombat)
   {
 
       for (auto &k : enemyID)
       {
           if (getEnemy(k) != NULL)
           {
-              getEnemy(k)->node->remove();
+              removeEnemy(k);
           }
       }
 
@@ -1099,6 +1142,7 @@ void GameManager::loopCombat(irr::ITimer *Timer){
               if (getEnemy(k) != NULL)
               {
                   getEnemy(k)->node->remove();
+                  //removeEnemy(k);
               }
           }
           addGameOverScreen();
@@ -1108,6 +1152,16 @@ void GameManager::loopCombat(irr::ITimer *Timer){
   // DEBUG :
   if(getPlayer()->p == position(0, 3))
   {
+
+      for (auto &k : enemyID)
+      {
+          if (getEnemy(k) != NULL)
+          {
+              removeEnemy(k);
+          }
+      }
+
+
       isCombat = 0; isPromenade = 1;
       startPromenade(Timer);
   }

@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 #include <irrlicht/irrlicht.h>
 
@@ -40,7 +41,7 @@ namespace ig = irr::gui;
 
 
 // HP par defaut du joueur
-#define DEFAULT_PLAYER_HP 3
+#define DEFAULT_PLAYER_HP 20
 
 // HP par defaut des ennemis
 #define DEFAULT_ENEMY_HP 4
