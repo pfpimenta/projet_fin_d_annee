@@ -110,11 +110,11 @@ En cours de développement ...
   </br>
   **D** ⇒ déplacement vers la droite
   </br>
-  **SPACE** ⇒ choisir d'attaquer
+  **SPACE** ⇒ Attaquer et passer la main à l'ennemi.
   </br>
-  **A** ⇒ Reset : retour à la position réelle du joueur et annulation des choix à effectuer avant de passer la main à l'ennemi.
+  **A** ⇒ Reset : retour à la position réelle du joueur et annulation des déplacements à effectuer avant de passer la main à l'ennemi.
   </br>
-  **M** ⇒ Valider l'action du joueur (valider le déplacement ou l'attaque du joueur) et passer la main à l'ennemi.
+  **M** ⇒ Valider le déplacement du joueur et passer la main à l'ennemi.
 
 
 * **souris** :

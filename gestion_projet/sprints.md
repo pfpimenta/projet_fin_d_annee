@@ -99,6 +99,25 @@ Ce sprint correspond donc à la réalisation des **étapes 2 & 3 de l'objectif 2
 
 **Date de fin :** Mardi 22 Janvier 2019
 
+- [x] Succès
+- [ ] Échec
+
+### Remarques :
+
+Nous n'avons pas eu de difficultés particulières dans l'accomplissement de ce sprint.
+
+</br>
+
+## Numéro de sprint : 5
+
+### Description :
+
+* Fusionner le code principal avec la dernière version du code de Dylan. et améliorer la Q_table des ennemis pour un meilleur apprentissage.
+
+**Date de début :** Mardi 22 Janvier 2019
+
+**Date de fin :** Jeudi 24 Janvier 2019
+
 - [ ] Succès
 - [ ] Échec
 
