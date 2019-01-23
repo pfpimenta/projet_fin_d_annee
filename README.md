@@ -97,7 +97,7 @@ En cours de développement ...
 #### Comment jouer (touches à appuyer pour les actions):
 
 ##### Mode Combat :
-<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements.png" width="280" height="130"></div>
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements2D.png" width="280" height="130"></div>
 </br>
 
 * **Clavier** :
