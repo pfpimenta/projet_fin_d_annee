@@ -725,6 +725,23 @@ void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
   windowItemRecovered->setVisible(false);
 
 
+
+  // ecran titre (pour commencer le jeu)
+  ecranTitre = gui->addWindow(ic::rect<s32>(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT), false);
+  ecranTitre->setDrawTitlebar(false);
+  ecranTitre->setDraggable(false);
+  iv::ITexture *name = device->getVideoDriver()->getTexture(L"data/menu/ecrantitre.png");
+  iv::ITexture *start = device->getVideoDriver()->getTexture(L"data/menu/startbutton.png");
+  gui->addImage(name, ic::position2d<s32>(0, 0), true, ecranTitre);
+  ig::IGUIButton *startButton = gui->addButton(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
+                                                             DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50), ecranTitre, WINDOW_BUTTON);
+
+  startButton->setUseAlphaChannel(true);
+  startButton->setDrawBorder(false);
+  startButton->setImage(start);
+  startButton->setScaleImage(true);
+
+
 }
 
 
@@ -1262,18 +1279,24 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     createMenu(gui);
     createItemWindow(gui);
 
+
     /** initialisation de la barre de vie du joueur **/
     ig::IGUIImage *hpBox = gui->addImage(ic::rect<s32>(10,25,  0.28 * DEFAULT_SCREEN_WIDTH,40)); hpBox->setScaleImage(true);
     std::vector<iv::ITexture*> hpVector = loadGif(/*nbFrameHp*/60, /*path*/ L"data/perso/hp/health", driver);
+
     if (getPlayer() != NULL)
         hpBox->setImage(hpVector[getPlayer()->HP]);
     else
         hpBox->setImage(hpVector[59]);
 
+    hpBox->setVisible(false);
 
 
-    /** initialisation de la partie **/
-    startPromenade(Timer);
+    /** conditions initiales avant le debut de la partie **/
+    isCombat = 0; isPromenade = 0;
+
+
+
 
     while(device->run())
     {
@@ -1283,52 +1306,73 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         smgr->drawAll();
         gui->drawAll();
 
+//        std::cout << "startGame : " << (int)startGame << std::endl;
+//        std::cout << "isCombat : " << (int)isCombat << std::endl;
+//        std::cout << "isPromenade : " << (int)isPromenade << std::endl;
 
 
-        if(getPlayer() != NULL) std::cout << "positions Joueur : x = " << getPlayer()->node->getPosition().X
-                                          << ", " << getPlayer()->node->getPosition().Y
-                                           << ", " << getPlayer()->node->getPosition().Z
-                                           << std::endl;
-
-
-        // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
-        // le joueur perd la moitie de sa vie lorsqu'il valide sa position a la case [2, 5] de la gridMapping
-        // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
-        //this->epsilon = 10;
-
-        // durant le mode jeu libre
-        if ( !isCombat && isPromenade )
+        if (startGame)
         {
-          this->loopPromenade(Timer);
-        }
-        // durant le mode combat
-        if ( isCombat && !isPromenade )
-        {
-          this->loopCombat(Timer);
-          if(getPlayer() != NULL) std::cout << "HP Joueur : " << getPlayer()->HP << std::endl;
-          if(getEnemy(0) != NULL) std::cout << "HP ennemi[0] : " << getEnemy(0)->HP << std::endl;
-          if(getEnemy(1) != NULL) std::cout << "HP ennemi[1] : " << getEnemy(1)->HP << std::endl;
+
+
+            /** initialisation de la partie quand on appuie sur start **/
+            if (!isCombat && !isPromenade)
+            {
+                ecranTitre->remove();
+                hpBox->setVisible(true);
+                isCombat = 0; isPromenade = 1;
+                startPromenade(Timer);
+            }
+
+            if(getPlayer() != NULL) std::cout << "positions Joueur : x = " << getPlayer()->node->getPosition().X
+                                              << ", " << getPlayer()->node->getPosition().Y
+                                              << ", " << getPlayer()->node->getPosition().Z
+                                              << std::endl;
+
+
+            // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
+            // le joueur perd la moitie de sa vie lorsqu'il valide sa position a la case [2, 5] de la gridMapping
+            // le jeu rebascule en mode jeu libre lorsqu'on valide la position du joueur a la case [0, 3] de la gridMapping
+            //this->epsilon = 10;
+
+            // durant le mode jeu libre
+            if ( !isCombat && isPromenade)
+            {
+                this->loopPromenade(Timer);
+            }
+            // durant le mode combat
+            if ( isCombat && !isPromenade)
+            {
+                this->loopCombat(Timer);
+                if(getPlayer() != NULL) std::cout << "HP Joueur : " << getPlayer()->HP << std::endl;
+                if(getEnemy(0) != NULL) std::cout << "HP ennemi[0] : " << getEnemy(0)->HP << std::endl;
+                if(getEnemy(1) != NULL) std::cout << "HP ennemi[1] : " << getEnemy(1)->HP << std::endl;
+
+            }
+
+            /** DO NOT EDIT **/
+
+            // pour que les cameras aient la bonne target
+            if (getCameraJeuLibre() != NULL)
+                getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
+
+            // faire clignoter le curseur
+            if (getGridMapping() != NULL)
+                getGridMapping()->makeCurseurBlink(true);
+
+            // actualise la barre de vie en fonction du nombre de HP restant du joueur
+            if (getPlayer() != NULL)
+                hpBox->setImage(hpVector[getPlayer()->HP]);
+            /** *********** **/
 
         }
 
-        /** DO NOT EDIT **/
 
-        // pour que les cameras aient la bonne target
-        if (getCameraJeuLibre() != NULL)
-            getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
-
-        // faire clignoter le curseur
-        if (getGridMapping() != NULL)
-            getGridMapping()->makeCurseurBlink(true);
-
-        // actualise la barre de vie en fonction du nombre de HP restant du joueur
-        if (getPlayer() != NULL)
-            hpBox->setImage(hpVector[getPlayer()->HP]);
 
         device->getVideoDriver()->endScene();
 
 
-        /** *********** **/
+
 
     }
 

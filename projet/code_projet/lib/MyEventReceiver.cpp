@@ -19,6 +19,16 @@ bool MyEventReceiver::OnEvent(const irr::SEvent &event)
 
     /********** Clavier et souris ***********/
 
+    /** A l'ecran titre **/
+    if (!gmngr->isPromenade && !gmngr->isCombat)
+    {
+        switch (event.EventType)
+        {
+            case irr::EET_GUI_EVENT:
+              return gui_manage(event);
+            default:;
+        }
+    }
 
     /** Durant le mode combat **/
     if (gmngr->isCombat && !gmngr->isPromenade)
@@ -342,63 +352,30 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                                                                                " \n FOLETTO PIMENTA Pédro,"
                                                                                " \n KUASSIVI Cédric,"
                                                                                " \n TOSTI Dylan");
-            break;
-
-
-            case ig::EGET_BUTTON_CLICKED:
-                id2 = event.GUIEvent.Caller->getID();
-                if (id2 == WINDOW_BUTTON)
-                {
-                    start = true;
-                }
-                if (id2 == ITEM_1)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.4;
-                }
-                if (id2 == ITEM_2)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.4;
-                }
-                if (id2 == ITEM_3)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.4;
-                }
-                if (id2 == ITEM_4)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.4;
-                }
-                if (id2 == ITEM_5)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.65;
-                }
-                if (id2 == ITEM_6)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.65;
-                }
-                if (id2 == ITEM_7)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                    gainHp = 0.90;
-                }
-                if (id2 == ITEM_8)
-                {
-                    window->getElementFromId(id2)->setVisible(false);
-                }
-
-              break;
-
+                break;
             default:;
         }
 
         break;
 
-    default:;
+
+      case ig::EGET_BUTTON_CLICKED:
+
+          id2 = event.GUIEvent.Caller->getID();
+
+          switch(id2)
+          {
+              case WINDOW_BUTTON:
+                  gmngr->startGame = true;
+                  //std::cout << "ok" << std::endl;
+                  break;
+
+              default:;
+          }
+
+          break;
+
+        default:;
 
   }
   return false;
