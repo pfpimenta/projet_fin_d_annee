@@ -713,8 +713,18 @@ void GameManager::createMenu(ig::IGUIEnvironment *gui)
 void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
 {
   // La fenetre des items
-  itemWindow = gui->addWindow(ic::rect<s32>(420,25, 620,460), false, L"items");
+  itemWindow = gui->addWindow(ic::rect<s32>(10, 70, DEFAULT_SCREEN_WIDTH - 10, DEFAULT_SCREEN_HEIGHT - 30), false, L"items");
+  itemWindow->setDraggable(false);
+  itemWindow->setDrawTitlebar(false);
+  iv::ITexture *fondItem = device->getVideoDriver()->getTexture(L"data/potions/fondItem.png");
+  gui->addImage(fondItem, ic::position2d<s32>(0, 0), true, itemWindow);
   itemWindow->setVisible(false);
+
+  //fenetre a afficher quand un item  est recupere
+  windowItemRecovered = gui->addMessageBox(L"", L"Vous obtenez une potion");
+  windowItemRecovered->setVisible(false);
+
+
 }
 
 

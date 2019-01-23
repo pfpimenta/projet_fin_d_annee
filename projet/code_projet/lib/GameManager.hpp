@@ -104,7 +104,8 @@ public:
 
 
     /** fonctions utiles pour la scene 3D **/
-    ig::IGUIWindow *itemWindow;
+    ig::IGUIWindow *itemWindow; //fenetre des items (inventaire)
+    ig::IGUIWindow *windowItemRecovered; //fenetre a afficher quand un item  est recupere
     std::vector<iv::ITexture*> loadGif(int nbFrame, std::wstring nomGeneral, iv::IVideoDriver *driver); // charge un gif
     void playVideo(std::vector<iv::ITexture*> frameVector, int nbFrame, ig::IGUIImage *box, IrrlichtDevice *device); // lire une video
     void createMenu(ig::IGUIEnvironment *gui); // creer le menu
