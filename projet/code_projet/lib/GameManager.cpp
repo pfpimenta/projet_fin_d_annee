@@ -781,7 +781,11 @@ scene3D *GameManager::getMapScene3D()
 
 /** game over screen **/
 void GameManager::addGameOverScreen()
-{}
+{
+    ig::IGUIImage *gameOverBox = device->getGUIEnvironment()->addImage(ic::rect<s32>(0, 0,  DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)); gameOverBox->setScaleImage(true);
+    irr::video::ITexture *gameOverText = device->getVideoDriver()->getTexture("./data/maps/gameOver.png");
+    gameOverBox->setImage(gameOverText);
+}
 
 
 
