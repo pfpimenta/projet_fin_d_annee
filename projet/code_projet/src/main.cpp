@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 // entrainement des ennemis
 void mode_train()
 {
-  Trainer* trainer = new Trainer(7, 7);
+  Trainer* trainer = new Trainer(10, 15);
   trainer->train();
 }
 
