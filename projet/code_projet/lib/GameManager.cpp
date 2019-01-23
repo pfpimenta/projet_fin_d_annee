@@ -1196,7 +1196,7 @@ void GameManager::loopCombat(irr::ITimer *Timer){
                   std::cout << "DEBUG combat action("<<k<<") " <<(int)a<< '\n';
 
                   // executer l'action:
-                  this->executerAction(k, QATTACK);
+                  this->executerAction(k, a);
                   //              if (device->getTimer()->getTime() - currentAnimationTimeEnemy >= 50)
                   //              {
                   //                  getEnemy(k)->node->setMD2Animation(is::EMAT_STAND);
