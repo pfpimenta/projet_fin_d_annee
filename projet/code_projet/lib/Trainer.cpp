@@ -29,8 +29,8 @@ bool Trainer::isSomeoneAtPosition(int x, int y){
 
 char Trainer::charAtPosition(int x, int y){
   // retourne un char qui represente ce qui est dans cette position dans la grid
-  int num_learners = this->learners.size();
-  for(int i = 0; i < num_learners; i++){
+  this->num_learners = this->learners.size();
+  for(int i = 0; i < this->num_learners; i++){
     if(x == this->learners[i]->getPosX() && y == this->learners[i]->getPosY()){
       if(this->learners[i]->isTrained) return 'Q'; // avec Q-table
       else return 'x'; // sans Q-table
@@ -38,7 +38,6 @@ char Trainer::charAtPosition(int x, int y){
   }
   return '-';
 }
-
 
 // affichage du grid
 void Trainer::printGrid(){
@@ -56,8 +55,8 @@ void Trainer::printGrid(){
 void Trainer::printHPs(){
   float hp;
   std::cout << "...printing HPs:" << std::endl;
-  int num_learners = this->learners.size();
-  for(int i = 0; i < num_learners; i++){
+  this->num_learners = this->learners.size();
+  for(int i = 0; i < this->num_learners; i++){
     hp = this->learners[i]->getHP();
     if(this->learners[i]->isTrained)
         std::cout << " -> " << hp <<" (trained)"<<std::endl;
@@ -83,22 +82,9 @@ void Trainer::doDamageAroundPoint(int x, int y, float attack_damage){
   }
 }
 
-// fonction pour entrainer les Q-tables
-void Trainer::train(){
-  // executes the training of the Q tables
-  // without showing on screen
-
-  std::srand(std::time(nullptr)); // use current time as seed for random generator
-
-  // un episode est un jeu avec (max_steps_per_episode) steps
-  int max_episodes = DEFAULT_MAX_EPISODES;
-  int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
-
-  int num_learners;
-  int pos_x; // pos initialle d'un learner
-  int pos_y;
+// fonction pour faire le update de la QTable
+void Trainer::updateTable( int step_count){
   int i_closest_enemy; // index
-
   // informations pour le state
   int dist_x_pers;
   int dist_y_pers;
@@ -109,73 +95,84 @@ void Trainer::train(){
   QTableAction action;
   float reward = 0.0f;
 
-  // table qu'on va entrainer
+  for(int learnerIndex = 0; learnerIndex < this->num_learners; learnerIndex++){
+      // calculate state information :
+      // find closest mec :
+      //i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
+      i_closest_enemy = this->learners[learnerIndex]->findClosestEnemy(this->learners);
+      dist_x_pers = this->learners[i_closest_enemy]->getPosX() - this->learners[learnerIndex]->getPosX();
+      dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[learnerIndex]->getPosY();
+      hp_soi = this->learners[learnerIndex]->getHP();
+      hp_pers = this->learners[i_closest_enemy]->getHP();
+      // get action, state, lastState, and reward   to update Q-table
+      action = this->learners[learnerIndex]->getLastAction();
+      currentState = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+      //std::cout << "DEBUG state: "<< state << std::endl;
+      if(step_count!=0){
+        lastState = this->learners[learnerIndex]->getLastState();
+        reward = this->learners[learnerIndex]->getReward();
+        //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
+        // actualise le tableau Q
+        this->learners[learnerIndex]->getQTable()->update_table(action, lastState, currentState, reward);
+      }
+      // set lastState
+      this->learners[learnerIndex]->setLastState(currentState);
+  }
+}
+
+// efface tous les learners et genere entre 2 et 5 learners au hasard
+void Trainer::resetLearners(Q_table* qtable){
+  //int num_learners;
+  int pos_x; // pos initialle d'un learner
+  int pos_y;
+
+  // reset personnages / learners
+  this->learners.clear();
+  // generer entre 2 et 5 learners au hasard
+  // (a chaque episode il y a un nombre
+  // different de learners pendant le training)
+  this->num_learners = 2 + std::rand()%4;
+  for(int i = 0; i < this->num_learners; i++){
+    // positions aleatoires uniques pour chaque mec
+    do{
+      pos_x = std::rand()%this->width;
+      pos_y = std::rand()%this->height;
+    }while(this->isSomeoneAtPosition(pos_x, pos_y));
+    Learner* new_learner = new Learner(pos_x, pos_y, qtable);
+    new_learner->setBoundaries(this->width, this->height);
+    this->learners.push_back(new_learner);
+  }
+}
+
+
+// fonction pour entrainer les Q-tables
+void Trainer::train(){
+  // executes the training of the Q tables
+  // without showing on screen
+
+  std::srand(std::time(nullptr)); // use current time as seed for random generator
+
+  // un episode est un jeu avec (max_steps_per_episode) steps : 
+  int max_episodes = DEFAULT_MAX_EPISODES;
+  int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
+  // table qu'on va entrainer :
   int num_states = getNumStates();
   Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
 
-
   int episode_count, step_count;
   for( episode_count = 0; episode_count < max_episodes; episode_count ++){
+
     // reset personnages / learners
-    this->learners.clear();
-    // generer entre 2 et 5 learners au hasard
-    // (a chaque episode il y a un nombre
-    // different de learners pendant le training)
-    num_learners = 2 + std::rand()%4;
-    for(int i = 0; i < num_learners; i++){
-      // positions aleatoires uniques pour chaque mec
-      do{
-        pos_x = std::rand()%this->width;
-        pos_y = std::rand()%this->height;
-      }while(this->isSomeoneAtPosition(pos_x, pos_y));
-      Learner* new_learner = new Learner(pos_x, pos_y, qtable);
-      new_learner->setBoundaries(this->width, this->height);
-      this->learners.push_back(new_learner);
-    }
-
-
-
-    // reset autre chose de la grid? TODO ?
+    this->resetLearners(qtable);
+    this->num_learners = learners.size(); //update num_learners
 
     // executer la simulation pour l'aprentissage:
     for( step_count = 0; step_count < max_steps_per_episode && num_learners !=1; step_count ++){
-      this->step(); // do one step
-
-
-      num_learners = learners.size();
-      // update q tables for all personnages / learners
-      for(int i = 0; i < num_learners; i++){
-
-      	// calculate state information :
-        // find closest mec :
-        //i_closest_enemy = this->findClosestEnemy(learners[i]->pos_x,learners[i]->pos_y);
-        i_closest_enemy = this->learners[i]->findClosestEnemy(this->learners);
-        dist_x_pers = this->learners[i_closest_enemy]->getPosX() - this->learners[i]->getPosX();
-        dist_y_pers = this->learners[i_closest_enemy]->getPosY() - this->learners[i]->getPosY();
-      	hp_soi = this->learners[i]->getHP();
-      	hp_pers = this->learners[i_closest_enemy]->getHP();
-        // get action, state, lastState, and reward   to update Q-table
-        action = this->learners[i]->getLastAction();
-        currentState = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
-        //std::cout << "DEBUG state: "<< state << std::endl;
-        if(step_count!=0){
-          lastState = this->learners[i]->getLastState();
-          reward = this->learners[i]->getReward();
-          //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
-          // actualise le tableau Q
-          this->learners[i]->getQTable()->update_table(action, lastState, currentState, reward);
-        }
-        // set lastState
-        this->learners[i]->setLastState(currentState);
-
-        if(learners[i]->isDead()){
-            // effacer du vecteur :
-            this->learners.erase(this->learners.begin()+i);
-            // ajuster index et num_learners :
-            i--;
-            num_learners--;
-        }
-      }
+      // do one step
+      this->step();
+      this->num_learners = learners.size(); //update num_learners
+      this->updateTable(step_count);
+      this->eraseDeadLearners();
     }
   }
   std::cout << "...training complete" << std::endl;
@@ -183,17 +180,17 @@ void Trainer::train(){
   // print q-table
   qtable->printTable();
   qtable->printTableBestActions();
-  qtable->saveTable("test_table");
+  //qtable->saveTable("test_table");
   //qtable->loadTable("test_table");
-  //this->test(qtable); // DEBUG
+  this->test(qtable); // DEBUG
 }
 
 // avance un tour du jeu
 void Trainer::step(){
-  int num_learners = this->learners.size();
+  this->num_learners = this->learners.size();
   QTableAction a;
   // execution des actions des personnages
-  for(int i = 0; i < num_learners; i++){
+  for(int i = 0; i < this->num_learners; i++){
     // choisir l'action
     a = this->deciderAction(i);
     this->executerAction(i, a);
@@ -265,10 +262,23 @@ bool Trainer::verifyDeadLearners(){
   return aLearnerDied;
 }
 
+// erase dead learners from the learners vector
+void Trainer::eraseDeadLearners(){
+  for(int i = 0; i < this->num_learners; i++){
+    if(learners[i]->isDead()){
+        // effacer du vecteur :
+        this->learners.erase(this->learners.begin()+i);
+        // ajuster index et num_learners :
+        i--;
+        this->num_learners--;
+    }
+  }
+}
+
 // fonction pour entrainer les Q-tables
 void Trainer::test(Q_table* q_table){
   //
-  int num_learners;
+  //int num_learners;
   int pos_x; // pos initialle d'un learner
   int pos_y;
   // pour la q table qu'on va tester
@@ -279,7 +289,7 @@ void Trainer::test(Q_table* q_table){
   // generer 2 learners:
   // 1 avec Q table
   // et 1 autre avec des actions au hasard
-  num_learners = 2;
+  this->num_learners = 2;
   // clear personnages / learners
   this->learners.clear();
 
@@ -302,7 +312,7 @@ void Trainer::test(Q_table* q_table){
   this->learners.push_back(mec_random);
 
   // loop du combat:
-  while(num_learners !=1){
+  while(this->num_learners !=1){
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
     this->printGrid();
     this->printHPs();
@@ -313,7 +323,7 @@ void Trainer::test(Q_table* q_table){
     // action du mec 2 ( au hasard )
     action = this->learners[1]->chooseRandomAction();
     this->executerAction(1, action);
-    num_learners = learners.size();
+    this->num_learners = learners.size();
   }
 
 }

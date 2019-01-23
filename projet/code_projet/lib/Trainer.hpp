@@ -20,6 +20,7 @@ class Trainer
       std::vector<Learner*> learners;
     	int width;
     	int height;
+      int num_learners;
       // returns a character according to what is in the point (pos_x, pos_y) :
       char charAtPosition(int x, int y);
       // returns true if there's a learner at (x,y), and false otherwise
@@ -27,9 +28,11 @@ class Trainer
       void step();
       void doDamageAroundPoint(int x, int y, float attack_damage);
       bool verifyDeadLearners();
+      void eraseDeadLearners();
       void executerAction(int learnerIndex, QTableAction a);
       QTableAction deciderAction(int learnerIndex);
       void resetLearners(Q_table* qtable);
+      void updateTable(int step_count);
 	public:
       Trainer(); // constructeur
       Trainer(int w, int h);
