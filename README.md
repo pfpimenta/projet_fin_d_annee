@@ -57,7 +57,7 @@ En cours de développement ...
   _Remarque : Si vous souhaitez compiler le code juste pour le tester, il est conseillé d'utiliser la méthode 2 (utilisation du makefile fourni).
   Si vous souhaitez modifier le code et tester les modifications, il est conseillé d'utiliser Qt pour lancer le CMakeLists.txt fourni (méthode 1.2)._
 
-  _Il est également possible de passer en argument lors de l'exécution du code la chîne de caractère "train" ( `$ ./projetFA train` ) ce qui a pour effet d'entraîner les ennemis et de générer un nouveau fichier test__table.txt qui servira de LUT pour la gestion du choix des actions de l'ennemi en fonction de son état._
+  _Il est également possible de passer en argument lors de l'exécution du code la chîne de caractère "train" ( `$ ./projetFA train` ) ce qui a pour effet d'entraîner les ennemis et de générer un nouveau fichier q__table.txt qui servira de LUT pour la gestion du choix des actions de l'ennemi en fonction de son état._
 
 
 1. Avec le CMakeLists.txt :
