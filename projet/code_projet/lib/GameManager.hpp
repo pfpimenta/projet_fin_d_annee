@@ -43,6 +43,7 @@ class GameManager
 
 public:
     core::vector3df tempPlayer3DPosition; // position a laquelle revient le joueur apres etre sorti du mode combat
+    core::vector3df tempPlayer3DRotation; // position a laquelle revient le joueur apres etre sorti du mode combat
 
     //device : correspond exactement au device dans le main
     irr::IrrlichtDevice *device;

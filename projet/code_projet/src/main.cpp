@@ -130,7 +130,7 @@ void interface()
                            ic::vector3df(0, 0, 0)); // positions 3D dans le monde 3D du joueur
     gameManager->getPlayer()->node->setPosition(ic::vector3df(1290.93, 388.025, -1334.74));
     gameManager->tempPlayer3DPosition = gameManager->getPlayer()->node->getPosition();
-
+    gameManager->tempPlayer3DRotation = gameManager->getPlayer()->node->getRotation();
 
 
     // ajouts d'ennemis

@@ -41,10 +41,10 @@ namespace ig = irr::gui;
 
 
 // HP par defaut du joueur
-#define DEFAULT_PLAYER_HP 5
+#define DEFAULT_PLAYER_HP 59
 
 // HP par defaut des ennemis
-#define DEFAULT_ENEMY_HP 4
+#define DEFAULT_ENEMY_HP 29
 
 // duree par defaut d'une animation de mouvement (UP, DOWN etc...)
 #define DEFAULT_DUREE_ANIMATION 141

@@ -318,7 +318,7 @@ bool GameManager::addCameraCombat()
                 camera->setPosition(camCombatPosition + translationCamCombat);
 
                 irr::core::vector3df target(getGridMapping()->myGrid->getGridNode(0)->getPosition().X + DEFAULT_GRID_NODE_SIZE * DEFAULT_HEIGHT/2,
-                                          0,
+                                          getGridMapping()->myGrid->getGridNode(0)->getPosition().Y,
                                           (getGridMapping()->myGrid->getGridNode(0)->getPosition().Z - DEFAULT_GRID_NODE_SIZE * DEFAULT_WIDTH/2));
 
                 camera->setTarget(target);
@@ -993,6 +993,7 @@ void GameManager::startCombat(irr::ITimer *Timer)
     endPlayerTurn = false;
 
     tempPlayer3DPosition = getPlayer()->node->getPosition();
+    tempPlayer3DRotation = getPlayer()->node->getRotation();
 
     //animation debut combat
     std::vector<iv::ITexture*> fightVector = loadGif(20, L"data/animations/combat/combat", device->getVideoDriver());
@@ -1007,8 +1008,15 @@ void GameManager::startCombat(irr::ITimer *Timer)
 
     // ajout d'ennemis
     std::vector<position> enemyPos;
-    enemyPos.push_back(position(2, 5));
-    enemyPos.push_back(position(4, 8));
+    position p1(alea(1, DEFAULT_HEIGHT - 1), alea(DEFAULT_WIDTH/2, DEFAULT_WIDTH - 1));
+    position p2(alea(1, DEFAULT_HEIGHT - 1), alea(DEFAULT_WIDTH/2, DEFAULT_WIDTH - 1));
+    while (p1 == p2)
+    {
+        p2 = position(alea(1, DEFAULT_HEIGHT - 1), alea(DEFAULT_WIDTH/2, DEFAULT_WIDTH - 1));
+    }
+
+    enemyPos.push_back(p1);
+    enemyPos.push_back(p2);
 
     for (unsigned int k = 0; k < enemyPos.size(); k++)
     {
@@ -1055,7 +1063,12 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     isPromenade = 1;
 
     // pour reprendre la partie ou on s'est arrete
-    if(getPlayer() != NULL) getPlayer()->node->setPosition(tempPlayer3DPosition);
+    if(getPlayer() != NULL)
+    {
+        getPlayer()->node->setPosition(tempPlayer3DPosition);
+        getPlayer()->node->setRotation(tempPlayer3DRotation);
+    }
+
 
     removeGridMapping();
     removeCameraCombat();
