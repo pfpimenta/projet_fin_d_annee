@@ -23,33 +23,6 @@ struct MyEventReceiver : irr::IEventReceiver
     bool isOpened = true;
 
 
-
-
-    irr::gui::IGUIEnvironment *gui;
-    irr::scene::ISceneNode *node;
-    irr::gui::IGUIWindow *window;
-    bool start = false;
-    bool interact = false;
-    float gainHp = 0;
-
-
-
-
-    void set_gui(irr::gui::IGUIEnvironment *g);
-    void set_node(irr::scene::ISceneNode *n);
-    void set_window(irr::gui::IGUIWindow *w);
-    bool get_start();
-    bool get_interact();
-    int applyGainHp(int hp, int hpMax);
-
-
-
-
-
-
-
-
-
     // le gameManager pour pouvoir utiliser directement les touches du clavier pour declencher
     // des fonctions de gmngr
     GameManager *gmngr = new GameManager;

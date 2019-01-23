@@ -267,7 +267,6 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
         else if(!event.KeyInput.PressedDown)
         {
             isMoving = 0;
-            interact = false;
         }
 
         if (isMoving == 1)
@@ -381,62 +380,3 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
   return false;
 }
 
-
-
-
-
-
-
-/**************************************************************************\
- * MyEventReceiver::set_node                                                *
-\**************************************************************************/
-void MyEventReceiver::set_node(irr::scene::ISceneNode *n)
-{
-  node = n;
-}
-
-/**************************************************************************\
- * MyEventReceiver::set_gui                                                 *
-\**************************************************************************/
-void MyEventReceiver::set_gui(irr::gui::IGUIEnvironment *g)
-{
-  gui = g;
-}
-
-/*===========================================================================*\
- * set_window for items                                                      *
-\*===========================================================================*/
-void MyEventReceiver::set_window(ig::IGUIWindow *w)
-{
-  window = w;
-}
-
-/*===========================================================================*\
- * get_start game                                                    *
-\*===========================================================================*/
-bool MyEventReceiver::get_start()
-{
-  return start;
-}
-
-/*===========================================================================*\
- * get hp++                                                                  *
-\*===========================================================================*/
-int MyEventReceiver::applyGainHp(int hp, int hpMax)
-{
-
-  hp += gainHp*(float)(hpMax - hp);
-  gainHp = 0;
-
-  return hp;
-}
-
-/*===========================================================================*\
- * get if interaction                                                        *
-\*===========================================================================*/
-bool MyEventReceiver::get_interact()
-{
-  bool interaction = interact;
-  interact = false;
-  return interaction;
-}
