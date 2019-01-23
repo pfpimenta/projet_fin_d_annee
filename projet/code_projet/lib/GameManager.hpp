@@ -16,7 +16,7 @@ class GameManager
 
     // joueur (/!\ il y a toujours un seul joueur; meilleure gestion avec un vecteur)
     std::vector<player*> j1;
-    core::vector3df tempPlayer3DPosition;
+
 
     // ennemis
     std::vector<enemy*> mechant;
@@ -42,6 +42,8 @@ class GameManager
 
 
 public:
+    core::vector3df tempPlayer3DPosition; // position a laquelle revient le joueur apres etre sorti du mode combat
+
     //device : correspond exactement au device dans le main
     irr::IrrlichtDevice *device;
 
@@ -117,7 +119,8 @@ public:
 
 
     /** map 3D **/
-    bool addMapScene3D();
+    is::IAnimatedMesh *mesh_bsp;
+    bool addMapScene3D(scene::IAnimatedMesh *mesh_bsp);
     bool removeMapScene3D();
     scene3D *getMapScene3D();
 

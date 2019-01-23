@@ -749,12 +749,11 @@ void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
 
 
 /** map 3D **/
-bool GameManager::addMapScene3D()
+bool GameManager::addMapScene3D(is::IAnimatedMesh *mesh_bsp)
 {
-
     if(mapScene3D.size() == 0)
     {
-        scene3D *scene = new scene3D(device, smgr->getMesh("cf.bsp"));
+        scene3D *scene = new scene3D(device, mesh_bsp);
 
         // on ajoute une collision au joueur s'il existe
         if (getPlayer() != NULL)
@@ -1056,11 +1055,11 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     isPromenade = 1;
 
     // pour reprendre la partie ou on s'est arrete
-    //if(getPlayer() != NULL) getPlayer()->node->setPosition(tempPlayer3DPosition);
+    if(getPlayer() != NULL) getPlayer()->node->setPosition(tempPlayer3DPosition);
 
     removeGridMapping();
     removeCameraCombat();
-    addMapScene3D();
+    addMapScene3D(mesh_bsp);
     addCameraJeuLibre();
 }
 
@@ -1068,37 +1067,32 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
 
 
-    ic::vector3df unePosition(967.692, 337.751, -1187.54);
+    // combat aleatoire
+    float probaFight = 0.0005;
+    float randNum = (float)rand() / (float)RAND_MAX;
 
-    if (getPlayer() != NULL) // pour eviter les erreurs de segmentations
+    if ( randNum < probaFight )
+
     {
-        if (    (core::abs_(getPlayer()->node->getPosition().X - unePosition.X)) <= this->epsilon
-                &&   (core::abs_(getPlayer()->node->getPosition().Y - unePosition.Y)) <= this->epsilon
-                &&   (core::abs_(getPlayer()->node->getPosition().Z - unePosition.Z)) <= this->epsilon  )
-
-        {
-            isCombat = 1; isPromenade = 0;
-            startCombat(Timer);
-        }
+        isCombat = 1; isPromenade = 0;
+        startCombat(Timer);
     }
 
+    //    ic::vector3df unePosition(967.692, 337.751, -1187.54);
+
+    //    if (getPlayer() != NULL) // pour eviter les erreurs de segmentations
+    //    {
+    //        if (    (core::abs_(getPlayer()->node->getPosition().X - unePosition.X)) <= this->epsilon
+    //                &&   (core::abs_(getPlayer()->node->getPosition().Y - unePosition.Y)) <= this->epsilon
+    //                &&   (core::abs_(getPlayer()->node->getPosition().Z - unePosition.Z)) <= this->epsilon  )
+
+    //        {
+    //            isCombat = 1; isPromenade = 0;
+    //            startCombat(Timer);
+    //        }
+    //    }
 
 
-////  for (unsigned int k = 0; k < mechant.size(); k++)
-//    for (auto &k : enemyID)
-//  {
-//      if (getEnemy(k) != NULL && getPlayer() != NULL) // pour eviter les erreurs de segmentations
-//      {
-//          if (    (core::abs_(getPlayer()->node->getPosition().X - getEnemy(k)->node->getPosition().X)) <= this->epsilon
-//                  &&   (core::abs_(getPlayer()->node->getPosition().Y - getEnemy(k)->node->getPosition().Y)) <= this->epsilon
-//                  &&   (core::abs_(getPlayer()->node->getPosition().Z - getEnemy(k)->node->getPosition().Z)) <= this->epsilon  )
-
-//          {
-//              isCombat = 1; isPromenade = 0;
-//              startCombat(Timer);
-//          }
-//      }
-//  }
 
 
 }
@@ -1269,6 +1263,9 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
     /** variables utiles pour plus tard **/
     iv::IVideoDriver  *driver = device->getVideoDriver();
     ig::IGUIEnvironment *gui  = device->getGUIEnvironment();
+
+    /** chargement de la map **/
+    mesh_bsp = smgr->getMesh("cf.bsp");
 
     /** police de caractere **/
     ig::IGUISkin* skin = gui->getSkin();
