@@ -161,4 +161,7 @@ Inventaire
 
 #### Rapport de bugs:
 
-Bugs non fixés à résoudre, etc... (A compléter ...)
+Bugs non fixés à résoudre, etc...
+
+* Caméra en mode jeu libre qui vibre
+* Les actions effectuées par le joueur durant le tour de l'ennemi sont prises en combat lorsque l'ennemi fini son tour.
