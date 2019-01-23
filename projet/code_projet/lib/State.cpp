@@ -22,20 +22,24 @@ int getState(int dist_x_pers, int dist_y_pers, float hp_soi, float hp_pers){
         state = state;
     }else if(dist_x_pers == -1){
         state = state + 1;
-    }else if(dist_x_pers == 1){
+    }else if(dist_x_pers == 0){
         state = state + 2;
-    }else if(dist_x_pers >= 2){
+    }else if(dist_x_pers == 1){
         state = state + 3;
+    }else if(dist_x_pers >= 2){
+        state = state + 4;
     }
     // dist_y_pers
     if(dist_y_pers <= -2){
         state = state;
     }else if(dist_y_pers == -1){
         state = state + 1*cumul_num_states[0];
-    }else if(dist_y_pers == 1){
+    }else if(dist_y_pers == 0){
         state = state + 2*cumul_num_states[0];
-    }else if(dist_y_pers >= 2){
+    }else if(dist_y_pers == 1){
         state = state + 3*cumul_num_states[0];
+    }else if(dist_y_pers >= 2){
+        state = state + 4*cumul_num_states[0];
     }
     // hp_soi
     if(hp_soi <= 25){
@@ -61,25 +65,27 @@ int getNumStates(){
 int getNumStatesOfFeature(int featureIndex){
 
 	//discretization:
-	// * dist_x_pers : 4
+	// * dist_x_pers : 5
+  //zero cases,
 	//une case positif,
 	//une case negatif,
 	//plus que une positif
 	//plus que une negatif
-	// * dist_y_pers : 4
+	// * dist_y_pers : 5
+  //zero cases,
 	//une case positif,
 	//une case negatif,
 	//plus que une positif
 	//plus que une negatif
 	// * hp_soi : moins ou plus de 25% (2)
 	// * hp_pers : moins ou plus de 25% (2)
-	// ** total num etats : 4*4*2*2 =
+	// ** total num etats : 5*5*2*2 = 100
 
 	switch(featureIndex){
 		case 0:
-			return 4;
+			return 5;
 		case 1:
-			return 4;
+			return 5;
 		case 2:
 			return 2;
 		case 3:

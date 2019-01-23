@@ -105,7 +105,7 @@ void Trainer::train(){
   float hp_soi = 100.0f;
   float hp_pers = 100.0f;
 
-  int state, lastState;
+  int currentState, lastState;
   QTableAction action;
   float reward = 0.0f;
 
@@ -133,11 +133,14 @@ void Trainer::train(){
       this->learners.push_back(new_learner);
     }
 
+
+
     // reset autre chose de la grid? TODO ?
 
     // executer la simulation pour l'aprentissage:
     for( step_count = 0; step_count < max_steps_per_episode && num_learners !=1; step_count ++){
       this->step(); // do one step
+
 
       num_learners = learners.size();
       // update q tables for all personnages / learners
@@ -153,17 +156,17 @@ void Trainer::train(){
       	hp_pers = this->learners[i_closest_enemy]->getHP();
         // get action, state, lastState, and reward   to update Q-table
         action = this->learners[i]->getLastAction();
-        state = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
+        currentState = getState(dist_x_pers, dist_y_pers, hp_soi, hp_pers);
         //std::cout << "DEBUG state: "<< state << std::endl;
         if(step_count!=0){
           lastState = this->learners[i]->getLastState();
           reward = this->learners[i]->getReward();
           //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
           // actualise le tableau Q
-          this->learners[i]->getQTable()->update_table(action, lastState, state, reward);
+          this->learners[i]->getQTable()->update_table(action, lastState, currentState, reward);
         }
         // set lastState
-        this->learners[i]->setLastState(state);
+        this->learners[i]->setLastState(currentState);
 
         if(learners[i]->isDead()){
             // effacer du vecteur :
@@ -179,10 +182,10 @@ void Trainer::train(){
 
   // print q-table
   qtable->printTable();
-  //qtable->printTableBestActions();
+  qtable->printTableBestActions();
   qtable->saveTable("test_table");
   //qtable->loadTable("test_table");
-  this->test(qtable); // DEBUG
+  //this->test(qtable); // DEBUG
 }
 
 // avance un tour du jeu

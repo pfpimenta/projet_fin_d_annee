@@ -129,10 +129,12 @@ float Learner::getReward(){
   float reward = 0.0f;
   //reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
   if(this->estMort){
-    reward = -1;
+    reward = -0.5;
   }else if(this->aTue){
     reward = 1;
     this->aTue = false; // reset
+  }else{
+    reward = -0.01;
   }
   return reward;
 }

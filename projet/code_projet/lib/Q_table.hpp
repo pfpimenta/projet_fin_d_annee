@@ -11,7 +11,7 @@
 
 #include "utils.hpp"
 
-#define NUM_STATES 5 // changer
+#define NUM_STATES 100 // changer
 #define NUM_ACTIONS 5 // changer
 #define TAUX_EXPLORATION 0.1 // changer
 #define LEARNING_RATE 0.05 // changer
@@ -36,7 +36,7 @@ class Q_table
 			QTableAction takeAction(int state); // retourne la meilleure action dans un etat donne
 			void printTable(); // affiche la Q table
 			void printTableBestActions(); // afficher la "meilleure" action pour chaque etat
-			void update_table(int action, int etat_courrant, int etat_suivant, float recompense); // actualise le tableau Q
+			void update_table(int action, int lastState, int currentState, float recompense); // actualise le tableau Q
 			void saveTable(std::string tableName);
 			void loadTable(std::string tableName);
 };
