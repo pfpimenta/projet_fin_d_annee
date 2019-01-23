@@ -152,27 +152,12 @@ void Trainer::train(){
 
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
-  // un episode est un jeu avec (max_steps_per_episode) steps
+  // un episode est un jeu avec (max_steps_per_episode) steps : 
   int max_episodes = DEFAULT_MAX_EPISODES;
   int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
-
-  //int num_learners;
-  int i_closest_enemy; // index
-
-  // informations pour le state
-  int dist_x_pers;
-  int dist_y_pers;
-  float hp_soi = 100.0f;
-  float hp_pers = 100.0f;
-
-  int currentState, lastState;
-  QTableAction action;
-  float reward = 0.0f;
-
-  // table qu'on va entrainer
+  // table qu'on va entrainer :
   int num_states = getNumStates();
   Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
-
 
   int episode_count, step_count;
   for( episode_count = 0; episode_count < max_episodes; episode_count ++){
@@ -186,19 +171,6 @@ void Trainer::train(){
       // do one step
       this->step();
       this->num_learners = learners.size(); //update num_learners
-
-      // update q tables for all personnages / learners
-      //for(int i = 0; i < this->num_learners; i++){
-        //this->updateTable(i, step_count);
-
-        // if(learners[i]->isDead()){
-        //     // effacer du vecteur :
-        //     this->learners.erase(this->learners.begin()+i);
-        //     // ajuster index et num_learners :
-        //     i--;
-        //     this->num_learners--;
-        // }
-      //}
       this->updateTable(step_count);
       this->eraseDeadLearners();
     }
