@@ -63,7 +63,8 @@ int main(int argc, char* argv[])
 void mode_train()
 {
   Trainer* trainer = new Trainer(10, 15);
-  trainer->train();
+  //trainer->train();
+  trainer->train_v2();
 }
 
 

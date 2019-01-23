@@ -67,11 +67,13 @@ QTableAction Learner::chooseRandomAction(){
 // choose action (overcharge)
 QTableAction Learner::chooseAction(int dist_x_pers, int dist_y_pers, float hp_pers){
   QTableAction action;
-  // action aleatoire (test)
-  //int random_variable = std::rand()%5;
-  //action = (Action) random_variable;
+
+  if(this->isTrained == false){ // no q-table
+    return this->chooseRandomAction();
+  }
   int state = getState(dist_x_pers, dist_y_pers, this->getHP(), hp_pers);
-  action = (QTableAction) this->qTable->takeAction(state);
+  //std::cout << "DEBUG state: "<< state << '\n';
+  action = (QTableAction) this->qTable->takeActionTraining(state);
   //std::cout << "DEBUG action "<< (int)action <<'\n';
 
   this->lastAction = action;

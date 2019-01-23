@@ -113,7 +113,8 @@ void Trainer::updateTable( int step_count){
         reward = this->learners[learnerIndex]->getReward();
         //std::cout << "DEBUG avant update_table, reward: "<< reward << std::endl;
         // actualise le tableau Q
-        this->learners[learnerIndex]->getQTable()->update_table(action, lastState, currentState, reward);
+        if(this->learners[learnerIndex]->isTrained)
+          this->learners[learnerIndex]->getQTable()->update_table(action, lastState, currentState, reward);
       }
       // set lastState
       this->learners[learnerIndex]->setLastState(currentState);
@@ -140,8 +141,74 @@ void Trainer::resetLearners(Q_table* qtable){
     }while(this->isSomeoneAtPosition(pos_x, pos_y));
     Learner* new_learner = new Learner(pos_x, pos_y, qtable);
     new_learner->setBoundaries(this->width, this->height);
+    new_learner->isTrained = true;
     this->learners.push_back(new_learner);
   }
+}
+
+
+// fonction pour entrainer les Q-tables // VERSION 2
+void Trainer::train_v2(){
+  // executes the training of the Q tables
+  // without showing on screen
+
+  std::srand(std::time(nullptr)); // use current time as seed for random generator
+
+  // un episode est un jeu avec (max_steps_per_episode) steps :
+  int max_episodes = DEFAULT_MAX_EPISODES;
+  int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
+  // table qu'on va entrainer :
+  int num_states = getNumStates();
+  Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
+
+  int pos_x, pos_y;
+
+  int episode_count, step_count;
+  for( episode_count = 0; episode_count < max_episodes; episode_count ++){
+
+    // reset personnages / learners
+    // generer 2 learners:
+    // 1 avec Q table
+    // et 1 autre avec des actions au hasard
+    this->num_learners = 2;
+    // clear personnages / learners
+    this->learners.clear();
+
+    //  mec 1 :
+    // positions aleatoires uniques pour chaque mec
+    pos_x = std::rand()%this->width;
+    pos_y = std::rand()%this->height;
+    Learner* mec_entrainne = new Learner(pos_x, pos_y, qtable);
+    mec_entrainne->isTrained = true;
+    mec_entrainne->setBoundaries(this->width, this->height);
+    this->learners.push_back(mec_entrainne);
+    //  mec 2 :
+    // positions aleatoires uniques pour chaque mec
+    do{
+      pos_x = std::rand()%this->width;
+      pos_y = std::rand()%this->height;
+    }while(this->isSomeoneAtPosition(pos_x, pos_y));
+    Learner* mec_random = new Learner(pos_x, pos_y);
+    mec_random->setBoundaries(this->width, this->height);
+    this->learners.push_back(mec_random);
+
+    // executer la simulation pour l'aprentissage:
+    for( step_count = 0; step_count < max_steps_per_episode && num_learners !=1; step_count ++){
+      // do one step
+      this->step();
+      this->num_learners = learners.size(); //update num_learners
+      this->updateTable(step_count);
+      this->eraseDeadLearners();
+    }
+  }
+  std::cout << "...training complete" << std::endl;
+
+  // print q-table
+  qtable->printTable();
+  qtable->printTableBestActions();
+  //qtable->saveTable("test_table");
+  //qtable->loadTable("test_table");
+  this->test(qtable); // DEBUG
 }
 
 
@@ -152,7 +219,7 @@ void Trainer::train(){
 
   std::srand(std::time(nullptr)); // use current time as seed for random generator
 
-  // un episode est un jeu avec (max_steps_per_episode) steps : 
+  // un episode est un jeu avec (max_steps_per_episode) steps :
   int max_episodes = DEFAULT_MAX_EPISODES;
   int max_steps_per_episode = DEFAULT_STEP_PER_EPISODE;
   // table qu'on va entrainer :
@@ -284,7 +351,6 @@ void Trainer::test(Q_table* q_table){
   // pour la q table qu'on va tester
   QTableAction action;
   int num_states = getNumStates();
-  Q_table* qtable = new Q_table(num_states, NUM_ACTIONS);
 
   // generer 2 learners:
   // 1 avec Q table
@@ -297,7 +363,7 @@ void Trainer::test(Q_table* q_table){
   // positions aleatoires uniques pour chaque mec
   pos_x = std::rand()%this->width;
   pos_y = std::rand()%this->height;
-  Learner* mec_entrainne = new Learner(pos_x, pos_y, qtable);
+  Learner* mec_entrainne = new Learner(pos_x, pos_y, q_table);
   mec_entrainne->isTrained = true;
   mec_entrainne->setBoundaries(this->width, this->height);
   this->learners.push_back(mec_entrainne);
@@ -316,14 +382,15 @@ void Trainer::test(Q_table* q_table){
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; // clear
     this->printGrid();
     this->printHPs();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
     // action du mec 1 ( q table )
     action = this->deciderAction(0);
     this->executerAction(0, action);
+    //std::cout << "DEBUG action: " <<action<< '\n';
     // action du mec 2 ( au hasard )
     action = this->learners[1]->chooseRandomAction();
     this->executerAction(1, action);
     this->num_learners = learners.size();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n' ); // wait for key
   }
 
 }
