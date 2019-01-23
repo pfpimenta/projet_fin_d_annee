@@ -1041,7 +1041,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
 
 
-    ic::vector3df unePosition(131.569, -78.2488, -898.676);
+    ic::vector3df unePosition(967.692, 337.751, -1187.54);
 
     if (getPlayer() != NULL) // pour eviter les erreurs de segmentations
     {
@@ -1273,6 +1273,12 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
         smgr->drawAll();
         gui->drawAll();
 
+
+
+        if(getPlayer() != NULL) std::cout << "positions Joueur : x = " << getPlayer()->node->getPosition().X
+                                          << ", " << getPlayer()->node->getPosition().Y
+                                           << ", " << getPlayer()->node->getPosition().Z
+                                           << std::endl;
 
 
         // debut de jeu qui passe du mode jeu libre au mode combat lorsque le joueur se trouve aux memes coordonnees que l'ennemi[k]
