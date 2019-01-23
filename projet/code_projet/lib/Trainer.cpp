@@ -206,8 +206,8 @@ void Trainer::train_v2(){
   // print q-table
   qtable->printTable();
   qtable->printTableBestActions();
-  //qtable->saveTable("test_table");
-  //qtable->loadTable("test_table");
+  //qtable->saveTable("q_table");
+  //qtable->loadTable("q_table");
   this->test(qtable); // DEBUG
 }
 
@@ -249,9 +249,9 @@ void Trainer::train(){
   //qtable->printTableBestActions();
 
   // save q-table :
-  qtable->saveTable("test_table");
-  //qtable->loadTable("test_table"); // DEBUG
-  
+  qtable->saveTable("q_table");
+  //qtable->loadTable("q_table"); // DEBUG
+
   // test q-table :
   //this->test(qtable); // DEBUG
 }
@@ -354,7 +354,6 @@ void Trainer::test(Q_table* q_table){
   int pos_y;
   // pour la q table qu'on va tester
   QTableAction action;
-  int num_states = getNumStates();
 
   // generer 2 learners:
   // 1 avec Q table
