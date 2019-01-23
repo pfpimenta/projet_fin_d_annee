@@ -149,7 +149,7 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
             if (gmngr->getGridMapping() != NULL)
             {
                 irr::core::vector3df camCombatPosition(0,
-                                                       std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
+                                                       gmngr->getGridMapping()->myGrid->getGridNode(0)->getPosition().Y + std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
                                                        0);
 
                 irr::core::vector3df translationCamCombat(gmngr->getGridMapping()->myGrid->getGridNode(0)->getPosition().X - 40 * DEFAULT_HEIGHT,
@@ -255,7 +255,10 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
         }
 
         else if(!event.KeyInput.PressedDown)
+        {
             isMoving = 0;
+            interact = false;
+        }
 
         if (isMoving == 1)
           gmngr->getPlayer()->node->setMD2Animation(irr::scene::EMAT_RUN);
@@ -313,6 +316,7 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
   ig::IGUIContextMenu *menu;
   irr::s32 item;
   irr::s32 id;
+  irr::s32 id2;
 
   switch(event.GUIEvent.EventType)
   {
@@ -339,6 +343,56 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                                                                                " \n KUASSIVI Cédric,"
                                                                                " \n TOSTI Dylan");
             break;
+
+
+            case ig::EGET_BUTTON_CLICKED:
+                id2 = event.GUIEvent.Caller->getID();
+                if (id2 == WINDOW_BUTTON)
+                {
+                    start = true;
+                }
+                if (id2 == ITEM_1)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.4;
+                }
+                if (id2 == ITEM_2)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.4;
+                }
+                if (id2 == ITEM_3)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.4;
+                }
+                if (id2 == ITEM_4)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.4;
+                }
+                if (id2 == ITEM_5)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.65;
+                }
+                if (id2 == ITEM_6)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.65;
+                }
+                if (id2 == ITEM_7)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                    gainHp = 0.90;
+                }
+                if (id2 == ITEM_8)
+                {
+                    window->getElementFromId(id2)->setVisible(false);
+                }
+
+              break;
+
             default:;
         }
 
@@ -350,3 +404,62 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
   return false;
 }
 
+
+
+
+
+
+
+/**************************************************************************\
+ * MyEventReceiver::set_node                                                *
+\**************************************************************************/
+void MyEventReceiver::set_node(irr::scene::ISceneNode *n)
+{
+  node = n;
+}
+
+/**************************************************************************\
+ * MyEventReceiver::set_gui                                                 *
+\**************************************************************************/
+void MyEventReceiver::set_gui(irr::gui::IGUIEnvironment *g)
+{
+  gui = g;
+}
+
+/*===========================================================================*\
+ * set_window for items                                                      *
+\*===========================================================================*/
+void MyEventReceiver::set_window(ig::IGUIWindow *w)
+{
+  window = w;
+}
+
+/*===========================================================================*\
+ * get_start game                                                    *
+\*===========================================================================*/
+bool MyEventReceiver::get_start()
+{
+  return start;
+}
+
+/*===========================================================================*\
+ * get hp++                                                                  *
+\*===========================================================================*/
+int MyEventReceiver::applyGainHp(int hp, int hpMax)
+{
+
+  hp += gainHp*(float)(hpMax - hp);
+  gainHp = 0;
+
+  return hp;
+}
+
+/*===========================================================================*\
+ * get if interaction                                                        *
+\*===========================================================================*/
+bool MyEventReceiver::get_interact()
+{
+  bool interaction = interact;
+  interact = false;
+  return interaction;
+}

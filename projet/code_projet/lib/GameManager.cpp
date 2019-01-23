@@ -308,7 +308,7 @@ bool GameManager::addCameraCombat()
             if(getGridMapping() != NULL && getPlayer() != NULL)
             {
                 irr::core::vector3df camCombatPosition(0,
-                                                       -getPlayer()->node->getPosition().Y + std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.25,
+                                                       getGridMapping()->myGrid->getGridNode(0)->getPosition().Y + std::max(DEFAULT_HEIGHT, DEFAULT_WIDTH) * DEFAULT_GRID_NODE_SIZE * 0.5,
                                                        0);
 
                 irr::core::vector3df translationCamCombat(getGridMapping()->myGrid->getGridNode(0)->getPosition().X - 40 * DEFAULT_HEIGHT,
