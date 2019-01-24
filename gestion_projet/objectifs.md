@@ -12,10 +12,14 @@
 
 
 - [x] Map 3D fixe (import de la map 3D dans laquelle évoluera le joueur)
+Ecran titre
+<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/ecranTitre.png" width="280" height="130"></div>
 Scène 3D
-<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/scene3D.png" width="280" height="130"></div>
-Menu de la scène 3D
-<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/menuScene3D.png" width="280" height="130"></div>
+<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/jeuLibre.png" width="280" height="130"></div>
+Inventaire
+<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/inventaire.png" width="280" height="130"></div>
+Menu
+<div style="text-align:center"><img src="./../projet/code_projet/data/screenshots/menu.png" width="280" height="130"></div>
 
 #### Etape 2: Déplacement dans la scène 3D et dans la grid
 
@@ -54,7 +58,7 @@ Menu de la scène 3D
 </br></br>
 
 
-### Objectif 3 : Extras
+### Objectif 3 : Extras (non effectué)
 
 #### Etape 1 : IA deep
 

@@ -1233,7 +1233,7 @@ void GameManager::startCombat(irr::ITimer *Timer)
     // load  Q table pour les ennemis
     int num_states = getNumStates();
     this->qTable = new Q_table(num_states, NUM_ACTIONS);
-    this->qTable->loadTable("test_table");
+    this->qTable->loadTable("q_table");
     // mettre la q table dans tous les ennemis
     //for (unsigned int k = 0; k < mechant.size(); k++)
     for (auto &k : enemyID)

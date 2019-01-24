@@ -57,7 +57,7 @@ En cours de développement ...
   _Remarque : Si vous souhaitez compiler le code juste pour le tester, il est conseillé d'utiliser la méthode 2 (utilisation du makefile fourni).
   Si vous souhaitez modifier le code et tester les modifications, il est conseillé d'utiliser Qt pour lancer le CMakeLists.txt fourni (méthode 1.2)._
 
-  _Il est également possible de passer en argument lors de l'exécution du code la chîne de caractère "train" ( `$ ./projetFA train` ) ce qui a pour effet d'entraîner les ennemis et de générer un nouveau fichier test__table.txt qui servira de LUT pour la gestion du choix des actions de l'ennemi en fonction de son état._
+  _Il est également possible de passer en argument lors de l'exécution du code la chîne de caractère "train" ( `$ ./projetFA train` ) ce qui a pour effet d'entraîner les ennemis et de générer un nouveau fichier q__table.txt qui servira de LUT pour la gestion du choix des actions de l'ennemi en fonction de son état._
 
 
 1. Avec le CMakeLists.txt :
@@ -97,7 +97,7 @@ En cours de développement ...
 #### Comment jouer (touches à appuyer pour les actions):
 
 ##### Mode Combat :
-<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements.png" width="280" height="130"></div>
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/animDeplacements2D.png" width="280" height="130"></div>
 </br>
 
 * **Clavier** :
@@ -130,8 +130,12 @@ En cours de développement ...
 
 ##### Mode Jeu libre :
 
-<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/modeJeuLibre.png" width="280" height="265"></div>
-</br>
+Ecran titre
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/ecranTitre.png" width="280" height="130"></div>
+Scène 3D
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/jeuLibre.png" width="280" height="130"></div>
+Inventaire
+<div style="text-align:center"><img src="./projet/code_projet/data/screenshots/inventaire.png" width="280" height="130"></div>
 
 * **Clavier** :
 
@@ -157,4 +161,7 @@ En cours de développement ...
 
 #### Rapport de bugs:
 
-Bugs non fixés à résoudre, etc... (A compléter ...)
+Bugs non fixés à résoudre, etc...
+
+* Caméra en mode jeu libre qui vibre
+* Les actions effectuées par le joueur durant le tour de l'ennemi sont prises en combat lorsque l'ennemi fini son tour.
