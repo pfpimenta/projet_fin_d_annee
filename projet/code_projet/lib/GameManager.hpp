@@ -132,7 +132,7 @@ public:
     is::IAnimatedMeshSceneNode *chest[NB_CHEST + 1];
     iv::ITexture *items[NB_CHEST + 1]; // vecteur avec les textures de chaque objet pour fenetre d inventaire
     ig::IGUIButton *itemsButton[NB_CHEST+1]; //les objets dans l inventaires sont de boutons pour faciliter l utilisation des objets
-    int nbObjetTrouve = 6;
+    int nbObjetTrouve = 0;
     int indiceItemRecovered[NB_CHEST + 1];
     u32 itemWinTime;
     bool interaction = false;

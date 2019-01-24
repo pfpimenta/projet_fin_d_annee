@@ -1313,9 +1313,9 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                     if(k == indiceMinibossKilled[i])
                         isNotMiniboss = true;
                 if(!isNotMiniboss)
-                    chest[k]->setVisible(true);
+                    miniBoss[k]->setVisible(true);
                 isNotMiniboss = false;
-
+                std::cout << "\n\n\n\n\n" << isNotItem << "\n\n\n\n\n" << nbMinibosskilled << std::endl;
             }
             cle++;
             miniBoss[k]->setVisible(false);
