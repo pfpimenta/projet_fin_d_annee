@@ -341,6 +341,7 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                                                                                 "\n  - Déplacements : Z, S et souris"
                                                                                 "\n  - Ouverture du menu des items : I"
                                                                                 "\n  - Interaction avec un objet : M"
+                                                                                "\n  - Activer/désactiver la caméra fps : X"
                                                                                 "\n\n->Mode Combat : "
                                                                                 "\n  - Déplacements du perso : Z, S, Q, D"
                                                                                 "\n  - Déplacements de la caméra : souris"
