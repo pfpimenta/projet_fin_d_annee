@@ -952,7 +952,9 @@ bool GameManager::openChest(is::IAnimatedMeshSceneNode *perso, irr::ITimer *Time
 
                             itemsButton[nbObjetTrouve]->setUseAlphaChannel(true);itemsButton[nbObjetTrouve]->setDrawBorder(false);
                             itemsButton[nbObjetTrouve]->setImage(items[nbObjetTrouve]);itemsButton[nbObjetTrouve]->setScaleImage(true);
+                            indiceItemRecovered[nbObjetTrouve] = k;
                             nbObjetTrouve++;
+
                             chest[k]->setVisible(false);
                             if(nbObjetTrouve == 8)
                                 windowUltimeItemRecovered->setVisible(true);
@@ -989,7 +991,7 @@ void GameManager::createMiniBoss()
     miniBoss[2]->setPosition(ic::vector3df(1.33853, 977.751, 186.854));
 }
 
-void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso)
+void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer)
 {
     int epsilon = 30;
     for (unsigned int k = 0; k < 3; k++)
@@ -1002,11 +1004,9 @@ void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso)
                         &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
 
                 {
-                    //on entre en collision avec un miniboss
-                    ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
 
-                    cle++;
-                    miniBoss[k]->setVisible(false);
+                    startCombat(timer);
+
                 }
         }
     }
@@ -1193,6 +1193,22 @@ void GameManager::startCombat(irr::ITimer *Timer)
 
     removeMapScene3D();
     removeCameraJeuLibre();
+    for (unsigned int k = 0; k < NB_CHEST + 1; k++)
+    {
+        if (chest[k] != NULL) // pour eviter les erreurs de segmentations
+        {
+            chest[k]->setVisible(false);
+        }
+    }
+
+    for (unsigned int k = 0; k < 3; k++)
+    {
+        if (miniBoss[k] != NULL) // pour eviter les erreurs de segmentations
+        {
+            miniBoss[k]->setVisible(false);
+        }
+    }
+
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
@@ -1252,13 +1268,61 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     isCombat = 0;
     isPromenade = 1;
 
+
     // pour reprendre la partie ou on s'est arrete
     if(getPlayer() != NULL)
     {
         getPlayer()->node->setPosition(tempPlayer3DPosition);
         getPlayer()->node->setRotation(tempPlayer3DRotation);
     }
+    is::IAnimatedMeshSceneNode *perso = getPlayer()->node;
 
+    bool isNotItem = false;
+    bool isNotMiniboss = false;
+    int epsilon = 30;
+    for (unsigned int k = 0; k < 3; k++)
+    {
+        if (    (core::abs_(perso->getPosition().X - miniBoss[k]->getPosition().X)) <= epsilon
+                &&   (core::abs_(perso->getPosition().Y - miniBoss[k]->getPosition().Y)) <= epsilon
+                &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
+
+        {
+
+            //on entre en collision avec un miniboss
+            ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
+            for (int k = 0; k < NB_CHEST + 1; k++)
+            {
+                if (chest[k] != NULL) // pour eviter les erreurs de segmentations
+                {
+                    for(int i = 0; i < nbObjetTrouve; i++)
+                        if(k == indiceItemRecovered[i])
+                            isNotItem = true;
+                    if(!isNotItem)
+                        chest[k]->setVisible(true);
+                    isNotItem = false;
+
+                    std::cout << "\n\n\n\n\n\n\n\n" << isNotItem << std::endl;
+
+                }
+            }
+
+            for (int k = 0; k < 3; k++)
+            {
+                for(int i = 0; i < nbMinibosskilled; i++)
+                    if(k == indiceMinibossKilled[i])
+                        isNotMiniboss = true;
+                if(!isNotMiniboss)
+                    chest[k]->setVisible(true);
+                isNotMiniboss = false;
+
+            }
+            cle++;
+            indiceMinibossKilled[nbMinibosskilled] = k;
+            nbMinibosskilled++;
+            miniBoss[k]->setVisible(false);
+
+        }
+    }
 
     removeGridMapping();
     removeCameraCombat();
@@ -1307,7 +1371,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
         }
 
     //on teste si on est en collision avec un mini boss
-    isVersusMiniboss(getPlayer()->node);
+    isVersusMiniboss(getPlayer()->node,Timer);
 
     if (cle == 3)
     {

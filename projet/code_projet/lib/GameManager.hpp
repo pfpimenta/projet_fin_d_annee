@@ -133,6 +133,7 @@ public:
     iv::ITexture *items[NB_CHEST + 1]; // vecteur avec les textures de chaque objet pour fenetre d inventaire
     ig::IGUIButton *itemsButton[NB_CHEST+1]; //les objets dans l inventaires sont de boutons pour faciliter l utilisation des objets
     int nbObjetTrouve = 6;
+    int indiceItemRecovered[NB_CHEST + 1];
     u32 itemWinTime;
     bool interaction = false;
     bool isOpenedChest = false;
@@ -144,9 +145,11 @@ public:
 
     /** mini boss **/
     is::IAnimatedMeshSceneNode* miniBoss[3];
+    int indiceMinibossKilled[3];
+    int nbMinibosskilled = 0;
     int cle = 0;
     void createMiniBoss();
-    void isVersusMiniboss(is::IAnimatedMeshSceneNode *perso);
+    void isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer);
 
     /** game over screen **/
     void addGameOverScreen();
