@@ -295,6 +295,7 @@ bool MyEventReceiver::mouse_promenade(const irr::SEvent &event)
       break;
     case irr::EMIE_LMOUSE_LEFT_UP:
       button_pressed = false;
+      gmngr->clicSouris = true;
       break;
     case irr::EMIE_MOUSE_MOVED:
       if (button_pressed)

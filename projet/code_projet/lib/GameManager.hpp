@@ -148,17 +148,22 @@ public:
     int indiceMinibossKilled[3];
     int nbMinibosskilled = 0;
     int cle = 0;
+    bool isVersusBossFinal = false;
+
     void createMiniBoss();
     void isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer);
 
     /** game over screen **/
     void addGameOverScreen();
 
+    /** Victory screen **/
+    void addVictoryScreen();
 
     /** gestionnaire de jeu **/
     // pour savoir si on commence un combat
     bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
+    bool clicSouris = false;
 
     // flags pour le combat tour par tour
     bool playerTurn, ennemysTurn, endPlayerTurn;

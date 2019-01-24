@@ -1044,7 +1044,13 @@ void GameManager::addGameOverScreen()
     gameOverBox->setImage(gameOverText);
 }
 
-
+/** Victory screen **/
+void GameManager::addVictoryScreen()
+{
+    ig::IGUIImage *victoryBox = device->getGUIEnvironment()->addImage(ic::rect<s32>(0, 0,  DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)); victoryBox->setScaleImage(true);
+    irr::video::ITexture *victoryText = device->getVideoDriver()->getTexture("./data/maps/victory.png");
+    victoryBox->setImage(victoryText);
+}
 
 
 
@@ -1235,6 +1241,8 @@ void GameManager::startCombat(irr::ITimer *Timer)
     addGridMapping(DEFAULT_WIDTH, DEFAULT_HEIGHT, Timer);
     addCameraCombat();
 
+    //////////////// if (isVersusBossFinal) on charge le boss ///////////////////
+
     // ajout d'ennemis
     std::vector<position> enemyPos;
     position p1(alea(1, DEFAULT_HEIGHT - 1), alea(DEFAULT_WIDTH/2, DEFAULT_WIDTH - 1));
@@ -1389,9 +1397,10 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
     }
 
     if(isWaiting)
-        if(Timer->getTime() - itemWinTime>7000)
+        if((Timer->getTime() - itemWinTime>7000) || clicSouris)
         {
             isWaiting = false;
+            clicSouris = false;
             //selon les differentes situations, on affiche un message différent
             if(nbObjetTrouve == 8)
                 windowUltimeItemRecovered->setVisible(false);
@@ -1413,12 +1422,8 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
            && getPlayer()->node->getPosition().Z <= -172.217 && getPlayer()->node->getPosition().Z >=-283.837
            && interaction)
         {
-            //loop combat contre le boss
-            if(true) //// si on gagne
-            {
-                //fenetre de victoire
-            }
-            exit(0);
+            isVersusBossFinal = true;
+            startCombat(Timer);
         }
     }
 
@@ -1509,6 +1514,27 @@ void GameManager::loopCombat(irr::ITimer *Timer){
 
       allEnemyDead.erase(allEnemyDead.begin(), allEnemyDead.end());
       isCombat = 0; isPromenade = 1;
+      if (isVersusBossFinal)
+      {
+          if(getPlayer() != NULL)
+          {
+              removeGridMapping();
+              removeCameraCombat();
+              removeMapScene3D();
+              removeCameraJeuLibre();
+
+              for (auto &k : enemyID)
+              {
+                  if (getEnemy(k) != NULL)
+                  {
+                      getEnemy(k)->node->remove();
+                      //removeEnemy(k);
+                  }
+              }
+              addVictoryScreen();
+          }
+      }
+
       startPromenade(Timer);
   }
 
@@ -1534,7 +1560,10 @@ void GameManager::loopCombat(irr::ITimer *Timer){
           }
           addGameOverScreen();
       }
+
+
   }
+
 
   // DEBUG :
 //  if(getPlayer()->p == position(0, 3))
