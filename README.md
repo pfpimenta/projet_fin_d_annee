@@ -116,7 +116,7 @@ En cours de développement ...
   </br>
   **M** ⇒ Valider le déplacement du joueur et passer la main à l'ennemi.
 
-
+  </br>
 * **souris** :
 
   **Clic gauche maintenu et souris déplacée** => rotation de la caméra
@@ -129,11 +129,13 @@ En cours de développement ...
 </br> </br>
 
 ##### Mode Jeu libre :
-
+</br>
 Ecran titre
 <div style="text-align:center"><img src="./projet/code_projet/data/screenshots/ecranTitre.png" width="280" height="130"></div>
+
 Scène 3D
 <div style="text-align:center"><img src="./projet/code_projet/data/screenshots/jeuLibre.png" width="280" height="130"></div>
+
 Inventaire
 <div style="text-align:center"><img src="./projet/code_projet/data/screenshots/inventaire.png" width="280" height="130"></div>
 
@@ -141,21 +143,18 @@ Inventaire
 
   **Z** ⇒ déplacement vers l’avant
   </br>
-  **Q** ⇒ rotation vers la gauche (optionnelle car possibilité de tourner avec la souris)
-  </br>
   **S** ⇒ déplacement vers l’arrière
-  </br>
-  **D** ⇒ rotation vers la droite (optionnelle car possibilité de tourner avec la souris)
   </br>
   **I** ⇒ Afficher ou cacher la fenêtre des items.
   </br>
-  **A** ⇒ A chaque appui sur la touche A, la vitesse du personnage est modifiée : Elle peut valoir :  3, 6, 9, 12, 15 ou 18. Par défaut, la vitesse (speed) vaut 3.
+  **M** ⇒ Interagir avec un objet.
   </br>
-  **SPACE** ⇒ saut du personnage
+  **A** ⇒ A chaque appui sur la touche A, la vitesse du personnage est modifiée : Elle peut valoir :  3, 6, 9, 12, 15 ou 18. Par défaut, la vitesse (speed) vaut 3.
+
 
 * **souris** :
 
-  **Clic gauche maintenu et souris déplacée** => rotation de la caméra (il n’est malheureusement pas possible de regarder en haut ou en bas).
+  **Souris déplacée** => rotation de la caméra et du personnage
 
 </br> </br>
 
@@ -163,5 +162,5 @@ Inventaire
 
 Bugs non fixés à résoudre, etc...
 
-* Caméra en mode jeu libre qui vibre
-* Les actions effectuées par le joueur durant le tour de l'ennemi sont prises en combat lorsque l'ennemi fini son tour.
+* Caméra **TPS** en mode jeu libre qui vibre
+* En mode combat, les actions effectuées par le joueur durant le tour de l'ennemi sont prises en compte lorsque l'ennemi fini son tour.

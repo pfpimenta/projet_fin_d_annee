@@ -331,7 +331,15 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
             case MENU_QUIT:
                 exit(0);
             case MENU_COMMANDES:
-                gmngr->device->getGUIEnvironment()->addMessageBox(L"Commandes", L"En exploration, ....");
+                gmngr->device->getGUIEnvironment()->addMessageBox(L"Commandes", L"->Mode Jeu libre : "
+                                                                                "\n  - Déplacements : Z, S et souris"
+                                                                                "\n  - Ouverture du menu des items : I"
+                                                                                "\n  - Interaction avec un objet : M"
+                                                                                "\n\n->Mode Combat : "
+                                                                                "\n  - Déplacements du perso : Z, S, Q, D"
+                                                                                "\n  - Déplacements de la caméra : souris"
+                                                                                "\n  - Valider sa position : M"
+                                                                                "\n  - Attaquer et passer son tour : ESPACE");
             break;
             case ABOUT:
                 gmngr->device->getGUIEnvironment()->addMessageBox(L"A propos", L"Projet de Majeure réalisé par :"
