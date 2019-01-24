@@ -112,6 +112,7 @@ void interface()
 
     // chargement du mesh (puisqu'il sera utilise plusieurs fois)
     irr::scene::IAnimatedMesh *mesh = smgr->getMesh("./data/tris/tris.md2");
+    irr::scene::IAnimatedMesh *meshChest = smgr->getMesh("data/coffre/Chest.obj");
 
     // chargement des textures
     irr::video::ITexture* textureJoueur = driver->getTexture("./data/tris/blue_texture.pcx");
@@ -133,6 +134,8 @@ void interface()
     gameManager->tempPlayer3DRotation = gameManager->getPlayer()->node->getRotation();
 
 
+    gameManager->parametreChest(meshChest);
+    gameManager->createMiniBoss();
     // ajouts d'ennemis
 
     //    gameManager->addEnemy(position(2, 5),

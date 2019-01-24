@@ -49,6 +49,9 @@ namespace ig = irr::gui;
 // duree par defaut d'une animation de mouvement (UP, DOWN etc...)
 #define DEFAULT_DUREE_ANIMATION 141
 
+// nombre de coffre
+#define NB_CHEST 7
+
 // actions du joueur ou de l'ennemi
 enum Action {UP, DOWN, LEFT, RIGHT, ATTACK, VALIDATE, RESET, NOTHING, DEBUG};
 

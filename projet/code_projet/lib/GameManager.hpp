@@ -110,6 +110,8 @@ public:
 
     ig::IGUIWindow *itemWindow; //fenetre des items (inventaire)
     ig::IGUIWindow *windowItemRecovered; //fenetre a afficher quand un item  est recupere
+    ig::IGUIWindow *windowUltimeItemmessage;  //fenetre indice de l objet ultime
+    ig::IGUIWindow *windowUltimeItemRecovered;
     ig::IGUIWindow *ecranTitre; // ecran titre (pour commencer le jeu)
     bool startGame = false; // mis a true quand on appuie sur start
 
@@ -124,6 +126,27 @@ public:
     bool addMapScene3D(scene::IAnimatedMesh *mesh_bsp);
     bool removeMapScene3D();
     scene3D *getMapScene3D();
+
+    /** objets et coffres **/
+    irr::s32 idItem[NB_CHEST + 1];
+    is::IAnimatedMeshSceneNode *chest[NB_CHEST + 1];
+    iv::ITexture *items[NB_CHEST + 1]; // vecteur avec les textures de chaque objet pour fenetre d inventaire
+    ig::IGUIButton *itemsButton[NB_CHEST+1]; //les objets dans l inventaires sont de boutons pour faciliter l utilisation des objets
+    int nbObjetTrouve = 0;
+    u32 itemWinTime;
+    bool interaction = false;
+    bool isOpenedChest = false;
+    bool isWaiting = false;
+    float gainHp = 0;
+
+    void parametreChest(is::IAnimatedMesh *meshChest);
+    bool openChest(is::IAnimatedMeshSceneNode *perso, irr::ITimer *Timer);
+
+    /** mini boss **/
+    is::IAnimatedMeshSceneNode* miniBoss[3];
+    int cle = 0;
+    void createMiniBoss();
+    void isVersusMiniboss(is::IAnimatedMeshSceneNode *perso);
 
     /** game over screen **/
     void addGameOverScreen();

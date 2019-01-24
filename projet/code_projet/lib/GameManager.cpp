@@ -721,10 +721,42 @@ void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
   itemWindow->setVisible(false);
 
   //fenetre a afficher quand un item  est recupere
-  windowItemRecovered = gui->addMessageBox(L"", L"Vous obtenez une potion");
+//  windowItemRecovered = gui->addWindow(ic::rect<s32>(10, 70, DEFAULT_SCREEN_WIDTH - 10, DEFAULT_SCREEN_HEIGHT - 30), false, L"items");
+//  windowItemRecovered->setVisible(false);
+
+//  windowUltimeItemmessage = gui->addMessageBox(L"", L"Félicitation, vous avez ramassé tous les objets\n"
+//                                                    "présents ce qui a réveillé un pouvoir enfoui à \n"
+//                                                    "                 l'origine de ces lieux!");
+//  windowUltimeItemmessage->setVisible(false);
+
+//  windowUltimeItemRecovered = gui->addMessageBox(L"", L"Vous obtenez les légendaires lames du chaos!");
+//  windowUltimeItemRecovered->setVisible(false);
+  windowItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+                                       false, L"items recovered");
+  windowItemRecovered->setDraggable(false);
+  windowItemRecovered->setDrawTitlebar(false);
+  iv::ITexture *fondWindowItemRecovered = device->getVideoDriver()->getTexture(L"data/menu/messagePotion.png");
+  gui->addImage(fondWindowItemRecovered, ic::position2d<s32>(0, 0), true, windowItemRecovered);
   windowItemRecovered->setVisible(false);
 
+  windowUltimeItemmessage = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+                                       false, L"indice");
+  windowUltimeItemmessage->setDraggable(false);
+  windowUltimeItemmessage->setDrawTitlebar(false);
+  iv::ITexture *fondWindowUltimeItemmessage = device->getVideoDriver()->getTexture(L"data/menu/messageIndice.png");
+  gui->addImage(fondWindowUltimeItemmessage, ic::position2d<s32>(0, 0), true, windowUltimeItemmessage);
+  windowUltimeItemmessage->setVisible(false);
 
+  windowUltimeItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+                                       false, L"lames du chaos");
+  windowUltimeItemRecovered->setDraggable(false);
+  windowUltimeItemRecovered->setDrawTitlebar(false);
+  iv::ITexture *fondWindowUltimeItemRecovered = device->getVideoDriver()->getTexture(L"data/menu/messageLamesDuChaos.png");
+  gui->addImage(fondWindowUltimeItemRecovered, ic::position2d<s32>(0, 0), true, windowUltimeItemRecovered);
+  windowUltimeItemRecovered->setVisible(false);
 
   // ecran titre (pour commencer le jeu)
   ecranTitre = gui->addWindow(ic::rect<s32>(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT), false);
@@ -821,6 +853,164 @@ scene3D *GameManager::getMapScene3D()
 }
 
 
+
+/** objets et coffres **/
+void GameManager::parametreChest(is::IAnimatedMesh *meshChest)
+{
+    iv::IVideoDriver  *driver = device->getVideoDriver();
+
+    for (int k = 0; k < NB_CHEST + 1; k++)
+    {
+        chest[k] = smgr->addAnimatedMeshSceneNode(meshChest);
+        chest[k]->setMaterialFlag(iv::EMF_LIGHTING, false);
+        chest[k]->setMaterialTexture(0, driver->getTexture("data/coffre/diffuse.tga"));
+    }
+  //  const core::aabbox3d<f32>& boxChest = chest[0]->getBoundingBox();
+  //  core::vector3df radiusChest = boxChest.MaxEdge - boxChest.getCenter();
+  //  //on applique le poids et les colisions aux coffres
+  //  for (int k = 0; k < 1; k++)
+  //  {
+  //      scene::ITriangleSelector *selectorChest = smgr->createOctreeTriangleSelector(node->getMesh(), node);
+  //      node->setTriangleSelector(selectorChest);
+
+  //      scene::ISceneNodeAnimator *animChest
+  //                                = smgr->createCollisionResponseAnimator(selectorChest,
+  //                                                                       chest[k],  // Le noeud que l'on veut gérer
+  //                                                                       radiusChest, // "rayons" de la caméra
+  //                                                                       ic::vector3df(0, -10, 0),  // gravité
+  //                                                                       ic::vector3df(0, 0, 0));  // décalage du centre
+  //      chest[k]->addAnimator(animChest);
+  //  }
+    chest[0]->setPosition(ic::vector3df(1898.98, 376.025, -1539.27));
+    chest[0]->setRotation(ic::vector3df(0, 180, 0));
+    items[0] = driver->getTexture("data/potions/petitePotion.png");
+    idItem[0] = ITEM_1;
+
+    chest[1]->setPosition(ic::vector3df(775.95, -8, -1767.98));
+    items[1] = driver->getTexture("data/potions/petitePotion.png");
+    idItem[1] = ITEM_2;
+
+    chest[2]->setPosition(ic::vector3df(624.709, -183.975, -1358.84));
+    chest[2]->setRotation(ic::vector3df(0, -44, 0));
+    items[2] = driver->getTexture("data/potions/petitePotion.png");
+    idItem[2] = ITEM_3;
+
+    chest[3]->setPosition(ic::vector3df(424.272, 432.025, -966));
+    chest[3]->setRotation(ic::vector3df(0, 90, 0));
+    items[3] = driver->getTexture("data/potions/petitePotion.png");
+    idItem[3] = ITEM_4;
+
+    chest[4]->setPosition(ic::vector3df(-504, 568.025, 698.047));
+    chest[4]->setRotation(ic::vector3df(0, 180, 0));
+    items[4] = driver->getTexture("data/potions/moyennePotion.png");
+    idItem[4] = ITEM_5;
+
+    chest[5]->setPosition(ic::vector3df(263.147, 568.017, 609.818));
+    chest[5]->setRotation(ic::vector3df(0, 180, 0));
+    items[5] = driver->getTexture("data/potions/moyennePotion.png");
+    idItem[5] = ITEM_6;
+
+    chest[6]->setPosition(ic::vector3df(582.848, 952.02, 179.737));
+    chest[6]->setRotation(ic::vector3df(0, -90, 0));
+    items[6] = driver->getTexture("data/potions/grossePotion.png");
+    idItem[6] = ITEM_7;
+
+    items[7] = driver->getTexture("data/potions/lamesDuChaos.png");
+    idItem[7] = ITEM_8;
+
+}
+
+bool GameManager::openChest(is::IAnimatedMeshSceneNode *perso, irr::ITimer *Timer)
+{
+    int epsilon = 70;
+    for (unsigned int k = 0; k < NB_CHEST + 1; k++)
+    {
+        if (chest[k] != NULL && perso != NULL && chest[k]->isVisible()) // pour eviter les erreurs de segmentations
+        {
+
+                if (    (core::abs_(perso->getPosition().X - chest[k]->getPosition().X)) <= epsilon
+                        &&   (core::abs_(perso->getPosition().Y - chest[k]->getPosition().Y)) <= epsilon
+                        &&   (core::abs_(perso->getPosition().Z - chest[k]->getPosition().Z)) <= epsilon
+                        &&   interaction )
+
+                {
+                    //actualisation de l inventaire
+                            interaction = false;
+                            itemWinTime = Timer->getTime();
+                            int ligne = nbObjetTrouve>3;
+                            if (ligne ==0)
+                                itemsButton[nbObjetTrouve] = device->getGUIEnvironment()->addButton(ic::rect<s32>(nbObjetTrouve%4*(DEFAULT_SCREEN_WIDTH - 20)/4 + 10, ligne*(DEFAULT_SCREEN_HEIGHT - 100)/2 + 45,
+                                                                                          (nbObjetTrouve%4 + 1)*(DEFAULT_SCREEN_WIDTH - 20)/4 - 10, (ligne + 1)*(DEFAULT_SCREEN_HEIGHT - 100)/2),
+                                                                                          itemWindow, idItem[nbObjetTrouve]);
+                            else
+                                itemsButton[nbObjetTrouve] = device->getGUIEnvironment()->addButton(ic::rect<s32>(nbObjetTrouve%4*(DEFAULT_SCREEN_WIDTH - 20)/4 + 10, ligne*(DEFAULT_SCREEN_HEIGHT - 100)/2,
+                                                                                          (nbObjetTrouve%4 + 1)*(DEFAULT_SCREEN_WIDTH - 20)/4 - 10, (ligne + 1)*(DEFAULT_SCREEN_HEIGHT - 100)/2),
+                                                                                          itemWindow, idItem[nbObjetTrouve]);
+
+                            itemsButton[nbObjetTrouve]->setUseAlphaChannel(true);itemsButton[nbObjetTrouve]->setDrawBorder(false);
+                            itemsButton[nbObjetTrouve]->setImage(items[nbObjetTrouve]);itemsButton[nbObjetTrouve]->setScaleImage(true);
+                            nbObjetTrouve++;
+                            chest[k]->setVisible(false);
+                            if(nbObjetTrouve == 8)
+                                windowUltimeItemRecovered->setVisible(true);
+                            else if(nbObjetTrouve == 7)
+                                windowUltimeItemmessage->setVisible(true);
+                            else
+                                windowItemRecovered->setVisible(true);
+
+                            return true;
+                }
+        }
+    }
+    return false;
+}
+
+
+/** mini boss **/
+void GameManager::createMiniBoss()
+{
+    is::IAnimatedMesh* mesh = getPlayer()->node->getMesh();
+    for (int k=0; k<3; k++)
+    {
+        miniBoss[k] = smgr->addAnimatedMeshSceneNode(mesh);
+        miniBoss[k]->setMaterialFlag(iv::EMF_LIGHTING, false);
+        miniBoss[k]->setMD2Animation(is::EMAT_STAND);
+        miniBoss[k]->setMaterialTexture(0, device->getVideoDriver()->getTexture("data/tris/blue_texture.pcx"));
+    }
+    miniBoss[0]->setRotation(ic::vector3df(0, 90, 0));
+    miniBoss[0]->setPosition(ic::vector3df(864.375, 721.751, 132.37));
+
+    miniBoss[1]->setRotation(ic::vector3df(0, 180, 0));
+    miniBoss[1]->setPosition(ic::vector3df(477.741, 609.751, 394.089));
+
+    miniBoss[2]->setPosition(ic::vector3df(1.33853, 977.751, 186.854));
+}
+
+void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso)
+{
+    int epsilon = 30;
+    for (unsigned int k = 0; k < 3; k++)
+    {
+        if (miniBoss[k] != NULL && perso != NULL && miniBoss[k]->isVisible()) // pour eviter les erreurs de segmentations
+        {
+
+                if (    (core::abs_(perso->getPosition().X - miniBoss[k]->getPosition().X)) <= epsilon
+                        &&   (core::abs_(perso->getPosition().Y - miniBoss[k]->getPosition().Y)) <= epsilon
+                        &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
+
+                {
+                    //on entre en collision avec un miniboss
+                    ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
+
+                            if(true) // quand on a gagne le combat
+                            {
+                                cle++;
+                                miniBoss[k]->setVisible(false);
+                            }
+                }
+        }
+    }
+}
 
 
 /** game over screen **/
@@ -1080,8 +1270,65 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
 
 
+
+    if ((float)getPlayer()->HP + gainHp*(float)(DEFAULT_PLAYER_HP - getPlayer()->HP) -
+            ((int)(getPlayer()->HP + (float)gainHp*(DEFAULT_PLAYER_HP - getPlayer()->HP)))!=0.0f)
+        getPlayer()->HP += 1 + gainHp*(float)(DEFAULT_PLAYER_HP - getPlayer()->HP);
+    else
+        getPlayer()->HP += gainHp*(float)(DEFAULT_PLAYER_HP - getPlayer()->HP);
+
+    gainHp = 0;
+
+    isOpenedChest = openChest(getPlayer()->node,Timer);
+
+
+    if(nbObjetTrouve == 7)
+    {
+        chest[7]->setPosition(ic::vector3df(1287.93, 308.025, -1309.74));
+    }
+
+    if(isOpenedChest)
+    {
+        isWaiting = true;
+    }
+
+    if(isWaiting)
+        if(Timer->getTime() - itemWinTime>5000)
+        {
+            isWaiting = false;
+            //selon les differentes situations, on affiche un message différent
+            if(nbObjetTrouve == 8)
+                windowUltimeItemRecovered->setVisible(false);
+            else if(nbObjetTrouve == 7)
+                windowUltimeItemmessage->setVisible(false);
+            else
+                windowItemRecovered->setVisible(false);
+
+        }
+
+    //on teste si on est en collision avec un mini boss
+    isVersusMiniboss(getPlayer()->node);
+
+    if (cle == 3)
+    {
+        // si le joueur est devant la porte du boss et appuie sur M
+        if(getPlayer()->node->getPosition().X <= -1668.46 && getPlayer()->node->getPosition().X >=-1745.07
+           && getPlayer()->node->getPosition().Y <= 26 && getPlayer()->node->getPosition().Y >= 25
+           && getPlayer()->node->getPosition().Z <= -172.217 && getPlayer()->node->getPosition().Z >=-283.837
+           && interaction)
+        {
+            //loop combat contre le boss
+            if(true) //// si on gagne
+            {
+                //fenetre de victoire
+            }
+            exit(0);
+        }
+    }
+
     // combat aleatoire
-    float probaFight = 0.0005;
+
+    float probaFight = 0;
     float randNum = (float)rand() / (float)RAND_MAX;
 
     if ( randNum < probaFight )

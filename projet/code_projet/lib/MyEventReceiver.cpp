@@ -249,6 +249,9 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
                 rotation.Y -= 10;
                 isMoving += 1;
                 break;
+              case KEY_KEY_M: // validate
+                gmngr->interaction = true;
+                break;
               case irr::KEY_KEY_A:
                 speed = (float)(((int)speed )%18) + 3;
                 std::cout << "speed = " << speed << std::endl;
@@ -267,6 +270,7 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
         else if(!event.KeyInput.PressedDown)
         {
             isMoving = 0;
+            gmngr->interaction = false;
         }
 
         if (isMoving == 1)
@@ -369,6 +373,29 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                   //std::cout << "ok" << std::endl;
                   break;
 
+              case ITEM_1:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.4;
+              case ITEM_2:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.4;
+              case ITEM_3:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.4;
+              case ITEM_4:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.4;
+              case ITEM_5:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.65;
+              case ITEM_6:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.65;
+              case ITEM_7:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->gainHp = 0.90;
+              case ITEM_8:
+                  gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
               default:;
           }
 
