@@ -213,16 +213,9 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
 bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
 {
     static int isMoving = 0;
-    static int hasJumped = 0;
 
     if (event.EventType == irr::EET_KEY_INPUT_EVENT)
     {
-        if(event.KeyInput.PressedDown && event.KeyInput.Key == irr::KEY_SPACE)
-            hasJumped += 1;
-        else if (!event.KeyInput.PressedDown || event.KeyInput.Key == irr::KEY_SPACE)
-            hasJumped = 0;
-
-
         if(event.KeyInput.PressedDown)
         {
             irr::core::vector3df position = gmngr->getPlayer()->node->getPosition();
@@ -269,9 +262,6 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
           gmngr->getPlayer()->node->setMD2Animation(irr::scene::EMAT_RUN);
         if (isMoving == 0)
            gmngr->getPlayer()->node->setMD2Animation(irr::scene::EMAT_STAND);
-        if (hasJumped == 1)
-          gmngr->getPlayer()->node->setMD2Animation(irr::scene::EMAT_JUMP);
-
     }
 
 
