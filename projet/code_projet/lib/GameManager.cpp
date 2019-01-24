@@ -1299,6 +1299,7 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     isCombat = 0;
     isPromenade = 1;
 
+    getPlayer()->HP = 2;
 
     // pour reprendre la partie ou on s'est arrete
     if(getPlayer() != NULL)
@@ -1347,6 +1348,7 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                     miniBoss[k]->setVisible(true);
                 isNotMiniboss = false;
             }
+            std::cout << "\n\n\n\n\n isNotItem " << isNotItem<< "\n\n\n\n\n isNotMiniboss " << isNotMiniboss << std::endl;
             cle++;
             miniBoss[k]->setVisible(false);
 
