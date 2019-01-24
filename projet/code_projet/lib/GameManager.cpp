@@ -936,7 +936,7 @@ void GameManager::parametreChest(is::IAnimatedMesh *meshChest)
 
 bool GameManager::openChest(is::IAnimatedMeshSceneNode *perso, irr::ITimer *Timer)
 {
-    int epsilon = 70;
+    int epsilon = 125;
     for (unsigned int k = 0; k < NB_CHEST + 1; k++)
     {
         if (chest[k] != NULL && perso != NULL && chest[k]->isVisible()) // pour eviter les erreurs de segmentations
@@ -1004,7 +1004,7 @@ void GameManager::createMiniBoss()
 
 void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer)
 {
-    int epsilon = 30;
+    int epsilon = 60;
     for (unsigned int k = 0; k < 3; k++)
     {
         if (miniBoss[k] != NULL && perso != NULL && miniBoss[k]->isVisible()) // pour eviter les erreurs de segmentations
@@ -1343,8 +1343,17 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
 
     irr::core::vector3d<float> pos = getPlayer()->node->getPosition();
-    pos.Y += 30;
+    irr::core::vector3d<float> rotationperso = getPlayer()->node->getRotation();
+    pos.Y += 25;
+    pos.X += 23 * cos(rotationperso.Y * M_PI / 180.0);
+    pos.Z += -23 * sin(rotationperso.Y * M_PI / 180.0);
+
     getCameraJeuLibre()->setPosition(pos);
+
+    irr::core::vector3df rotationCamera = getCameraJeuLibre()->getRotation();
+    rotationperso.Y = rotationCamera.Y - 90;
+
+    getPlayer()->node->setRotation(rotationperso);
 
     if ((float)getPlayer()->HP + gainHp*(float)(DEFAULT_PLAYER_HP - getPlayer()->HP) -
             ((int)(getPlayer()->HP + (float)gainHp*(DEFAULT_PLAYER_HP - getPlayer()->HP)))!=0.0f)

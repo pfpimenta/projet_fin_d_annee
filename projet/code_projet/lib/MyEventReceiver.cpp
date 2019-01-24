@@ -241,14 +241,6 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
                 position.Z += 1 * sin(rotation.Y * M_PI / 180.0) * speed;
                 isMoving += 1;
                 break;
-              case irr::KEY_KEY_D:
-                rotation.Y += 10;
-                isMoving += 1;
-                break;
-              case irr::KEY_KEY_Q:
-                rotation.Y -= 10;
-                isMoving += 1;
-                break;
               case KEY_KEY_M: // validate
                 gmngr->interaction = true;
                 break;
@@ -264,11 +256,6 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
                 isMoving = 0;
             }
             gmngr->getPlayer()->node->setPosition(position);
-            irr::core::vector3df rotationCamera = gmngr->getCameraJeuLibre()->getRotation();
-            rotation.Y = rotationCamera.Y - 90;
-
-            gmngr->getPlayer()->node->setRotation(rotation);
-
 //            gmngr->getPlayer()->node->setRotation(rotation);
         }
 
