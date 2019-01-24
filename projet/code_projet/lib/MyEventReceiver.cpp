@@ -264,7 +264,12 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
                 isMoving = 0;
             }
             gmngr->getPlayer()->node->setPosition(position);
+            irr::core::vector3df rotationCamera = gmngr->getCameraJeuLibre()->getRotation();
+            rotation.Y = rotationCamera.Y - 90;
+
             gmngr->getPlayer()->node->setRotation(rotation);
+
+//            gmngr->getPlayer()->node->setRotation(rotation);
         }
 
         else if(!event.KeyInput.PressedDown)

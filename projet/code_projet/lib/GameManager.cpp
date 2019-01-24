@@ -384,10 +384,21 @@ bool GameManager::addCameraJeuLibre()
                 std::cout << "... GameManager::addCameraJeuLibre : CameraJeuLibre non ajoutee ! Aucun joueur present !  ..." << std::endl;
                 return 0;
             }
-            irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
-            camera->setPosition(ic::vector3df(-50, 30, 0));
+
+            irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(nullptr,
+                                                                                100,         // Vitesse de rotation
+                                                                                0,          // Vitesse de déplacement
+                                                                                -1,          // Identifiant
+                                                                                nullptr, 0,  // Table de changement de touches
+                                                                                true      // Pas de possibilité de voler
+                                                                                );          // Vitesse saut
+
+            //irr::scene::ICameraSceneNode *camera = smgr->addCameraSceneNode(getPlayer()->node, core::vector3df(0, 0, 0), core::vector3df(0,0,0));
+            irr::core::vector3d<float> pos = getPlayer()->node->getPosition();
+            //pos.Y -= 27;
+            camera->setPosition(pos);
             // ajout collision a la camera en mode jeu libre si la map 3D est chargee
-            if (getMapScene3D() != NULL) getMapScene3D()->addCollisionToCamera(camera, ic::vector3df(30, 50, 30));
+//            if (getMapScene3D() != NULL) getMapScene3D()->addCollisionToCamera(camera, ic::vector3df(30, 50, 30));
 
             cameraJeuLibre.push_back(camera);
             isCombat = 0; isPromenade = 1;
@@ -817,7 +828,7 @@ bool GameManager::addMapScene3D(is::IAnimatedMesh *mesh_bsp)
         }
 
         // on ajoute une collision au joueur s'il existe
-        if (getCameraJeuLibre() != NULL) scene->addCollisionToCamera(getCameraJeuLibre(), ic::vector3df(30, 50, 30));
+//        if (getCameraJeuLibre() != NULL) scene->addCollisionToCamera(getCameraJeuLibre(), ic::vector3df(30, 50, 30));
 
         mapScene3D.push_back(scene);
         std::cout << "... GameManager::addMapScene3D() : MapScene3D ajoutee avec succes ! ..." << std::endl;
@@ -1325,9 +1336,8 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                     if(k == indiceMinibossKilled[i])
                         isNotMiniboss = true;
                 if(!isNotMiniboss)
-                    chest[k]->setVisible(true);
+                    miniBoss[k]->setVisible(true);
                 isNotMiniboss = false;
-
             }
             cle++;
             miniBoss[k]->setVisible(false);
@@ -1344,7 +1354,9 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 void GameManager::loopPromenade(irr::ITimer *Timer){
   // est appellee en loop dans le mode jeu libre
 
-
+    irr::core::vector3d<float> pos = getPlayer()->node->getPosition();
+    pos.Y += 30;
+    getCameraJeuLibre()->setPosition(pos);
 
     if ((float)getPlayer()->HP + gainHp*(float)(DEFAULT_PLAYER_HP - getPlayer()->HP) -
             ((int)(getPlayer()->HP + (float)gainHp*(DEFAULT_PLAYER_HP - getPlayer()->HP)))!=0.0f)
@@ -1685,8 +1697,8 @@ void GameManager::sceneRenderer(irr::ITimer *Timer)
             /** DO NOT EDIT **/
 
             // pour que les cameras aient la bonne target
-            if (getCameraJeuLibre() != NULL)
-                getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
+//            if (getCameraJeuLibre() != NULL)
+//                getCameraJeuLibre()->setTarget(getPlayer()->node->getPosition());
 
             // faire clignoter le curseur
             if (getGridMapping() != NULL)
