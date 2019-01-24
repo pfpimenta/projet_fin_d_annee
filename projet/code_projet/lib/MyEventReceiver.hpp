@@ -11,6 +11,15 @@ struct MyEventReceiver : irr::IEventReceiver
 {
 
 
+
+
+//    // controller
+//    irr::SEvent::SJoystickEvent JoystickState; //permet de recuperer l'etat du joystick (touches appuyees, etc...)
+//    irr::core::array<irr::SJoystickInfo> joystickInfo; //permet d'avoir toute les infos d'un joystick (nombre de touches, nom du joystick, etc...)
+
+
+
+
     irr::scene::IAnimatedMeshSceneNode *perso1; //correspondra au perso principal
     irr::scene::ICameraSceneNode *camCombat; //correspondra a la camera pendant le combat
 

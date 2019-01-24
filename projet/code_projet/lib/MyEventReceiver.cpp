@@ -245,6 +245,10 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
             case irr::KEY_KEY_I:
                 gmngr->itemWindow->setVisible(isOpened);
                 isOpened = !isOpened;
+
+                enabled = gmngr->getCameraJeuLibre()->isInputReceiverEnabled();
+                gmngr->getCameraJeuLibre()->setInputReceiverEnabled(!enabled);
+                gmngr->device->getCursorControl()->setVisible(enabled);
                 break;
             case irr::KEY_KEY_X:
                 enabled = gmngr->getCameraJeuLibre()->isInputReceiverEnabled();
