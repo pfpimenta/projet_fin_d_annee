@@ -11,11 +11,11 @@
 
 #include "utils.hpp"
 
-#define NUM_STATES 100 // changer
-#define NUM_ACTIONS 5 // changer
-#define TAUX_EXPLORATION 0.1 // changer
-#define LEARNING_RATE 0.01 // changer
-#define DISCOUNT_VALUE 0.92 // changer
+#define NUM_STATES 100
+#define NUM_ACTIONS 5
+#define TAUX_EXPLORATION 0.1
+#define LEARNING_RATE 0.05
+#define DISCOUNT_VALUE 0.99 // changer
 
 enum QTableAction {QUP, QDOWN, QLEFT, QRIGHT, QATTACK};
 

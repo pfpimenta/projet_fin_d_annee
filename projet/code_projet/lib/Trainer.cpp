@@ -203,12 +203,16 @@ void Trainer::train_v2(){
   }
   std::cout << "...training complete" << std::endl;
 
-  // print q-table
-  qtable->printTable();
-  qtable->printTableBestActions();
-  //qtable->saveTable("q_table");
-  //qtable->loadTable("q_table");
-  this->test(qtable); // DEBUG
+  // print q-table :
+  //qtable->printTable();
+  //qtable->printTableBestActions();
+
+  // save q-table :
+  qtable->saveTable("q_table");
+  //qtable->loadTable("q_table"); // DEBUG
+
+  // test q-table :
+  this->test(qtable);
 }
 
 
@@ -253,7 +257,7 @@ void Trainer::train(){
   //qtable->loadTable("q_table"); // DEBUG
 
   // test q-table :
-  //this->test(qtable); // DEBUG
+  //this->test(qtable);
 }
 
 // avance un tour du jeu

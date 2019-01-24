@@ -36,7 +36,11 @@ Learner::Learner(int x, int y, Q_table* q_table){
   this->pos_x = x;
   this->pos_y = y;
 
-  this->setHP(HP_MAX);
+  // DEBUG
+  float rand_num = static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX); // nb entre 0 et 1
+  this->setHP(HP_MAX/3 + rand_num*HP_MAX*2/3);
+
+  //this->setHP(HP_MAX);
   this->setAttackForce(DEFAULT_ATTACK_FORCE);
   this->qTable = q_table;
   this->isTrained = false;
@@ -131,7 +135,7 @@ float Learner::getReward(){
   float reward = 0.0f;
   //reward = std::rand() / static_cast <float> (RAND_MAX); // DEBUG
   if(this->estMort){
-    reward = -0.5;
+    reward = -0.75;
   }else if(this->aTue){
     reward = 1;
     this->aTue = false; // reset
