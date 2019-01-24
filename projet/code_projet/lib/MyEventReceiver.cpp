@@ -213,6 +213,7 @@ bool MyEventReceiver::mouse_combat(const irr::SEvent &event)
 bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
 {
     static int isMoving = 0;
+    bool enabled;
 
     if (event.EventType == irr::EET_KEY_INPUT_EVENT)
     {
@@ -244,6 +245,11 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
             case irr::KEY_KEY_I:
                 gmngr->itemWindow->setVisible(isOpened);
                 isOpened = !isOpened;
+                break;
+            case irr::KEY_KEY_X:
+                enabled = gmngr->getCameraJeuLibre()->isInputReceiverEnabled();
+                gmngr->getCameraJeuLibre()->setInputReceiverEnabled(!enabled);
+                gmngr->device->getCursorControl()->setVisible(enabled);
                 break;
               default:
                 isMoving = 0;
