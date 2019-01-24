@@ -376,26 +376,34 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
               case ITEM_1:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.4;
+                  break;
               case ITEM_2:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.4;
+                  break;
               case ITEM_3:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.4;
+                  break;
               case ITEM_4:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.4;
+                  break;
               case ITEM_5:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.65;
+                  break;
               case ITEM_6:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.65;
+                  break;
               case ITEM_7:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
                   gmngr->gainHp = 0.90;
+                  break;
               case ITEM_8:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  break;
               default:;
           }
 
