@@ -52,6 +52,9 @@ namespace ig = irr::gui;
 // nombre de coffre
 #define NB_CHEST 7
 
+// limite de deplacement du joueur en mode combat
+#define DEFAULT_RAYON_ACTION 1
+
 // actions du joueur ou de l'ennemi
 enum Action {UP, DOWN, LEFT, RIGHT, ATTACK, VALIDATE, RESET, NOTHING, DEBUG};
 
@@ -106,6 +109,12 @@ public:
                 || position(ligne, colonne) == position(p.ligne - 1, p.colonne)
                 || position(ligne, colonne) == position(p.ligne, p.colonne + 1)
                 || position(ligne, colonne) == position(p.ligne, p.colonne - 1));
+    }
+
+    bool isArround(const position &p, int rayon)
+    {
+        return (std::abs(ligne - p.ligne) <= rayon
+                && std::abs(colonne - p.colonne) <= rayon);
     }
 };
 

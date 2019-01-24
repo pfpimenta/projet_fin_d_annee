@@ -527,30 +527,42 @@ void GameManager::playAnimation(bool voieLibre, Action act, scene::IAnimatedMesh
 
 
     case UP: // haut
-        if (voieLibre){
-            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
-            animator(0, 1, perso);
+        if (getGridMapping() != NULL)
+        {
+            if (voieLibre){
+                getPlayer()->node->setMD2Animation(is::EMAT_STAND);
+                animator(0, 1, perso);
+            }
         }
         break;
     case DOWN: // bas
-        if (voieLibre)
+        if (getGridMapping() != NULL)
         {
-            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
-            animator(0, -1, perso);
+            if (voieLibre)
+            {
+                getPlayer()->node->setMD2Animation(is::EMAT_STAND);
+                animator(0, -1, perso);
+            }
         }
         break;
     case RIGHT: // droite
-        if (voieLibre)
+        if (getGridMapping() != NULL)
         {
-            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
-            animator(1, 0, perso);
+            if (voieLibre)
+            {
+                getPlayer()->node->setMD2Animation(is::EMAT_STAND);
+                animator(1, 0, perso);
+            }
         }
         break;
     case LEFT: // gauche
-        if (voieLibre)
+        if (getGridMapping() != NULL)
         {
-            getPlayer()->node->setMD2Animation(is::EMAT_STAND);
-            animator(-1, 0, perso);
+            if (voieLibre)
+            {
+                getPlayer()->node->setMD2Animation(is::EMAT_STAND);
+                animator(-1, 0, perso);
+            }
         }
         break;
     case ATTACK: // attack

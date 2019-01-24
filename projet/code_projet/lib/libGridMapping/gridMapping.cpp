@@ -79,7 +79,7 @@ void gridMapping::setCurseur(position curseur)
 bool gridMapping::mouvementGridPlayer(Action act)
 {
 
-    bool voieLibre = true;
+    bool voieLibre = 0;
 
     switch (act) {
     /**
@@ -96,34 +96,51 @@ bool gridMapping::mouvementGridPlayer(Action act)
     case RIGHT:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
-        myGrid->getGridNode(curseur)->setWireframe();
-        curseur.colonne ++;
-        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne --;}
-        myGrid->getGridNode(curseur)->setWireframe();
+
+        if(curseur.colonne - j1.pos.colonne <= DEFAULT_RAYON_ACTION)
+        {
+            voieLibre = 1;
+            myGrid->getGridNode(curseur)->setWireframe();
+            curseur.colonne ++;
+            if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne --;}
+            myGrid->getGridNode(curseur)->setWireframe();
+        }
         break;
     case LEFT:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
-        myGrid->getGridNode(curseur)->setWireframe();
-        curseur.colonne --;
-        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne ++;}
-        myGrid->getGridNode(curseur)->setWireframe();
+        if(curseur.colonne - j1.pos.colonne >= -DEFAULT_RAYON_ACTION)
+        {
+            voieLibre = 1;
+            myGrid->getGridNode(curseur)->setWireframe();
+            curseur.colonne --;
+            if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.colonne ++;}
+            myGrid->getGridNode(curseur)->setWireframe();
+        }
         break;
     case UP:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
-        myGrid->getGridNode(curseur)->setWireframe();
-        curseur.ligne --;
-        if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.ligne ++;}
-        myGrid->getGridNode(curseur)->setWireframe();
+        if(curseur.ligne - j1.pos.ligne >= -DEFAULT_RAYON_ACTION)
+        {
+            voieLibre = 1;
+            myGrid->getGridNode(curseur)->setWireframe();
+            curseur.ligne --;
+            if (isObstacle(curseur, barrier)){ voieLibre = 0;  curseur.ligne ++;}
+            myGrid->getGridNode(curseur)->setWireframe();
+        }
         break;
     case DOWN:
         if (isBlinking)
             curseurBlink(false); // on ne veut pas que le curseur blink a ce moment
-        myGrid->getGridNode(curseur)->setWireframe();
-        curseur.ligne ++;
-        if (isObstacle(curseur, barrier)){  voieLibre = 0;  curseur.ligne --;}
-        myGrid->getGridNode(curseur)->setWireframe();
+        if(curseur.ligne - j1.pos.ligne <= DEFAULT_RAYON_ACTION)
+        {
+            voieLibre = 1;
+            myGrid->getGridNode(curseur)->setWireframe();
+            curseur.ligne ++;
+            if (isObstacle(curseur, barrier)){  voieLibre = 0;  curseur.ligne --;}
+            myGrid->getGridNode(curseur)->setWireframe();
+        }
         break;
 
 
