@@ -1418,7 +1418,6 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
         if((Timer->getTime() - itemWinTime>7000) || clicSouris)
         {
             isWaiting = false;
-            clicSouris = false;
             //selon les differentes situations, on affiche un message différent
             if(nbObjetTrouve == 8)
                 windowUltimeItemRecovered->setVisible(false);
@@ -1428,6 +1427,8 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
                 windowItemRecovered->setVisible(false);
 
         }
+    clicSouris = false;
+
 
     //on teste si on est en collision avec un mini boss
     isVersusMiniboss(getPlayer()->node,Timer);
