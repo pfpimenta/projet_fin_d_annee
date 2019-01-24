@@ -1252,20 +1252,38 @@ void GameManager::startCombat(irr::ITimer *Timer)
         p2 = position(alea(1, DEFAULT_HEIGHT - 1), alea(DEFAULT_WIDTH/2, DEFAULT_WIDTH - 1));
     }
 
-    enemyPos.push_back(p1);
-    enemyPos.push_back(p2);
-
-    for (unsigned int k = 0; k < enemyPos.size(); k++)
+    if(isVersusBossFinal)
     {
-        this->addEnemy(enemyPos[k],
-                       DEFAULT_ENEMY_HP, // HP de l'ennemi
+        enemyPos.push_back(p1);
+        //mesh = .... // mesh du boss final
+        //textureEnemy = .... // texture du boss final
+        int HpBossFinal = 50;
+        this->addEnemy(enemyPos[0],
+                       HpBossFinal, // HP du boss final
                        mesh, // mesh de l'ennemi
                        textureEnemy, // texture du joueur
                        getPlayer()->node->getPosition()
-                       + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemyPos[k].ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemyPos[k].colonne)); // positions 3D dans le monde 3D du joueur
-        getGridMapping()->addEnemy(enemyPos[k]);
-    }
+                       + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemyPos[0].ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemyPos[0].colonne)); // positions 3D dans le monde 3D du joueur
+        getGridMapping()->addEnemy(enemyPos[0]);
 
+    }
+    else
+    {
+        enemyPos.push_back(p1);
+        enemyPos.push_back(p2);
+
+
+        for (unsigned int k = 0; k < enemyPos.size(); k++)
+        {
+            this->addEnemy(enemyPos[k],
+                           DEFAULT_ENEMY_HP, // HP de l'ennemi
+                           mesh, // mesh de l'ennemi
+                           textureEnemy, // texture du joueur
+                           getPlayer()->node->getPosition()
+                           + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemyPos[k].ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemyPos[k].colonne)); // positions 3D dans le monde 3D du joueur
+            getGridMapping()->addEnemy(enemyPos[k]);
+        }
+    }
 
     for (unsigned int k = 0; k < mechant.size(); k++ )
     {
