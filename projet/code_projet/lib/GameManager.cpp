@@ -494,7 +494,6 @@ void GameManager::animPlayer(bool voieLibre, Action act)
             {
                 if(getEnemy(k)->p.isNear(getPlayer()->p))
                 {
-                    int damage = 2;
                     if (getEnemy(k)->HP >=  damage)
                     {
                         getEnemy(k)->HP -= damage;
@@ -1027,7 +1026,7 @@ void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* ti
                         &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
 
                 {
-
+                    versusMiniBoss = true;
                     startCombat(timer);
 
                 }
@@ -1267,6 +1266,21 @@ void GameManager::startCombat(irr::ITimer *Timer)
         getGridMapping()->addEnemy(enemyPos[0]);
 
     }
+    else if(versusMiniBoss)
+    {
+        enemyPos.push_back(p1);
+        //mesh = .... // mesh du boss final
+        //textureEnemy = .... // texture du boss final
+        int HpBossFinal = 20;
+        this->addEnemy(enemyPos[0],
+                       HpBossFinal, // HP du boss final
+                       mesh, // mesh de l'ennemi
+                       textureEnemy, // texture du joueur
+                       getPlayer()->node->getPosition()
+                       + ic::vector3df(-DEFAULT_GRID_NODE_SIZE * enemyPos[0].ligne, 0, -DEFAULT_GRID_NODE_SIZE * enemyPos[0].colonne)); // positions 3D dans le monde 3D du joueur
+        getGridMapping()->addEnemy(enemyPos[0]);
+
+    }
     else
     {
         enemyPos.push_back(p1);
@@ -1316,8 +1330,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 {
     isCombat = 0;
     isPromenade = 1;
-
-    getPlayer()->HP = 2;
 
     // pour reprendre la partie ou on s'est arrete
     if(getPlayer() != NULL)
@@ -1449,11 +1461,10 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
 
     // combat aleatoire
 
-    float probaFight = 0;
+    float probaFight = 0.005;
     float randNum = (float)rand() / (float)RAND_MAX;
 
-    if ( randNum < probaFight )
-
+    if ( randNum < probaFight && onMvt)
     {
         isCombat = 1; isPromenade = 0;
         startCombat(Timer);

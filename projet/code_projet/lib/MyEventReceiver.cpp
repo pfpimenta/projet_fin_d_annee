@@ -238,10 +238,10 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
               case KEY_KEY_M: // validate
                 gmngr->interaction = true;
                 break;
-              case irr::KEY_KEY_A:
-                speed = (float)(((int)speed )%18) + 3;
-                std::cout << "speed = " << speed << std::endl;
-                break;
+//              case irr::KEY_KEY_A:
+//                speed = (float)(((int)speed )%18) + 3;
+//                std::cout << "speed = " << speed << std::endl;
+//                break;
             case irr::KEY_KEY_I:
                 gmngr->itemWindow->setVisible(isOpened);
                 isOpened = !isOpened;
@@ -254,6 +254,7 @@ bool MyEventReceiver::keyboard_promenade(const irr::SEvent &event)
               default:
                 isMoving = 0;
             }
+            gmngr->onMvt = isMoving;
             gmngr->getPlayer()->node->setPosition(position);
 //            gmngr->getPlayer()->node->setRotation(rotation);
         }
@@ -401,6 +402,7 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
                   break;
               case ITEM_8:
                   gmngr->itemWindow->getElementFromId(id2)->setVisible(false);
+                  gmngr->damage *= 2;
                   break;
               default:;
           }

@@ -92,6 +92,7 @@ public:
     bool isFin = 1;
     int currentAnimationTime;
     int currentAnimationTimeEnemy;
+    int damage = 2;
 
     void animEnemy(int id, bool voieLibre, Action act);
     void animPlayer(bool voieLibre, Action act);
@@ -149,6 +150,7 @@ public:
     int nbMinibosskilled = 0;
     int cle = 0;
     bool isVersusBossFinal = false;
+    bool versusMiniBoss = false;
 
     void createMiniBoss();
     void isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer);
@@ -164,6 +166,7 @@ public:
     bool isCombat; // : 1 => le combat commence dans la scene 2D , appelle de la fonction gestion combat()
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
     bool clicSouris = false;
+    int onMvt = 0;
 
     // flags pour le combat tour par tour
     bool playerTurn, ennemysTurn, endPlayerTurn;

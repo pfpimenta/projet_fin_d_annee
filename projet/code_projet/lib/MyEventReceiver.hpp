@@ -17,7 +17,7 @@ struct MyEventReceiver : irr::IEventReceiver
     // pour la souris
     bool button_pressed;
     int  old_x, old_y;
-    float speed = 3;
+    float speed = 9;
 
     /** gestion scene 3D **/
     bool isOpened = true;
