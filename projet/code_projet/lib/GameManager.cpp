@@ -731,32 +731,35 @@ void GameManager::createItemWindow(ig::IGUIEnvironment *gui)
 
 //  windowUltimeItemRecovered = gui->addMessageBox(L"", L"Vous obtenez les légendaires lames du chaos!");
 //  windowUltimeItemRecovered->setVisible(false);
-  windowItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
-                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+  windowItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 250, DEFAULT_SCREEN_HEIGHT/2 - 125,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 250, DEFAULT_SCREEN_HEIGHT/2 + 125),
                                        false, L"items recovered");
   windowItemRecovered->setDraggable(false);
   windowItemRecovered->setDrawTitlebar(false);
   iv::ITexture *fondWindowItemRecovered = device->getVideoDriver()->getTexture(L"data/menu/messagePotion.png");
   gui->addImage(fondWindowItemRecovered, ic::position2d<s32>(0, 0), true, windowItemRecovered);
   windowItemRecovered->setVisible(false);
+  windowItemRecovered->setDrawBackground(false);
 
-  windowUltimeItemmessage = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
-                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+  windowUltimeItemmessage = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 250, DEFAULT_SCREEN_HEIGHT/2 - 125,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 250, DEFAULT_SCREEN_HEIGHT/2 + 125),
                                        false, L"indice");
   windowUltimeItemmessage->setDraggable(false);
   windowUltimeItemmessage->setDrawTitlebar(false);
   iv::ITexture *fondWindowUltimeItemmessage = device->getVideoDriver()->getTexture(L"data/menu/messageIndice.png");
   gui->addImage(fondWindowUltimeItemmessage, ic::position2d<s32>(0, 0), true, windowUltimeItemmessage);
   windowUltimeItemmessage->setVisible(false);
+  windowUltimeItemmessage->setDrawBackground(false);
 
-  windowUltimeItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 150, DEFAULT_SCREEN_HEIGHT/2 - 50,
-                                                     DEFAULT_SCREEN_WIDTH/2 + 150, DEFAULT_SCREEN_HEIGHT/2 + 50),
+  windowUltimeItemRecovered = gui->addWindow(ic::rect<s32>(DEFAULT_SCREEN_WIDTH/2 - 250, DEFAULT_SCREEN_HEIGHT/2 - 75,
+                                                     DEFAULT_SCREEN_WIDTH/2 + 250, DEFAULT_SCREEN_HEIGHT/2 + 75),
                                        false, L"lames du chaos");
   windowUltimeItemRecovered->setDraggable(false);
   windowUltimeItemRecovered->setDrawTitlebar(false);
   iv::ITexture *fondWindowUltimeItemRecovered = device->getVideoDriver()->getTexture(L"data/menu/messageLamesDuChaos.png");
   gui->addImage(fondWindowUltimeItemRecovered, ic::position2d<s32>(0, 0), true, windowUltimeItemRecovered);
   windowUltimeItemRecovered->setVisible(false);
+  windowUltimeItemRecovered->setDrawBackground(false);
 
   // ecran titre (pour commencer le jeu)
   ecranTitre = gui->addWindow(ic::rect<s32>(0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT), false);
@@ -1002,11 +1005,8 @@ void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso)
                     //on entre en collision avec un miniboss
                     ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
 
-                            if(true) // quand on a gagne le combat
-                            {
-                                cle++;
-                                miniBoss[k]->setVisible(false);
-                            }
+                    cle++;
+                    miniBoss[k]->setVisible(false);
                 }
         }
     }
@@ -1293,7 +1293,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
     }
 
     if(isWaiting)
-        if(Timer->getTime() - itemWinTime>5000)
+        if(Timer->getTime() - itemWinTime>7000)
         {
             isWaiting = false;
             //selon les differentes situations, on affiche un message différent
