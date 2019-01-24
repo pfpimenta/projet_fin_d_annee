@@ -1329,7 +1329,7 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 
     bool isNotItem = false;
     bool isNotMiniboss = false;
-    int epsilon = 30;
+    int epsilon = 60;
     for (unsigned int k = 0; k < 3; k++)
     {
         if (    (core::abs_(perso->getPosition().X - miniBoss[k]->getPosition().X)) <= epsilon
@@ -1366,7 +1366,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                     miniBoss[k]->setVisible(true);
                 isNotMiniboss = false;
             }
-            std::cout << "\n\n\n\n\n isNotItem " << isNotItem<< "\n\n\n\n\n isNotMiniboss " << isNotMiniboss << std::endl;
             cle++;
             miniBoss[k]->setVisible(false);
 
