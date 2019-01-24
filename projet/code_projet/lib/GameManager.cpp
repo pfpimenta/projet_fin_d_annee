@@ -1287,6 +1287,8 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                 &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
 
         {
+            indiceMinibossKilled[nbMinibosskilled] = k;
+            nbMinibosskilled++;
 
             //on entre en collision avec un miniboss
             ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
@@ -1301,7 +1303,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                         chest[k]->setVisible(true);
                     isNotItem = false;
 
-                    std::cout << "\n\n\n\n\n\n\n\n" << isNotItem << std::endl;
 
                 }
             }
@@ -1317,8 +1318,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
 
             }
             cle++;
-            indiceMinibossKilled[nbMinibosskilled] = k;
-            nbMinibosskilled++;
             miniBoss[k]->setVisible(false);
 
         }
