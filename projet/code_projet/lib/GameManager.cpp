@@ -996,21 +996,31 @@ bool GameManager::openChest(is::IAnimatedMeshSceneNode *perso, irr::ITimer *Time
 /** mini boss **/
 void GameManager::createMiniBoss()
 {
-    is::IAnimatedMesh* mesh = getPlayer()->node->getMesh();
+    //is::IAnimatedMesh* mesh = getPlayer()->node->getMesh();
+    is::IAnimatedMesh* mesh = smgr->getMesh("data/splice/splice.DAE");
+
+    // pour resize le mesh
+    is::IMeshManipulator *meshManip = smgr->getMeshManipulator();
+    float fact = 0.2;
+    meshManip->scaleMesh(mesh,core::vector3df(fact, fact, fact));
+
     for (int k=0; k<3; k++)
     {
         miniBoss[k] = smgr->addAnimatedMeshSceneNode(mesh);
+        miniBoss[k]->setRotation(ic::vector3df(-90, 0, 0));
         miniBoss[k]->setMaterialFlag(iv::EMF_LIGHTING, false);
         miniBoss[k]->setMD2Animation(is::EMAT_STAND);
-        miniBoss[k]->setMaterialTexture(0, device->getVideoDriver()->getTexture("data/tris/blue_texture.pcx"));
+        miniBoss[k]->setMaterialTexture(0, device->getVideoDriver()->getTexture("data//splice/splice.png"));
     }
-    miniBoss[0]->setRotation(ic::vector3df(0, 90, 0));
-    miniBoss[0]->setPosition(ic::vector3df(864.375, 721.751, 132.37));
 
-    miniBoss[1]->setRotation(ic::vector3df(0, 180, 0));
-    miniBoss[1]->setPosition(ic::vector3df(477.741, 609.751, 394.089));
+    ic::vector3df translation(0, -25, 0);
+    miniBoss[0]->setRotation(ic::vector3df(-90, 90, 0));
+    miniBoss[0]->setPosition(ic::vector3df(864.375, 721.751, 132.37) + translation);
 
-    miniBoss[2]->setPosition(ic::vector3df(1.33853, 977.751, 186.854));
+    miniBoss[1]->setRotation(ic::vector3df(-90, 180, 0));
+    miniBoss[1]->setPosition(ic::vector3df(477.741, 609.751, 394.089) + translation);
+
+    miniBoss[2]->setPosition(ic::vector3df(1.33853, 977.751, 186.854) + translation);
 }
 
 void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* timer)
