@@ -1352,45 +1352,63 @@ void GameManager::startPromenade(irr::ITimer *Timer)
     bool isNotItem = false;
     bool isNotMiniboss = false;
     int epsilon = 60;
-    for (unsigned int k = 0; k < 3; k++)
+
+    if(fightMob)
     {
-        if (    (core::abs_(perso->getPosition().X - miniBoss[k]->getPosition().X)) <= epsilon
-                &&   (core::abs_(perso->getPosition().Y - miniBoss[k]->getPosition().Y)) <= epsilon
-                &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
-
+        for (int k = 0; k < NB_CHEST + 1; k++)
         {
-            indiceMinibossKilled[nbMinibosskilled] = k;
-            nbMinibosskilled++;
+            if (chest[k] != NULL) // pour eviter les erreurs de segmentations
+                chest[k]->setVisible(true);
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            if (miniBoss[i] != NULL) // pour eviter les erreurs de segmentations
+                miniBoss[i]->setVisible(true);
+        }
+    }
 
-            //on entre en collision avec un miniboss
-            ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
-            for (int k = 0; k < NB_CHEST + 1; k++)
+    else
+    {
+        for (unsigned int k = 0; k < 3; k++)
+        {
+            if (    (core::abs_(perso->getPosition().X - miniBoss[k]->getPosition().X)) <= epsilon
+                    &&   (core::abs_(perso->getPosition().Y - miniBoss[k]->getPosition().Y)) <= epsilon
+                    &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
+
             {
-                if (chest[k] != NULL) // pour eviter les erreurs de segmentations
+                indiceMinibossKilled[nbMinibosskilled] = k;
+                nbMinibosskilled++;
+
+                //on entre en collision avec un miniboss
+                ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
+                for (int k = 0; k < NB_CHEST + 1; k++)
                 {
-                    for(int i = 0; i < nbObjetTrouve; i++)
-                        if(k == indiceItemRecovered[i])
-                            isNotItem = true;
-                    if(!isNotItem)
-                        chest[k]->setVisible(true);
-                    isNotItem = false;
+                    if (chest[k] != NULL) // pour eviter les erreurs de segmentations
+                    {
+                        for(int i = 0; i < nbObjetTrouve; i++)
+                            if(k == indiceItemRecovered[i])
+                                isNotItem = true;
+                        if(!isNotItem)
+                            chest[k]->setVisible(true);
+                        isNotItem = false;
 
 
+                    }
                 }
-            }
 
-            for (int k = 0; k < 3; k++)
-            {
-                for(int i = 0; i < nbMinibosskilled; i++)
-                    if(k == indiceMinibossKilled[i])
-                        isNotMiniboss = true;
-                if(!isNotMiniboss)
-                    miniBoss[k]->setVisible(true);
-                isNotMiniboss = false;
-            }
-            cle++;
-            miniBoss[k]->setVisible(false);
+                for (int k = 0; k < 3; k++)
+                {
+                    for(int i = 0; i < nbMinibosskilled; i++)
+                        if(k == indiceMinibossKilled[i])
+                            isNotMiniboss = true;
+                    if(!isNotMiniboss)
+                        miniBoss[k]->setVisible(true);
+                    isNotMiniboss = false;
+                }
+                cle++;
+                miniBoss[k]->setVisible(false);
 
+            }
         }
     }
 
@@ -1471,11 +1489,12 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
 
     // combat aleatoire
 
-    float probaFight = 0.005;
+    float probaFight = 0.0005;
     float randNum = (float)rand() / (float)RAND_MAX;
 
     if ( randNum < probaFight && onMvt)
     {
+        fightMob = true;
         isCombat = 1; isPromenade = 0;
         startCombat(Timer);
     }

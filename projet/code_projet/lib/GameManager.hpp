@@ -167,6 +167,7 @@ public:
     bool isPromenade; // : 1 => le joueur se promene dans le monde 3D, appelle de la fonction gestion promenade()
     bool clicSouris = false;
     int onMvt = 0;
+    bool fightMob = false;
 
     // flags pour le combat tour par tour
     bool playerTurn, ennemysTurn, endPlayerTurn;
