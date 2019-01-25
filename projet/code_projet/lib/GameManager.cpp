@@ -1035,6 +1035,8 @@ void GameManager::isVersusMiniboss(is::IAnimatedMeshSceneNode *perso, ITimer* ti
                         &&   (core::abs_(perso->getPosition().Z - miniBoss[k]->getPosition().Z)) <= epsilon)
 
                 {
+                    miniBoss[k]->setVisible(false);
+
                     versusMiniBoss = true;
                     startCombat(timer);
 
@@ -1392,7 +1394,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
             {
                 indiceMinibossKilled[nbMinibosskilled] = k;
                 nbMinibosskilled++;
-                miniBoss[k]->setVisible(false);
 
                 //on entre en collision avec un miniboss
                 ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
@@ -1438,8 +1439,8 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
     irr::core::vector3d<float> pos = getPlayer()->node->getPosition();
     irr::core::vector3d<float> rotationperso = getPlayer()->node->getRotation();
     pos.Y += 25;
-    pos.X += 25 * cos(rotationperso.Y * M_PI / 180.0);
-    pos.Z += -25 * sin(rotationperso.Y * M_PI / 180.0);
+    pos.X += 28 * cos(rotationperso.Y * M_PI / 180.0);
+    pos.Z += -28 * sin(rotationperso.Y * M_PI / 180.0);
 
     getCameraJeuLibre()->setPosition(pos);
 
@@ -1492,7 +1493,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
     {
         // si le joueur est devant la porte du boss et appuie sur M
         if(getPlayer()->node->getPosition().X <= -1668.46 && getPlayer()->node->getPosition().X >=-1745.07
-           && getPlayer()->node->getPosition().Y <= 26 && getPlayer()->node->getPosition().Y >= 25
+           && getPlayer()->node->getPosition().Y <= 21 && getPlayer()->node->getPosition().Y >= 20
            && getPlayer()->node->getPosition().Z <= -172.217 && getPlayer()->node->getPosition().Z >=-283.837
            && interaction)
         {
