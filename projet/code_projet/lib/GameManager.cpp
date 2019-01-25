@@ -1119,19 +1119,6 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
   // faire l'action
   switch(a){
     case QUP:
-          gridPosition = gridPosition + position(-1, 0);
-          if(getEnemy(enemyIndex) != NULL)
-          {
-              getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
-              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
-              {
-                  animator(0, 1, this->getEnemy(enemyIndex)->node);
-                  this->getEnemy(enemyIndex)->p = gridPosition;
-                  std::cout << "enemy up" << std::endl;
-              }
-          }
-          break;
-    case QDOWN:
           gridPosition = gridPosition + position(1, 0);
           if(getEnemy(enemyIndex) != NULL)
           {
@@ -1139,6 +1126,19 @@ void GameManager::executerAction(int enemyIndex, QTableAction a){
               if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
               {
                   animator(0, -1, this->getEnemy(enemyIndex)->node);
+                  this->getEnemy(enemyIndex)->p = gridPosition;
+                  std::cout << "enemy up" << std::endl;
+              }
+          }
+          break;
+    case QDOWN:
+          gridPosition = gridPosition + position(-1, 0);
+          if(getEnemy(enemyIndex) != NULL)
+          {
+              getEnemy(enemyIndex)->node->setMD2Animation(is::EMAT_STAND);
+              if(getGridMapping()->setEnemyCursor(enemyIndex, gridPosition))
+              {
+                  animator(0, 1, this->getEnemy(enemyIndex)->node);
                   this->getEnemy(enemyIndex)->p = gridPosition;
                   std::cout << "enemy down" << std::endl;
               }
@@ -1504,7 +1504,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
 
     // combat aleatoire
 
-    float probaFight = 0.0001;
+    float probaFight = 0.0003;
     float randNum = (float)rand() / (float)RAND_MAX;
 
     if ( randNum < probaFight && onMvt)
@@ -1674,8 +1674,8 @@ void GameManager::loopCombat(irr::ITimer *Timer){
               if (getEnemy(k)->HP > 0)
               {
                   // get informations pour choisir l'action
-                  dist_x_pers = this->getPlayer()->p.ligne - this->getEnemy(k)->p.ligne;
-                  dist_y_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
+                  dist_y_pers = this->getPlayer()->p.ligne - this->getEnemy(k)->p.ligne;
+                  dist_x_pers = this->getPlayer()->p.colonne - this->getEnemy(k)->p.colonne;
                   hp_pers = this->getPlayer()->HP;
 
                   std::cout << "DEBUG dist_x_pers : " <<(int)dist_x_pers<< "dist_y_pers : "<<(int)dist_y_pers<< '\n';
