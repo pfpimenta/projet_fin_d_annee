@@ -45,7 +45,7 @@ Lorsque le combat est engagé, à tour de rôle, le joueur puis les ennemis réa
 
 ### Etat du projet:
 
-En cours de développement ...
+#### Terminé !
 
 
 </br>
