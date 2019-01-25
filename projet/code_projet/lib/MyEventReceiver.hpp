@@ -54,6 +54,7 @@ struct MyEventReceiver : irr::IEventReceiver
     bool mouse_promenade(const irr::SEvent &event);
     bool gui_manage(const irr::SEvent &event);
 
+
 };
 
 #endif

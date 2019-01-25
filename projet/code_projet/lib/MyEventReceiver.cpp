@@ -419,3 +419,5 @@ bool MyEventReceiver::gui_manage(const irr::SEvent &event)
   return false;
 }
 
+
+
