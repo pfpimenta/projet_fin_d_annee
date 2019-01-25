@@ -118,7 +118,8 @@ Nous n'avons pas eu de difficultés particulières dans l'accomplissement de ce 
 
 **Date de fin :** Jeudi 24 Janvier 2019
 
-- [ ] Succès
+- [x] Succès
 - [ ] Échec
 
 ### Remarques :
+Le sprint a été effectué sans problème et à temps !
