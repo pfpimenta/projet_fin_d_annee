@@ -906,8 +906,7 @@ void GameManager::parametreChest(is::IAnimatedMesh *meshChest)
   //                                                                       ic::vector3df(0, 0, 0));  // décalage du centre
   //      chest[k]->addAnimator(animChest);
   //  }
-    chest[0]->setPosition(ic::vector3df(1898.98, 376.025, -1539.27));
-    chest[0]->setRotation(ic::vector3df(0, 180, 0));
+    chest[0]->setPosition(ic::vector3df(1066.48, -264, 101.24));
     items[0] = driver->getTexture("data/potions/petitePotion.png");
     idItem[0] = ITEM_1;
 
@@ -1278,6 +1277,7 @@ void GameManager::startCombat(irr::ITimer *Timer)
     }
     else if(versusMiniBoss)
     {
+        versusMiniBoss = false;
         enemyPos.push_back(p1);
         //mesh = .... // mesh du boss final
         //textureEnemy = .... // texture du boss final
@@ -1358,12 +1358,26 @@ void GameManager::startPromenade(irr::ITimer *Timer)
         for (int k = 0; k < NB_CHEST + 1; k++)
         {
             if (chest[k] != NULL) // pour eviter les erreurs de segmentations
-                chest[k]->setVisible(true);
+            {
+                for(int i = 0; i < nbObjetTrouve; i++)
+                    if(k == indiceItemRecovered[i])
+                        isNotItem = true;
+                if(!isNotItem)
+                    chest[k]->setVisible(true);
+                isNotItem = false;
+
+
+            }
         }
-        for (int i = 0; i < 3; i++)
+
+        for (int k = 0; k < 3; k++)
         {
-            if (miniBoss[i] != NULL) // pour eviter les erreurs de segmentations
-                miniBoss[i]->setVisible(true);
+            for(int i = 0; i < nbMinibosskilled; i++)
+                if(k == indiceMinibossKilled[i])
+                    isNotMiniboss = true;
+            if(!isNotMiniboss)
+                miniBoss[k]->setVisible(true);
+            isNotMiniboss = false;
         }
     }
 
@@ -1378,6 +1392,7 @@ void GameManager::startPromenade(irr::ITimer *Timer)
             {
                 indiceMinibossKilled[nbMinibosskilled] = k;
                 nbMinibosskilled++;
+                miniBoss[k]->setVisible(false);
 
                 //on entre en collision avec un miniboss
                 ////combat loop avec  miniboss, si on gagne on obtien une des 3 cles pour le boss ultime
@@ -1406,7 +1421,6 @@ void GameManager::startPromenade(irr::ITimer *Timer)
                     isNotMiniboss = false;
                 }
                 cle++;
-                miniBoss[k]->setVisible(false);
 
             }
         }
@@ -1424,8 +1438,8 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
     irr::core::vector3d<float> pos = getPlayer()->node->getPosition();
     irr::core::vector3d<float> rotationperso = getPlayer()->node->getRotation();
     pos.Y += 25;
-    pos.X += 23 * cos(rotationperso.Y * M_PI / 180.0);
-    pos.Z += -23 * sin(rotationperso.Y * M_PI / 180.0);
+    pos.X += 25 * cos(rotationperso.Y * M_PI / 180.0);
+    pos.Z += -25 * sin(rotationperso.Y * M_PI / 180.0);
 
     getCameraJeuLibre()->setPosition(pos);
 
@@ -1489,7 +1503,7 @@ void GameManager::loopPromenade(irr::ITimer *Timer){
 
     // combat aleatoire
 
-    float probaFight = 0.0005;
+    float probaFight = 0.0001;
     float randNum = (float)rand() / (float)RAND_MAX;
 
     if ( randNum < probaFight && onMvt)

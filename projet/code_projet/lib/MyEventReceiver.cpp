@@ -60,6 +60,7 @@ bool MyEventReceiver::OnEvent(const irr::SEvent &event)
               return gui_manage(event);
             default:;
         }
+        joystick.controllerEvent(event);
     }
 
 

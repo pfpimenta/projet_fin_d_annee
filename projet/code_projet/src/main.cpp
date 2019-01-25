@@ -87,6 +87,7 @@ void interface()
     // Le gestionnaire d'événements
     MyEventReceiver *receiver = new MyEventReceiver();
 
+
     // Création de la fenêtre et du système de rendu.
     irr::IrrlichtDevice *device = createDevice(irr::video::EDT_OPENGL,
                                               irr::core::dimension2d<u32>(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
@@ -101,6 +102,8 @@ void interface()
     //creation du gameManager
     GameManager *gameManager = new GameManager(device);
     receiver->gmngr = gameManager; // /!\ toujours rattacher le receiver au gameManager
+
+    receiver->joystick.myJoysticksActivation(device);
 
     /** ************* **/
 

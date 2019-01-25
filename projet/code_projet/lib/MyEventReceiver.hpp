@@ -5,6 +5,7 @@
 
 
 #include "GameManager.hpp"
+#include "MyJoystickManager.hpp"
 
 
 struct MyEventReceiver : irr::IEventReceiver
@@ -41,7 +42,7 @@ struct MyEventReceiver : irr::IEventReceiver
     //constructeur(s) :
     MyEventReceiver();
 
-
+    MyJoystickManager joystick;
 
     bool OnEvent(const irr::SEvent &event); //surcharge de la fonction OnEvent() pour ajouter nos propres events
 
